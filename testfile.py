@@ -27,7 +27,7 @@ print('\nAtoms\n', diamond.atoms)
 # Add types of isotopes
 diamond.add_isotopes(('13C', 0.011))
 # Isotopes may also be directly added to BathCell.isotopes. For example, below we are adding an isotope without the nuclear spin:
-# diamond.isotopes['C']['14C'] = 0.001
+diamond.isotopes['C']['14C'] = 0.001
 
 
 ####### Set z-direction of the bath (optional)
