@@ -138,7 +138,7 @@ where:
 - spin (float) is the total spin of the given bath spin.
 - gyromagnetic ratio (float) is the gyromagnetic ratio of the given bath spin.
 - quadrupole moment (float) is the quadrupole moment of the given bath spin. Relevant only when electric field gradient are used to generate quadrupole couplings for spins, stored in the BathArray, with BathArray.from_efg method.
--detuning (float) is an additional energy splitting for model spins, included as an extra +wS(hat)_z term in the Hamiltonian, where w is the detuning.
+- detuning (float) is an additional energy splitting for model spins, included as an extra +wS(hat)_z term in the Hamiltonian, where w is the detuning.
 
 Units of gyromagnetic ratio are rad / ms / G, quadrupole moments are given in barn, detunings are given in kHz.
 
@@ -176,6 +176,89 @@ mock = pc.Simulator(spin=1, position=[0,0,0],
                     r_dipole=6, order=3)
 
 ---MARKDOWN---
+During the initiallization, depending on the provided keyword arguments several methods may be called:
+- Simulator.read_bath is called if keyword bath is provided. It may take several additional arguments:
+    - r_bath - cutoff distance from the qubit for the bath.
+    - skiprows - if bath is provided as .xyz file, this argument tells how many rows to skip when reading the file.
+    - external_bath - BathArray instance, which contains bath spins with pre defined hyperfines to be used.
+    - hyperfine - defines the way to compute hyperfine couplings. If it is not given and bath doesn’t contain any predefined hyperfines (bath['A'].any() == False) the point dipole approximation is used. Otherwise it can be an instance of pc.Cube object, or callable with signature func(coord, gyro, central_gyro), where coord is an array of the bath spin coordinate, gyro is the gyromagnetic ratio of bath spin, central_gyro is the gyromagnetic ratio of the central bath spin.
+    - types - instance of SpinDict or input to create one.
+    - error_range - maximum allowed distance between positions in bath and external_bath for two spins to be considered the same.
+    - ext_r_bath - cutoff distance from the qubit for the external_bath. Useful if external_bath has very assymetric shape and user wants to keep the precision level of the hyperfine at different distances consistent.
+    - imap - instance of the pc.InteractionMap class, which contain tensor of bath spin interactions. If not provided, interactions between bath spins are assumed to be the same as one of point dipoles.
+
+Generates BathArray object with hyperfine tensors to be used in the calculation.
+- Simulator.generate_clusters is called if order and r_dipole are provided. It produces dict object, which contains the indexes of the bath spins in the clusters.
+
+We implemented the following procedure to determine the clusters:
+
+Each bath spin i forms a cluster of one. Bath spins i and j form cluster of two if there is an edge between them (distance d_ij ≤ r_dipole). 
+Bath spins i, j, and k form a cluster of three if enough edges connect them (e.g., there are two edges ij and jk) and so on. In general, we assume that spins {i.. n} form clusters if they form a connected graph. 
+Only clusters up to the size indicated by the order parameter (equal to CCE order) are included.
+
+We use matplotlib to visualize the spatial distribution of the spin bath. The grey lines show connected pairs of nuclear spins, red dashed lines show clusters of three. You can try to increase r_dipole, r_bath parameters, or increase order and visuallize.
+
+---CODE---
+# add 3D axis
+fig = plt.figure(figsize=(6,6))
+ax = fig.add_subplot(projection='3d')
+
+# We want to visualize the smaller bath
+data = mock.bath
+
+# First plot the positions of the bath
+colors = np.abs(data.A[:,2,2]/data.A[:,2,2].max())
+ax.scatter3D(data.x, data.y, data.z, c=colors, cmap='viridis');
+# Plot all pairs of nuclear spins, which are contained
+# in the calc.clusters dictionary under they key 2
+for c in mock.clusters[2]:
+    ax.plot3D(data.x[c], data.y[c], data.z[c], color='grey')
+# Plot all triplets of nuclear spins, which are contained
+# in the calc.clusters dictionary under they key 3
+for c in mock.clusters[3]:
+    ax.plot3D(data.x[c], data.y[c], data.z[c], color='red', ls='--', lw=0.5)
+
+ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)');
+
+---MARKDOWN---
+Now we setup Simulator object for the actual simulation.
+
+---CODE---
+# Parameters of CCE calculations engine
+
+# Order of CCE aproximation
+order = 2
+# Bath cutoff radius
+r_bath = 40  # in A
+# Cluster cutoff radius
+r_dipole = 8  # in A
+
+---MARKDOWN---
+We will use the CenterArray object to store the properties of the central spin, however for simple usecases one can provide the corresponding keywords to the Simulator object directly (see examples below).
+
+---CODE---
+# position of central spin
+position = [0, 0, 0]
+# Qubit levels (in Sz basis)
+alpha = [0, 0, 1]; beta = [0, 1, 0]
+# ZFS Parametters of NV center in diamond
+D = 2.88 * 1e6 # in kHz
+E = 0 # in kHz
+nv = pc.CenterArray(spin=1, position=position, D=D, E=E, alpha=alpha, beta=beta)
+
+---MARKDOWN---
+The code already knows the properties of the most common nuclear spins and of elecron spin (accessible under the name 'e'), however the user can provide their own by calling BathArray.add_type method. The way to initiallize SpinType objects is the same as in SpinDict above.
+
+---CODE---
+# The code already knows most exsiting isotopes.
+#              Bath spin types
+#              name    spin    gyro       quadrupole (for s>1/2)
+spin_types = [('14N',  1,      1.9338,    20.44),
+              ('13C',  1 / 2,  6.72828),
+              ('29Si', 1 / 2, -5.3188),]
+atoms.add_type(*spin_types)
+
+---MARKDOWN---
 # Setting the Simulator object
 All of the kwargs can be provided at the moment of creation. If all of the kwargs are provided, several methods of the Simulator class are called:
 
@@ -189,8 +272,11 @@ The details are available in the Simulator methods description.
 # Setting the runner engine
 calc = pc.Simulator(spin=nv, bath=atoms,
                     r_bath=r_bath, r_dipole=r_dipole, order=order)
+
+---MARKDOWN---
 Taking advantage of subclassing np.ndarray we can change in situ the quadrupole tensor of the Nitrogen nuclear spin.
 
+---CODE---
 nspin = calc.bath
 # Set model quadrupole tensor at N atom
 quad = np.asarray([[-2.5, 0, 0],
