@@ -52,7 +52,7 @@ for i in range(len(N)):
 pos1 = x[76], y[76], z[76]
 qpos = sic.to_cell(pos1)
 
-#generte supercell - nuclear bath 
+#generate supercell - nuclear bath 
 cell=100
 atoms = sic.gen_supercell(cell, seed = 8000) #left fixed for convergence tests to avoid changes
 #set spin |gyro | quadrupole 
