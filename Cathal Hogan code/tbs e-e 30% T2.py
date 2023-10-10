@@ -52,7 +52,7 @@ cell = 60 #cell size
 
 #dictionary of parameters
 parameters = dict(
-    order=3, # CCE order
+    order=2, # CCE order
     r_bath=40,  # Size of the bath in A
     r_dipole=40,  # Cutoff of pairwise clusters in A
     pulses = 1, # N pulses in CPMG sequence
@@ -61,7 +61,7 @@ parameters = dict(
 
 #calculating T2 using 50 random seeds
 n = 1 #counter to keep track
-no_sims = 50 # set number of sims to be run 
+no_sims = 1 # set number of sims to be run 
 sims = []
 for i in range(no_sims):
     
@@ -80,7 +80,7 @@ for i in range(no_sims):
                         method='cce', quantity='coherence')
     
     #use and interate counter to keep track of progress
-    #print(n, ' done') # uncomment to see progress
+    print(n, ' done') # uncomment to see progress
     n += 1
     
     #plot this run and store it 
