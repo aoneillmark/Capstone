@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pycce as pc 
 import pandas as pd
 from scipy.optimize import curve_fit 
+import mpi4py as MPI
 
 def fit(x, T2, n):
     y = np.exp(-(((2*x)/T2)**n))
@@ -51,21 +52,24 @@ cell = 200 #cell size
 
 #dictionary of parameters
 parameters = dict(
-    order=3, # CCE order
+    order=2, # CCE order
     r_bath=100,  # Size of the bath in A
     r_dipole=60,  # Cutoff of pairwise clusters in A
     pulses = 1, # N pulses in CPMG sequence
     magnetic_field=[0,0,10000] #set to 1T
 ) 
 
+print("A processor is running this")
+
 #calculating T2 using 50 random seeds
 n = 1 #counter to keep track
-no_sims = 50 # set number of sims to be run 
+no_sims = 1 # set number of sims to be run 
 sims = []
 for i in range(no_sims):
     
     #generte bath
-    rand = np.random.randint(0, 8000) # chooses random integer from 0 to 8000 
+    # rand = np.random.randint(0, 8000) # chooses random integer from 0 to 8000 
+    rand = 8000
     atoms = sic.gen_supercell(cell, remove = [('V', qpos)], seed =rand) #generate supercell 
     #set spin |gyro | quadrupole 
     spin_types = ['51V',  1/2, -17608.59705]   #electronic bath
@@ -73,13 +77,16 @@ for i in range(no_sims):
 
     #set up simulation
     calc = pc.Simulator(spin=cen, bath=atoms, **parameters)
+    print(calc.clusters)
 
     #run simulation
     sim = calc.compute(ts, nbstates = nb,
-                        method='cce', quantity='coherence')
+                        method='cce', quantity='coherence',
+                        parallel = True,
+                        parallel_states=True,)
     
     #use and interate counter to keep track of progress
-    #print(n, ' done') # uncomment to see progress
+    print(n, ' done') # uncomment to see progress
     n += 1
     
     #plot this run and store it 
@@ -108,7 +115,7 @@ plt.show()
 
 #fit coherence curve 
 p_guess= [0.02, 2] #guessing T2 and the power respectively 
-par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
+par, cov = curve_fit(fit, ts, avg, p0=p_guess,) #find best fitting parameters and covariance matrix
 err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
 print('params =', par) # print params
 
