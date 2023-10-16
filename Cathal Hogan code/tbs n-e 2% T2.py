@@ -51,22 +51,31 @@ ts = np.linspace(0, 5e-1, 201) #expected T2 of 0.138ms
 cell = 500 #cell size 
 
 #dictionary of parameters
-parameters = dict(
-    order=2, # CCE order
-    r_bath=200,  # Size of the bath in A
-    r_dipole=180,  # Cutoff of pairwise clusters in A
-    pulses = 1, # N pulses in CPMG sequence
-    magnetic_field=[0,0,10000] #set to 1T
-) 
+# parameters = dict(
+#     order=2, # CCE order
+#     r_bath=200,  # Size of the bath in A
+#     r_dipole=180,  # Cutoff of pairwise clusters in A
+#     pulses = 1, # N pulses in CPMG sequence
+#     magnetic_field=[0,0,10000] #set to 1T
+# ) 
+
+parameters = {
+    'order': 2, # CCE order
+    'r_bath': 200,  # Size of the bath in A
+    'r_dipole': 180,  # Cutoff of pairwise clusters in A
+    'pulses': 1, # N pulses in CPMG sequence
+    'magnetic_field': [0,0,10000], # Magnetic field in Gauss
+    }
 
 #calculating T2 using 50 random seeds
 n = 1 #counter to keep track
-no_sims = 50 #set number of sims to average over
+no_sims = 1 #set number of sims to average over
 sims = []
 for i in range(no_sims):
     
     #generte bath
-    rand = np.random.randint(0, 8000) # chooses random integer from 0 to 8000 
+    # rand = np.random.randint(0, 8000) # chooses random integer from 0 to 8000 
+    rand = 8000
     atoms = sic.gen_supercell(cell, remove = [('V', qpos)], seed =rand) #generate supercell 
     #set spin |gyro | quadrupole 
     spin_types = ['51V',  1/2, -17608.59705]   #electronic bath
