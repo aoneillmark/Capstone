@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pycce as pc 
 import pandas as pd
-from scipy.optimize import curve_fit 
+# from scipy.optimize import curve_fit 
 
 def fit(x, T2, n):
     y = np.exp(-(((2*x)/T2)**n))
@@ -93,32 +93,32 @@ plt.ylabel('Coherence')
 plt.title('50 coherence curves for e-e 30%')
 plt.show()
 
-#use all 50 sims to calculate average curve 
-avg = np.zeros(201) #creates array of 0s same length as ts
-for i in range(201): 
-    for j in range(no_sims):
-        avg[i] += sims[j][i]   
-avg = avg/no_sims
+# #use all 50 sims to calculate average curve 
+# avg = np.zeros(201) #creates array of 0s same length as ts
+# for i in range(201): 
+#     for j in range(no_sims):
+#         avg[i] += sims[j][i]   
+# avg = avg/no_sims
 
-#plot the average coherence curve 
-plt.plot(ts, avg)
-plt.xlabel('Time [ms]')
-plt.ylabel('Coherence')
-plt.title('Averaged Coherence Curve e-e 30%')
-plt.show()
+# #plot the average coherence curve 
+# plt.plot(ts, avg)
+# plt.xlabel('Time [ms]')
+# plt.ylabel('Coherence')
+# plt.title('Averaged Coherence Curve e-e 30%')
+# plt.show()
 
-#fit coherence curve 
-p_guess= [0.0001, 2] #guessing T2 and the power respectively 
-par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
-err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
-print('params =', par) # print params
+# #fit coherence curve 
+# p_guess= [0.0001, 2] #guessing T2 and the power respectively 
+# par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
+# err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
+# print('params =', par) # print params
 
-#plot fitted curve 
-label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
-plt.plot(ts, avg, label='average for 50')
-plt.plot(ts, fit(ts, *par), 'r-', label=label)
-plt.xlabel('Time [ms]')
-plt.ylabel('Coherence')
-plt.title('Averaged Coherence Curve e-e 30%')
-plt.legend()
-plt.show()
+# #plot fitted curve 
+# label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
+# plt.plot(ts, avg, label='average for 50')
+# plt.plot(ts, fit(ts, *par), 'r-', label=label)
+# plt.xlabel('Time [ms]')
+# plt.ylabel('Coherence')
+# plt.title('Averaged Coherence Curve e-e 30%')
+# plt.legend()
+# plt.show()
