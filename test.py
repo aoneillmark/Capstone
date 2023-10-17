@@ -1,0 +1,2 @@
+print("Output of test")
+
