@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import mpi4py
+from mpi4py import MPI
 
 # Get mpi rank
-rank = mpi4py.MPI.COMM_WORLD.Get_rank()
+rank = MPI.COMM_WORLD.Get_rank()
 print(rank)
 print("Output of test")
 
