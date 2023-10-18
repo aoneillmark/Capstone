@@ -1,7 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import mpi4py
 
-
+# Get mpi rank
+rank = mpi4py.MPI.COMM_WORLD.Get_rank()
+print(rank)
 print("Output of test")
 
 # Generate a dummy plot to test if matplotlib is working
