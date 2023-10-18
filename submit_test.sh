@@ -8,5 +8,5 @@
 # Activate the Conda environment
 source ~/miniconda3/bin/activate Capstone_conda_env
 
-# Run the MPI script using mpiexec
-mpiexec -n 3 python test.py
+# Run the MPI script using slurm
+srun python test.py
