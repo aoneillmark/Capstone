@@ -9,4 +9,5 @@
 source ~/miniconda3/bin/activate Capstone_conda_env
 
 # Run the MPI script using slurm
-srun python test.py
+mpirun python test.py
+
