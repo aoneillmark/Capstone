@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pycce as pc
 import pandas as pd
 from scipy.optimize import curve_fit
-import mpi4py
+from mpi4py import MPI
 
 class VOTPP_class:
     def __init__(self, concentration, cell_size, displacement, seed=8000):
@@ -135,7 +135,7 @@ class VOTPP_class:
             print("Interaction tensor:")
             print(self.cen.imap[0, 1]) # in kHz
 
-        return cen
+        return self.cen
 
     def setup_simulator(self, order, r_bath, r_dipole, pulses, magnetic_field):
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, pulses=pulses, magnetic_field=magnetic_field)
@@ -150,12 +150,42 @@ class VOTPP_class:
     def plot_results(self, timespace, result):
         plt.figure()
         plt.plot(timespace, result.real)
-        plt.xlabel('Time (s)')
+        plt.xlabel('Time (ms)')
         plt.ylabel('Coherence')
         plt.show()
 
 # Usage:
-simulator = VOTPP_class(concentration=0.02, cell_size=500, displacement=3.75)
-sim = simulator.setup_simulator(order=2, r_bath=200, r_dipole=180, pulses=1, magnetic_field=[0,0,10000])
-result = sim.compute(timespace=np.linspace(0, 5e-3, 201), method='cce', pulses=1, nbstates=0, quantity='coherence', parallel=False, parallel_states=False)
-simulator.plot_results(np.linspace(0, 5e-3, 201), result)
+# simulator = VOTPP_class(concentration=0.02, cell_size=500, displacement=3.75)
+# sim = simulator.setup_simulator(order=2, r_bath=200, r_dipole=180, pulses=1, magnetic_field=[0,0,10000])
+# result = sim.compute(timespace=np.linspace(0, 5e-3, 201), method='cce', pulses=1, nbstates=0, quantity='coherence', parallel=True, parallel_states=True)
+# simulator.plot_results(np.linspace(0, 5e-3, 201), result)
+
+# # Set up a runner to cycle through different orders to test for convergence for different concentrations
+# concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
+# order_list = [1, 2, 3]
+# parameters = {
+#     'order': 2,
+#     'r_bath': 200,
+#     'r_dipole': 180,
+#     'pulses': 1,
+#     'magnetic_field': [0,0,10000]
+# }
+
+# def runner(variables, values):
+#     invalue = parameters[variable]
+#     calc = pc.Simulator(spin=cen, bath=atoms, **parameters)
+#     ls = []
+    
+#     for v in values:
+#         setattr(calc, variable, v)
+#         l = calc.compute(ts, method='cce',
+#                          nbstates=nb,
+#                          quantity='coherence')
+        
+        
+#         #print('a run done') # uncomment to keep track
+#         ls.append(l.real)
+
+#     parameters[variable] = invalue
+#     ls = pd.DataFrame(ls, columns=ts, index=values).T
+#     return ls
