@@ -12,6 +12,8 @@ start = time.time()
 rank = MPI.COMM_WORLD.Get_rank()
 size = MPI.COMM_WORLD.Get_size()
 
+print("Rank: {}".format(rank))
+
 concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 order_list = [1, 2, 3] 
 r_bath_list = [40, 80, 160, 220]
