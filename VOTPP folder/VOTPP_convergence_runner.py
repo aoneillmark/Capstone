@@ -55,7 +55,7 @@ default_calc_parameters = {
     'timespace': np.linspace(0, 1e-1, 201),
     'method': 'cce',
     'pulses': 1,
-    'nbstates': 250, #!
+    'nbstates': 256, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
