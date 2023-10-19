@@ -6,7 +6,7 @@
 #SBATCH -J test_mpi     # Job name
 
 # Activate the Conda environment
-source ~/miniconda3/bin/activate Capstone_conda_env
+source ~/miniconda3/bin/activate Capstone_conda_env2
 
 # Run the MPI script using slurm # mpirun python test.py
 srun -n 2 python "Cathal Hogan code/VOTPP_convergence_runner.py"
