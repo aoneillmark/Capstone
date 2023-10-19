@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
 
-path = "Results/"
+# path = "/"
 # Loading results in another script
-with open(str(path)+'order_results.pkl', 'rb') as f:
+with open('order_results.pkl', 'rb') as f:
     loaded_results = pickle.load(f)
 
 concentration_to_plot = 0.1
@@ -17,7 +17,7 @@ plt.ylabel('Coherence')
 plt.title(f"Concentration: {concentration_to_plot}")
 
 # Save the figure to a file
-output_filename = f"{path}Concentration_{concentration_to_plot}.png"
+output_filename = f"Concentration_{concentration_to_plot}.png"
 plt.savefig(output_filename, dpi=300)  # dpi is dots per inch (resolution). You can adjust as needed.
 
 # If you still want to show the plot, you can uncomment the next line
