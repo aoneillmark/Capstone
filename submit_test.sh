@@ -7,6 +7,7 @@
 
 # Activate the Conda environment
 source ~/miniconda3/bin/activate Capstone_conda_env2
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Run the MPI script using slurm # mpirun python test.py
 srun -n 2 python "Cathal Hogan code/VOTPP_convergence_runner.py"
