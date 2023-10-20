@@ -5,5 +5,4 @@ package_download
 package_download/*
 Python-3.9.7
 *.DS_Store
-VOTPP folder/__pycache__/VOTPP_class.cpython-310.pyc
-
+VOTPP folder/__pycache__/*
