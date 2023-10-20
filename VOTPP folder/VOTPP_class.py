@@ -20,7 +20,8 @@ class VOTPP_class:
             'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
             'beta': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
-        self.cen = self.setup_center()
+        self.interaction_matrix = self.create_interaction_tensor()
+        self.cen = self.setup_center(self.interaction_matrix)
         self.cen = self.create_interaction_tensor()
 
     def setup_bath(self):
@@ -94,7 +95,7 @@ class VOTPP_class:
     
         return atoms, qpos1, qpos2
 
-    def setup_center(self):
+    def setup_center(self, interaction_matrix):
         # set up the center
         cen = pc.CenterArray(
             size=2, 
@@ -103,39 +104,50 @@ class VOTPP_class:
             gyro=self.center_parameters['gyro'], 
             D=self.center_parameters['D'], 
             alpha=self.center_parameters['alpha'], 
-            beta=self.center_parameters['beta']
+            beta=self.center_parameters['beta'],
+            imap = interaction_matrix
         )
         return cen
 
     def create_interaction_tensor(self, printing=False):
-        self.cen.point_dipole()
+        # self.cen.point_dipole()
 
-        el_alpha = np.array([0,1])
-        el_beta = np.array([1,0])
-        n_alpha = np.array([0,0,0,0,0,1,0,0])
-        n_beta = np.array([0,0,0,0,1,0,0,0])
+        # el_alpha = np.array([0,1])
+        # el_beta = np.array([1,0])
+        # n_alpha = np.array([0,0,0,0,0,1,0,0])
+        # n_beta = np.array([0,0,0,0,1,0,0,0])
 
-        # cen[0].alpha = el_alpha
-        # cen[0].beta = el_beta
-        # cen[1].alpha = n_alpha
-        # cen[1].beta = n_beta
-        self.cen[0].alpha = n_alpha
-        self.cen[0].beta = n_beta
-        self.cen[1].alpha = el_alpha
-        self.cen[1].beta = el_beta
+        # # cen[0].alpha = el_alpha
+        # # cen[0].beta = el_beta
+        # # cen[1].alpha = n_alpha
+        # # cen[1].beta = n_beta
+        # self.cen[0].alpha = n_alpha
+        # self.cen[0].beta = n_beta
+        # self.cen[1].alpha = el_alpha
+        # self.cen[1].beta = el_beta
 
-        # Generate product state
-        # state = pc.normalize(np.kron(el_alpha + el_beta, n_alpha + n_beta)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
-        state = pc.normalize(np.kron(el_beta + el_alpha, n_beta + n_alpha)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
-        # state2 = pc.normalize(np.kron(n_beta, el_beta) + np.kron(n_alpha, el_alpha))
-        self.cen.state = state
-        if printing==True:
-            print("Initial amplitudes in Sz x Sz basis:            ", np.abs(self.cen.state)) # Initial state
-            # print("Initial amplitudes in Sz x Sz basis (Chatgpt v2)", np.abs(state2))
-            print("Interaction tensor:")
-            print(self.cen.imap[0, 1]) # in kHz
+        # # Generate product state
+        # # state = pc.normalize(np.kron(el_alpha + el_beta, n_alpha + n_beta)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
+        # state = pc.normalize(np.kron(el_beta + el_alpha, n_beta + n_alpha)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
+        # # state2 = pc.normalize(np.kron(n_beta, el_beta) + np.kron(n_alpha, el_alpha))
+        # self.cen.state = state
+        # if printing==True:
+        #     print("Initial amplitudes in Sz x Sz basis:            ", np.abs(self.cen.state)) # Initial state
+        #     # print("Initial amplitudes in Sz x Sz basis (Chatgpt v2)", np.abs(state2))
+        #     print("Interaction tensor:")
+        #     print(self.cen.imap[0, 1]) # in kHz
 
-        return self.cen
+        with open('VOTPP_opt.Atens', 'r') as f:
+            lines = f.readlines()
+
+        # Extract numerical values from the string
+        values = lines[0].strip().split()
+        values = [float(value)*1e3 for value in values]
+
+        # Create a 3x3 matrix from the list of data
+        interaction_matrix = np.array(values).reshape((3, 3))
+
+        return interaction_matrix # self.cen
 
     def setup_simulator(self, order, r_bath, r_dipole, pulses, magnetic_field):
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, pulses=pulses, magnetic_field=magnetic_field)
