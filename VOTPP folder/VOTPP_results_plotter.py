@@ -7,7 +7,7 @@ path = "VOTPP folder/Results/Pickle files/"
 with open((str(path) + 'order_results.pkl') , 'rb') as f:
     loaded_results = pickle.load(f)
 
-concentration_to_plot = 0.02
+concentration_to_plot = 0.05
 for order_val, df in loaded_results[concentration_to_plot].items():
     plt.plot(df.index, df[0], label=f"Order {order_val}")
 

@@ -52,7 +52,7 @@ cell_size_list = [60,100,200]
 nbstates_list = [32, 64, 128, 256]
 
 default_calc_parameters = {
-    'timespace': np.linspace(0, 1e-3, 201),
+    'timespace': np.linspace(0, 1e-2, 201),
     'method': 'cce',
     'pulses': 1,
     'nbstates': 256, #!
@@ -70,8 +70,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 80, #!
-    'r_dipole': 60, #!
+    'r_bath': 200, #!
+    'r_dipole': 150, #!
     'pulses': 1, # N pulses in CPMG sequence
     'magnetic_field': [0, 0, 10000], # Magnetic field in Gauss
 }
