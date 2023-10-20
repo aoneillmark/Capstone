@@ -52,7 +52,7 @@ cell_size_list = [60,100,200]
 nbstates_list = [32, 64, 128, 256]
 
 default_calc_parameters = {
-    'timespace': np.linspace(0, 1e-1, 201),
+    'timespace': np.linspace(0, 1e-3, 201),
     'method': 'cce',
     'pulses': 1,
     'nbstates': 256, #!
@@ -98,7 +98,7 @@ for conc in concentration_list:
 end = time.time()
 print("Time taken: {} seconds".format(end - start))
 
-path = "VOTPP folder/Results/"
+path = "VOTPP folder/Results/Pickle files/"
 
 # Save this data to an external file
 if rank == 0:

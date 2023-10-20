@@ -69,7 +69,7 @@ cen = pc.CenterArray(size=1, position=qpos, spin=1/2,
 
 #parameters
 nb=100 # no. of bath states
-ts = np.linspace(0, 0.001, 201) 
+ts = np.linspace(0, 1e-3, 201) 
 
 #dictionary of parameters
 parameters = dict(
