@@ -4,8 +4,8 @@
 #SBATCH -t 0-00:60:00      # Request 60 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J Convergence     # Job name
-#SBATCH -o Capstone/VOTPP folder/Slurm_convergence/slurm-%j.out
-#SBATCH -e Capstone/VOTPP folder/Slurm_convergence/slurm-%j.err
+#SBATCH -o "Capstone/VOTPP folder/Slurm_convergence/slurm-%j.out"
+#SBATCH -e "Capstone/VOTPP folder/Slurm_convergence/slurm-%j.err"
 
 # Activate the Conda environment
 source ~/miniconda3/bin/activate Capstone_conda_env2
