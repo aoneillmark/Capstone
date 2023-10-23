@@ -55,7 +55,7 @@ class VOTPP_class:
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
-            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1)]) #left fixed for convergence tests to avoid changes
+            atoms = sic.gen_supercell(cell, seed=self.seed,) #left fixed for convergence tests to avoid changes
             #set          spin | gyro | quadrupole 
             spin_types = [('C',  1 / 2,  6.72828),    
                         ('H', 1 / 2, 26.7522),
