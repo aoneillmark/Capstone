@@ -43,10 +43,8 @@ class VOTPP_class:
                 sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
 
             #assign position of qubit 
-            # pos1 = x[76], y[76], z[76]
-            # pos2 = x[76], y[76], z[77]
             pos2 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos1 = x[76]+self.displacement, y[76]+self.displacement, z[76]+self.displacement # Position of the electron spin (displacement is in angstroms)
+            pos1 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
             # print(qpos1)
@@ -74,10 +72,8 @@ class VOTPP_class:
             sic.add_atoms((N[76], [x[76], y[76], z[76]]), type='angstrom')
 
             #assign position of qubit 
-            # pos1 = x[76], y[76], z[76]
-            # pos2 = x[76], y[76], z[77]
             pos1 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos2 = x[76]+self.displacement, y[76]+self.displacement, z[76]+self.displacement # Position of the electron spin (displacement is in angstroms)
+            pos2 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
             # print(qpos1)
