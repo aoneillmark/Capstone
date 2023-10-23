@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH -n 1            # Request 1 cores
-#SBATCH -t 0-00:10:00   # Request 10 minutes
+#SBATCH -t 0-00:0:10   # Request 10 seconds
 #SBATCH -p compute      # Use the "compute" partition
 #SBATCH -J Plotting     # Job name
 #SBATCH -o "Capstone/VOTPP folder/Slurm_plotting/slurm-%j.out"
