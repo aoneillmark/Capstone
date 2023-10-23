@@ -4,8 +4,8 @@
 #SBATCH -t 0-00:10:00   # Request 10 minutes
 #SBATCH -p compute      # Use the "compute" partition
 #SBATCH -J Plotting     # Job name
-#SBATCH -o Capstone/VOTPP folder/Slurm_plotting/slurm-%j.out
-#SBATCH -e Capstone/VOTPP folder/Slurm_plotting/slurm-%j.err
+#SBATCH -o "Capstone/VOTPP folder/Slurm_plotting/slurm-%j.out"
+#SBATCH -e "Capstone/VOTPP folder/Slurm_plotting/slurm-%j.err"
 
 # Activate the Conda environment
 source ~/miniconda3/bin/activate Capstone_conda_env2
