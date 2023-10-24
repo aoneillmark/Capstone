@@ -133,7 +133,7 @@ class VOTPP_class:
         #     print("Interaction tensor:")
         #     print(self.cen.imap[0, 1]) # in kHz
 
-        with open('VOTPP_opt.Atens', 'r') as f:
+        with open(('VOTPP folder/VOTPP_opt.Atens'), 'r') as f:
             lines = f.readlines()
 
         # Extract numerical values from the string
