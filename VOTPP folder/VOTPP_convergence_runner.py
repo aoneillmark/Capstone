@@ -129,14 +129,17 @@ path = "VOTPP folder/Results/Pickle files/"
 # Save this data to an external file
 if rank == 0:
     # Saving results
-    with open((str(path) + 'order_results.pkl'), 'wb') as f:
-        pickle.dump(order_results, f)
+    with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
+        pickle.dump(magnetic_results, f)
+
+    # with open((str(path) + 'order_results.pkl'), 'wb') as f:
+    #     pickle.dump(order_results, f)
     
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
-    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_dipole_results, f)
 
 
 
