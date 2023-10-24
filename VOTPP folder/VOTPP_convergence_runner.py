@@ -60,7 +60,7 @@ default_calc_parameters = {
     'timespace': np.linspace(0, 1e-2, 201),
     'method': 'cce',
     'pulses': 1,
-    'nbstates': 32, #!
+    'nbstates': 16, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -81,41 +81,40 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'magnetic_field': [1000, 0, 0], # Magnetic field in Gauss
 }
 
-
-# # default_calc_parameters.update(default_simulator_parameters)
-# # print(default_calc_parameters)
-
-# simulator = VOTPP_class(**default_bath_parameters)
-# sim = simulator.setup_simulator(**default_simulator_parameters)
-# result = sim.compute(**default_calc_parameters)
-
-
-# if rank == 0:
-#     simulator.plot_results(default_calc_parameters['timespace'], result)
-
-order_results = {}
+magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
+magnetic_results = {}
 for conc in concentration_list:
-    order_results[conc] = runner(concentration_value=conc,
-                        changing_variable='order', variable_values=order_list,
+    magnetic_results[conc] = runner(concentration_value=conc,
+                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-print("Order results done")
+#####################################################################
 
-r_bath_results = {}
-for conc in concentration_list:
-    r_bath_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_bath', variable_values=order_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+# order_results = {}
+# for conc in concentration_list:
+#     order_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='order', variable_values=order_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-print("r_bath results done")
+# print("Order results done")
 
-r_dipole_results = {}
-for conc in concentration_list:
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=order_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+# r_bath_results = {}
+# for conc in concentration_list:
+#     r_bath_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=order_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-print("r_dipole results done")
+# print("r_bath results done")
+
+# r_dipole_results = {}
+# for conc in concentration_list:
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=order_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+
+# print("r_dipole results done")
+
+#####################################################################
 
 # Print time taken
 end = time.time()
