@@ -21,7 +21,7 @@ class VOTPP_class:
             'beta': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
         self.interaction_matrix = self.create_interaction_tensor()
-        self.cen = self.setup_center(self.interaction_matrix)
+        self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
         self.cen = self.create_interaction_tensor()
 
     def setup_bath(self):
