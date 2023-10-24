@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH -n 16              # Request 16 cores
+#SBATCH -n 32              # Request 16 cores
 #SBATCH -t 0-02:00:00      # Request 60 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J Convergence     # Job name
@@ -12,4 +12,4 @@ source ~/miniconda3/bin/activate Capstone_conda_env2
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Run the MPI script using slurm 
-mpirun -np 16 python "Cathal Hogan code/tbs e-e 2% T2.py"
+mpirun -np 32 python "Cathal Hogan code/tbs e-e 2% T2.py"
