@@ -40,12 +40,21 @@ def runner(concentration_value,
         # Printing for progress check, listing the variable and value
         print("{}: {}".format(changing_variable, v))
         
-        results[v] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
+        v_key = convert_to_key(v)
+        results[v_key] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
         # ls.append(l.real)
 
     simulator_parameters[changing_variable] = changing_invalue
     # ls = pd.DataFrame(ls, columns=calc_parameters['timespace'], index=variable_values).T
     return results
+
+
+def convert_to_key(value):
+    if isinstance(value, list):
+        return tuple(value)
+    else:
+        return value
+
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
