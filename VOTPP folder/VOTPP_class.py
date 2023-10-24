@@ -26,7 +26,7 @@ class VOTPP_class:
 
     def setup_bath(self):
         #import xyz file
-        uc = pd.read_csv('VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
+        uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
         #seperate columns into numpy arrays
         N = np.array(uc[0])
         x = np.array(uc[1])
