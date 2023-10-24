@@ -31,7 +31,8 @@ def runner(concentration_value,
     results = {}
     for v in variable_values: # Iterate through variable values (e.g. order = 1, 2, 3)
         # Progress printing
-        print("Rank: {}, {} = {}".format(rank, changing_variable, v))
+        if rank == 0:
+            print("Rank: {}, {} = {}".format(rank, changing_variable, v))
 
         setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
         l = sim.compute(**calc_parameters)
