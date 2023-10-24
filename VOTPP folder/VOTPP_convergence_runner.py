@@ -78,8 +78,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'r_bath': 20, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
-    # 'magnetic_field': [0, 0, 10000], # Magnetic field in Gauss
-    'magnetic_field': [1000, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [0, 0, 1000], # Magnetic field in Gauss
 }
 
 
