@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH -n 32              # Request 32 cores
-#SBATCH -t 0-03:00:00      # Request 60 minutes
+#SBATCH -t 0-06:00:00      # Request 60 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J Convergence     # Job name
 #SBATCH -o "Capstone/VOTPP folder/Slurm_convergence/slurm-%j.out"
