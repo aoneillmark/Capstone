@@ -100,17 +100,23 @@ for conc in concentration_list:
                         changing_variable='order', variable_values=order_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
+print("Order results done")
+
 r_bath_results = {}
 for conc in concentration_list:
     r_bath_results[conc] = runner(concentration_value=conc,
                         changing_variable='r_bath', variable_values=order_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
+print("r_bath results done")
+
 r_dipole_results = {}
 for conc in concentration_list:
     r_dipole_results[conc] = runner(concentration_value=conc,
                         changing_variable='r_dipole', variable_values=order_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+
+print("r_dipole results done")
 
 # Print time taken
 end = time.time()
