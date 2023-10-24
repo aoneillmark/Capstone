@@ -85,7 +85,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'magnetic_field': [1000, 0, 0], # Magnetic field in Gauss
 }
 
-magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
+magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0]]#, [1500,0,0], [2000,0,0], [2900,0,0]]
 magnetic_results = {}
 for conc in concentration_list:
     magnetic_results[conc] = runner(concentration_value=conc,
