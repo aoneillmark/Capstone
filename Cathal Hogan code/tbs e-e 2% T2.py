@@ -46,7 +46,7 @@ cen = pc.CenterArray(size=1, position=qpos, spin=1/2,
                     D=0, gyro=-17608.59705, alpha=[0,1], beta=[1,0],)
 
 #parameters
-nb = 16 # 240
+nb = 256 # 240
 ts = np.linspace(0, 5e-3, 201) #expected T2 of 3.3e-2
 cell = 200 #cell size 
 
