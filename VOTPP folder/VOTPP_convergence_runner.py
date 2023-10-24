@@ -72,7 +72,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 100, #!
+    'cell_size': 60, #!
     'displacement': 0, # Angstrom
     'seed': 8000
 }
