@@ -61,7 +61,7 @@ cell_size_list = [60,100,200]
 nbstates_list = [16,32,64]
 
 default_calc_parameters = {
-    'timespace': np.linspace(0, 1e-2, 201),
+    'timespace': np.linspace(0, 7e-2, 201),
     'method': 'cce',
     'pulses': 1,
     'nbstates': 16, #!
