@@ -144,7 +144,7 @@ print("r_bath results done")
 r_dipole_results = {}
 for conc in concentration_list:
     r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=order_list,
+                        changing_variable='r_dipole', variable_values=r_dipole_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 print("r_dipole results done")
@@ -152,7 +152,7 @@ print("r_dipole results done")
 cell_size_results = {}
 for conc in concentration_list:
     cell_size_results[conc] = runner(concentration_value=conc,
-                        changing_variable='cell_size', variable_values=order_list,
+                        changing_variable='cell_size', variable_values=cell_size_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 #####################################################################
