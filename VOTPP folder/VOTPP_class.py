@@ -16,7 +16,7 @@ class VOTPP_class:
             'position': [self.qpos1, self.qpos2],
             'spin': [7/2, 1/2],
             'gyro': [-7.05,-17608.59705],
-            'D': [ -350, 0],
+            'D': [-350, 0],
             'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
             'beta': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
@@ -108,33 +108,6 @@ class VOTPP_class:
         return cen
 
     def create_interaction_tensor(self, printing=False):
-        # self.cen.point_dipole()
-
-        # el_alpha = np.array([0,1])
-        # el_beta = np.array([1,0])
-        # n_alpha = np.array([0,0,0,0,0,1,0,0])
-        # n_beta = np.array([0,0,0,0,1,0,0,0])
-
-        # # cen[0].alpha = el_alpha
-        # # cen[0].beta = el_beta
-        # # cen[1].alpha = n_alpha
-        # # cen[1].beta = n_beta
-        # self.cen[0].alpha = n_alpha
-        # self.cen[0].beta = n_beta
-        # self.cen[1].alpha = el_alpha
-        # self.cen[1].beta = el_beta
-
-        # # Generate product state
-        # # state = pc.normalize(np.kron(el_alpha + el_beta, n_alpha + n_beta)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
-        # state = pc.normalize(np.kron(el_beta + el_alpha, n_beta + n_alpha)) # I'm kinda guessing the order here # This is performing a tensor product! (Kronecker product)
-        # # state2 = pc.normalize(np.kron(n_beta, el_beta) + np.kron(n_alpha, el_alpha))
-        # self.cen.state = state
-        # if printing==True:
-        #     print("Initial amplitudes in Sz x Sz basis:            ", np.abs(self.cen.state)) # Initial state
-        #     # print("Initial amplitudes in Sz x Sz basis (Chatgpt v2)", np.abs(state2))
-        #     print("Interaction tensor:")
-        #     print(self.cen.imap[0, 1]) # in kHz
-
         with open(('VOTPP folder/VOTPP_opt.Atens'), 'r') as f:
             lines = f.readlines()
 
@@ -166,6 +139,47 @@ class VOTPP_class:
         plt.xlabel('Time (ms)')
         plt.ylabel('Coherence')
         plt.show()
+    
+    def get_active_nuclei_positions(self, calc, r_bath):
+        # Extracting positions from the setup
+        uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python')
+        positions = uc[[1, 2, 3]].values  # Extracting x, y, z columns as numpy array
+
+        central_spin_position = np.array(self.qpos1)  # Using qpos1 as the central spin position
+        distances = np.linalg.norm(positions - central_spin_position, axis=1)
+        active_indices = np.where(distances <= r_bath)[0]
+        return positions[active_indices]
+
+    def get_number_of_active_nuclei(self, calc, r_bath):
+        return len(self.get_active_nuclei_positions(calc, r_bath))
+
+    def visualize_cluster(self, calc):
+        central_spin_pos = self.qpos1
+
+        # add 3D axis
+        fig = plt.figure(figsize=(6,6))
+        ax = fig.add_subplot(projection='3d')
+
+        # We want to visualize the smaller bath
+        data = calc.bath
+
+        # First plot the positions of the bath
+        colors = np.abs(data.A[:,1,2]/data.A[:,1,2].max())
+        ax.scatter3D(data.x, data.y, data.z, c=colors, cmap='viridis');
+
+        ax.scatter3D(central_spin_pos[0], central_spin_pos[1], central_spin_pos[2], c='red', s=100, label='Central Spin');
+        # Plot all pairs of nuclear spins, which are contained
+        # in the calc.clusters dictionary under they key 2
+        for c in calc.clusters[1]:
+            ax.plot3D(data.x[c], data.y[c], data.z[c], color='grey')
+        # # Plot all triplets of nuclear spins, which are contained
+        # # in the calc.clusters dictionary under they key 3
+        # for c in mock.clusters[3]:
+        #     ax.plot3D(data.x[c], data.y[c], data.z[c], color='red', ls='--', lw=0.5)
+
+        ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)');
+        plt.show()
+
 
 # Usage:
 # simulator = VOTPP_class(concentration=0.02, cell_size=500, displacement=3.75)
