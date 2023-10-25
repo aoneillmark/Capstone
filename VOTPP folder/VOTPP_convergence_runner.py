@@ -13,7 +13,8 @@ start = time.time()
 rank = MPI.COMM_WORLD.Get_rank()
 size = MPI.COMM_WORLD.Get_size()
 
-print("Rank: {}".format(rank))
+# Print the largest rank in the ranks
+# print("Rank: {}".format(rank))
 
 
 # Runner to converge parameters
@@ -36,9 +37,6 @@ def runner(concentration_value,
 
         setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
         l = sim.compute(**calc_parameters)
-        
-        # Printing for progress check, listing the variable and value
-        print("{}: {}".format(changing_variable, v))
         
         v_key = convert_to_key(v)
         results[v_key] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
