@@ -12,4 +12,4 @@ source ~/miniconda3/bin/activate Capstone_conda_env2
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Run the MPI script using slurm 
-mpirun -np 1 python "VOTPP folder/Results/VOTPP_results_plotter.py"
+mpirun -np 1 python "VOTPP folder/VOTPP_results_plotter.py"
