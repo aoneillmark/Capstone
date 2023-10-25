@@ -21,7 +21,7 @@ def runner(concentration_value,
            changing_variable, variable_values, 
            bath_parameters, simulator_parameters, calc_parameters,):
     
-    changing_invalue = simulator_parameters[changing_variable] # Save this for later
+    changing_invalue = calc_parameters[changing_variable] # Save this for later
     bath_parameters['concentration'] = concentration_value # Set concentration value
 
     simulator = VOTPP_class(**bath_parameters) # Set up bath and atoms
