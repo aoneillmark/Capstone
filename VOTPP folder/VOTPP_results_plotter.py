@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 path = "VOTPP folder/Results/Pickle files/"
-pickle_filename = 'r_dipole_results.pkl'
+pickle_filename = 'cell_size_results.pkl'
 
 # Extract the variable name from the pickle file name
 variable_name = pickle_filename.split('_results.pkl')[0]
@@ -24,7 +24,7 @@ for v_key, df in loaded_results[concentration_to_plot].items():
         label_str = ', '.join(map(str, v_key))
         label = f"Field: ({label_str})"
     else:
-        label = f"Order {v_key}"
+        label = f"Value {v_key}"
     plt.plot(df.index, df[0], label=label, marker='o')
 
 plt.legend()
