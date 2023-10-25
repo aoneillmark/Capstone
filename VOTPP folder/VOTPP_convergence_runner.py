@@ -66,13 +66,13 @@ r_bath_list = [10,20,30]
 r_dipole_list = [8,10,12]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
-nbstates_list = [64, 128, 256]
+nbstates_list = [128, 256, 512]
 # nbstates_list = [16,32,64]
 
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 7e-3, 20),
+    'timespace': np.linspace(0, 1e-3, 5), # 7e-2
     'method': 'cce',
     'pulses': 1,
     'nbstates': 64, #!
