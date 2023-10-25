@@ -20,7 +20,8 @@ size = MPI.COMM_WORLD.Get_size()
 # Runner to converge parameters
 def runner(concentration_value, 
            changing_variable, variable_values, 
-           bath_parameters, simulator_parameters, calc_parameters,):
+           bath_parameters, simulator_parameters, calc_parameters,
+           changing_variable2=None, variable_values2=None, ):
     
     # Attempt to retrieve the changing_variable from each dictionary
     changing_invalue = None
@@ -39,12 +40,18 @@ def runner(concentration_value,
     simulator = VOTPP_class(**bath_parameters) # Set up bath and atoms
     sim = simulator.setup_simulator(**simulator_parameters) # Set up simulator
 
-    # ls = []
     results = {}
-    for v in variable_values: # Iterate through variable values (e.g. order = 1, 2, 3)
+    for idx, v in enumerate(variable_values): # Iterate through variable values (e.g. order = 1, 2, 3)
         # Progress printing
         if rank == 0:
             print("Rank: {}, {} = {}".format(rank, changing_variable, v))
+
+        # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
+        # If either is, then we need to change the value in calc_parameters to the value at this index in variable_values2
+        if changing_variable in calc_parameters:
+            # if idx == 0:
+            #     # Store the original value of the changing_variable in calc_parameters
+            calc_parameters[changing_variable] = variable_values2[idx]
 
         setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
         l = sim.compute(**calc_parameters) # Run the simulation
@@ -110,12 +117,15 @@ default_simulator_parameters = { ########## These should be greater when simulat
 }
 
 # magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
-magnetic_field_list = [[500,0,0],]
+magnetic_field_list = [[500,0,0],[800,0,0],]
+timespace_list = [np.linspace(0, 1e-3, 201), np.linspace(0, 1e-3, 201)]
+
 magnetic_results = {}
 for conc in concentration_list:
     magnetic_results[conc] = runner(concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        changing_variable2='timespace', variable_values2=timespace_list,)
 
 # magnetic_nbstates_convergence = {}
 # for conc in concentration_list:
