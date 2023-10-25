@@ -105,7 +105,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
 
 magnetic_nbstates_convergence = {}
 for conc in concentration_list:
-    magnetic_results[conc] = runner(concentration_value=conc,
+    magnetic_nbstates_convergence[conc] = runner(concentration_value=conc,
                         changing_variable='nbstates', variable_values=nbstates_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
