@@ -116,9 +116,9 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
 }
 
-# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
-magnetic_field_list = [[500,0,0],[800,0,0],]
-timespace_list = [np.linspace(0, 1e-3, 201), np.linspace(0, 1e-3, 201)]
+magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
+# magnetic_field_list = [[500,0,0],[800,0,0],]
+timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
 
 magnetic_results = {}
 for conc in concentration_list:
