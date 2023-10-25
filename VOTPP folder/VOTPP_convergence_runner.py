@@ -48,10 +48,10 @@ def runner(concentration_value,
 
         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
         # If either is, then we need to change the value in calc_parameters to the value at this index in variable_values2
-        if changing_variable in calc_parameters:
+        if changing_variable2 in calc_parameters:
             # if idx == 0:
             #     # Store the original value of the changing_variable in calc_parameters
-            calc_parameters[changing_variable] = variable_values2[idx]
+            calc_parameters[changing_variable2] = variable_values2[idx]
 
         setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
         l = sim.compute(**calc_parameters) # Run the simulation
