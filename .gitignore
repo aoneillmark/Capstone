@@ -6,3 +6,5 @@ package_download/*
 Python-3.9.7
 *.DS_Store
 VOTPP folder/__pycache__/*
+VOTPP folder/__pycache__/VOTPP_class.cpython-37.pyc
+
