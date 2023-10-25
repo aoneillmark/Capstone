@@ -36,7 +36,7 @@ def runner(concentration_value,
             print("Rank: {}, {} = {}".format(rank, changing_variable, v))
 
         setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
-        l = sim.compute(**calc_parameters)
+        l = sim.compute(**calc_parameters) # Run the simulation
         
         v_key = convert_to_key(v)
         results[v_key] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
@@ -64,7 +64,7 @@ r_bath_list = [10,20,30]
 r_dipole_list = [8,10,12]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
-nbstates_list = [128, 256, 512]
+nbstates_list = [128,]
 # nbstates_list = [16,32,64]
 
 
@@ -91,7 +91,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'r_bath': 20, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
-    'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [10000, 0, 0], # Magnetic field in Gauss
 }
 
 # magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
