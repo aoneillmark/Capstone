@@ -4,7 +4,7 @@ import pandas as pd
 
 path = "VOTPP folder/Results/Pickle files/"
 # Loading results in another script
-with open((str(path) + 'magnetic_results.pkl') , 'rb') as f:
+with open((str(path) + 'magnetic_nbstates_convergence.pkl') , 'rb') as f:
     loaded_results = pickle.load(f)
 
 print(loaded_results.keys())
@@ -19,7 +19,7 @@ for v_key, df in loaded_results[concentration_to_plot].items():
         label = f"Field: ({label_str})"
     else:
         label = f"Order {v_key}"
-    plt.plot(df.index, df[0], label=label)
+    plt.plot(df.index, df[0], label=label, marker='o')
 
 plt.legend()
 plt.xlabel('Time')
