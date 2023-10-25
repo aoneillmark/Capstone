@@ -7,7 +7,7 @@ path = "VOTPP folder/Results/Pickle files/"
 with open((str(path) + 'order_results.pkl') , 'rb') as f:
     loaded_results = pickle.load(f)
 
-concentration_to_plot = 0.05
+concentration_to_plot = 0
 for v_key, df in loaded_results[concentration_to_plot].items():
     # Check if the key is a tuple and handle the label accordingly
     if isinstance(v_key, tuple):
