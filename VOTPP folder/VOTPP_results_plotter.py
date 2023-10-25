@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 path = "VOTPP folder/Results/Pickle files/"
-pickle_filename = 'cell_size_results.pkl'
+pickle_filename = 'magnetic_results.pkl'
 
 # Extract the variable name from the pickle file name
 variable_name = pickle_filename.split('_results.pkl')[0]
