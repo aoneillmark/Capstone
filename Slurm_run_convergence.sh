@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH -n 64              # Request 32 cores
+#SBATCH -n 128              # Request 32 cores
 #SBATCH -t 0-06:00:00      # Request 60 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J Convergence     # Job name
@@ -12,4 +12,4 @@ source ~/miniconda3/bin/activate Capstone_conda_env2
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Run the MPI script using slurm 
-mpirun -np 64 python "VOTPP folder/VOTPP_convergence_runner.py"
+mpirun -np 128 python "VOTPP folder/VOTPP_convergence_runner.py"
