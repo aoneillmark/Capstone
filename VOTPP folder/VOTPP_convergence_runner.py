@@ -139,7 +139,8 @@ for conc in concentration_list:
                         changing_variable='r_bath', variable_values=r_bath_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-print("r_bath results done")
+if rank == 0:
+    print("r_bath results done")
 
 r_dipole_results = {}
 for conc in concentration_list:
@@ -147,7 +148,8 @@ for conc in concentration_list:
                         changing_variable='r_dipole', variable_values=r_dipole_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-print("r_dipole results done")
+if rank == 0:
+    print("r_dipole results done")
 
 cell_size_results = {}
 for conc in concentration_list:
@@ -155,6 +157,8 @@ for conc in concentration_list:
                         changing_variable='cell_size', variable_values=cell_size_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
+if rank == 0:
+    print("cell_size results done")
 #####################################################################
 
 # Print time taken
