@@ -26,8 +26,8 @@ class VOTPP_class:
     def setup_bath(self):
         #import xyz file
         uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
-        print("xyz file (uc):")
-        print(uc)
+        # print("xyz file (uc):")
+        # print(uc)
         
         #seperate columns into numpy arrays
         N = np.array(uc[0])
@@ -145,8 +145,8 @@ class VOTPP_class:
         # Create a 3x3 matrix from the list of data
         interaction_matrix = np.array(values).reshape((3, 3))
 
-        print("Interaction tensor:")
-        print(interaction_matrix)
+        # print("Interaction tensor:")
+        # print(interaction_matrix)
 
         return interaction_matrix # self.cen
 
