@@ -136,7 +136,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
 r_bath_results = {}
 for conc in concentration_list:
     r_bath_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_bath', variable_values=order_list,
+                        changing_variable='r_bath', variable_values=r_bath_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 print("r_bath results done")
