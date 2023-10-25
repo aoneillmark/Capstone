@@ -26,6 +26,9 @@ class VOTPP_class:
     def setup_bath(self):
         #import xyz file
         uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
+        print("xyz file (uc):")
+        print(uc)
+        
         #seperate columns into numpy arrays
         N = np.array(uc[0])
         x = np.array(uc[1])
@@ -52,7 +55,7 @@ class VOTPP_class:
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
-            atoms = sic.gen_supercell(cell, seed=self.seed,) #left fixed for convergence tests to avoid changes
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
             #set          spin | gyro | quadrupole 
             spin_types = [('C',  1 / 2,  6.72828),    
                         ('H', 1 / 2, 26.7522),
@@ -141,6 +144,9 @@ class VOTPP_class:
 
         # Create a 3x3 matrix from the list of data
         interaction_matrix = np.array(values).reshape((3, 3))
+
+        print("Interaction tensor:")
+        print(interaction_matrix)
 
         return interaction_matrix # self.cen
 
