@@ -78,9 +78,9 @@ cell_size_list = [60,100,200]
 nbstates_list = [128,]
 # nbstates_list = [16,32,64]
 
-r_bath_list = [10,]
-r_dipole_list = [8,]
-cell_size_list = [60,]
+# r_bath_list = [10,]
+# r_dipole_list = [8,]
+# cell_size_list = [60,]
 
 
 default_calc_parameters = {
