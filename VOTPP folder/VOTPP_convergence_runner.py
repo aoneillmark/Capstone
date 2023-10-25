@@ -138,12 +138,12 @@ for conc in concentration_list:
 
 # Print time taken
 end = time.time()
-print("Time taken: {} seconds".format(end - start))
-
 path = "VOTPP folder/Results/Pickle files/"
 
 # Save this data to an external file
 if rank == 0:
+    print("Time taken: {} seconds".format(end - start))
+
     # Saving results
     with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
         pickle.dump(magnetic_nbstates_convergence, f)
