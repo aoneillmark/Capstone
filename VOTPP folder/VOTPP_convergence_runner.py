@@ -22,7 +22,18 @@ def runner(concentration_value,
            changing_variable, variable_values, 
            bath_parameters, simulator_parameters, calc_parameters,):
     
-    changing_invalue = calc_parameters[changing_variable] # Save this for later
+    # Attempt to retrieve the changing_variable from each dictionary
+    changing_invalue = None
+    for param_dict in [simulator_parameters, bath_parameters, calc_parameters]:
+        try:
+            changing_invalue = param_dict[changing_variable]
+            break
+        except KeyError:
+            continue
+
+    if changing_invalue is None:
+        raise ValueError(f"'{changing_variable}' not found in any of the provided dictionaries.")
+
     bath_parameters['concentration'] = concentration_value # Set concentration value
 
     simulator = VOTPP_class(**bath_parameters) # Set up bath and atoms
@@ -60,12 +71,16 @@ concentration_list = [0]
 order_list = [1, 2, 3, 4] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
-r_bath_list = [10,20,30]
-r_dipole_list = [8,10,12]
+r_bath_list = [10,20,30, 40]
+r_dipole_list = [8,10,12, 14]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
 nbstates_list = [128,]
 # nbstates_list = [16,32,64]
+
+r_bath_list = [10,]
+r_dipole_list = [8,]
+cell_size_list = [60,]
 
 
 default_calc_parameters = {
@@ -101,11 +116,11 @@ default_simulator_parameters = { ########## These should be greater when simulat
 #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
 #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-magnetic_nbstates_convergence = {}
-for conc in concentration_list:
-    magnetic_nbstates_convergence[conc] = runner(concentration_value=conc,
-                        changing_variable='nbstates', variable_values=nbstates_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+# magnetic_nbstates_convergence = {}
+# for conc in concentration_list:
+#     magnetic_nbstates_convergence[conc] = runner(concentration_value=conc,
+#                         changing_variable='nbstates', variable_values=nbstates_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 
 #####################################################################
@@ -118,21 +133,27 @@ for conc in concentration_list:
 
 # print("Order results done")
 
-# r_bath_results = {}
-# for conc in concentration_list:
-#     r_bath_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='r_bath', variable_values=order_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+r_bath_results = {}
+for conc in concentration_list:
+    r_bath_results[conc] = runner(concentration_value=conc,
+                        changing_variable='r_bath', variable_values=order_list,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-# print("r_bath results done")
+print("r_bath results done")
 
-# r_dipole_results = {}
-# for conc in concentration_list:
-#     r_dipole_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='r_dipole', variable_values=order_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+r_dipole_results = {}
+for conc in concentration_list:
+    r_dipole_results[conc] = runner(concentration_value=conc,
+                        changing_variable='r_dipole', variable_values=order_list,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-# print("r_dipole results done")
+print("r_dipole results done")
+
+cell_size_results = {}
+for conc in concentration_list:
+    cell_size_results[conc] = runner(concentration_value=conc,
+                        changing_variable='cell_size', variable_values=order_list,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 #####################################################################
 
@@ -145,8 +166,9 @@ if rank == 0:
     print("Time taken: {} seconds".format(end - start))
 
     # Saving results
-    with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
-        pickle.dump(magnetic_nbstates_convergence, f)
+
+    # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
+    #     pickle.dump(magnetic_nbstates_convergence, f)
 
     # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_results, f)
@@ -154,11 +176,14 @@ if rank == 0:
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
-    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-    #     pickle.dump(r_bath_results, f)
+    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
     
-    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-    #     pickle.dump(r_dipole_results, f)
+    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+        pickle.dump(r_dipole_results, f)
+
+    with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
+        pickle.dump(cell_size_results, f)
 
 
 
