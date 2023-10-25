@@ -11,6 +11,8 @@ print(loaded_results.keys())
 
 concentration_to_plot = 0
 for v_key, df in loaded_results[concentration_to_plot].items():
+    print(f"Data for {v_key}:")
+    print(df)
     # Check if the key is a tuple and handle the label accordingly
     if isinstance(v_key, tuple):
         label_str = ', '.join(map(str, v_key))
@@ -30,4 +32,4 @@ output_filename = f"{image_path}Concentration_{concentration_to_plot}.png"
 plt.savefig(output_filename, dpi=300)  # dpi is dots per inch (resolution). You can adjust as needed.
 
 # If you want to show the plot, you can uncomment the next line
-# plt.show()
+plt.show()
