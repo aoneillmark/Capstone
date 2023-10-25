@@ -66,14 +66,16 @@ r_bath_list = [10,20,30]
 r_dipole_list = [8,10,12]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
-# nbstates_list = [32, 64, 128, 256]
-nbstates_list = [16,32,64]
+nbstates_list = [64, 128, 256]
+# nbstates_list = [16,32,64]
+
 
 default_calc_parameters = {
-    'timespace': np.linspace(0, 7e-2, 201),
+    # 'timespace': np.linspace(0, 7e-2, 201),
+    'timespace': np.linspace(0, 7e-3, 20),
     'method': 'cce',
     'pulses': 1,
-    'nbstates': 32, #!
+    'nbstates': 64, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -91,15 +93,22 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'r_bath': 20, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
-    'magnetic_field': [1000, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
 }
 
-magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
-magnetic_results = {}
+# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
+# magnetic_results = {}
+# for conc in concentration_list:
+#     magnetic_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+
+magnetic_nbstates_convergence = {}
 for conc in concentration_list:
     magnetic_results[conc] = runner(concentration_value=conc,
-                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
+                        changing_variable='nbstates', variable_values=nbstates_list,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+
 
 #####################################################################
 
@@ -138,8 +147,11 @@ path = "VOTPP folder/Results/Pickle files/"
 # Save this data to an external file
 if rank == 0:
     # Saving results
-    with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+    with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
+        pickle.dump(magnetic_nbstates_convergence, f)
+
+    # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
+    #     pickle.dump(magnetic_results, f)
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
