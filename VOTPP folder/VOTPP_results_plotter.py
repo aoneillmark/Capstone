@@ -1,10 +1,16 @@
 import matplotlib.pyplot as plt
 import pickle
 import pandas as pd
+import os
 
 path = "VOTPP folder/Results/Pickle files/"
-# Loading results in another script
-with open((str(path) + 'magnetic_nbstates_convergence.pkl') , 'rb') as f:
+pickle_filename = 'r_dipole_results.pkl'
+
+# Extract the variable name from the pickle file name
+variable_name = pickle_filename.split('_results.pkl')[0]
+
+# Loading results from the pickle file
+with open(os.path.join(path, pickle_filename), 'rb') as f:
     loaded_results = pickle.load(f)
 
 print(loaded_results.keys())
@@ -24,11 +30,13 @@ for v_key, df in loaded_results[concentration_to_plot].items():
 plt.legend()
 plt.xlabel('Time')
 plt.ylabel('Coherence')
-plt.title(f"Concentration: {concentration_to_plot}")
+plt.title(f"{variable_name.capitalize()} - Concentration: {concentration_to_plot}")
 
 image_path = "VOTPP folder/Results/Plots/"
-# Save the figure to a file
-output_filename = f"{image_path}Concentration_{concentration_to_plot}.png"
+
+# Modify the output_filename to include both variable_name and concentration_to_plot
+output_filename = os.path.join(image_path, f"{variable_name}_concentration_{concentration_to_plot}.png")
+
 plt.savefig(output_filename, dpi=300)  # dpi is dots per inch (resolution). You can adjust as needed.
 
 # If you want to show the plot, you can uncomment the next line
