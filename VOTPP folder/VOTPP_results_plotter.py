@@ -4,7 +4,7 @@ import pandas as pd
 
 path = "VOTPP folder/Results/Pickle files/"
 # Loading results in another script
-with open((str(path) + 'order_results.pkl') , 'rb') as f:
+with open((str(path) + 'magnetic_results.pkl') , 'rb') as f:
     loaded_results = pickle.load(f)
 
 print(loaded_results.keys())
