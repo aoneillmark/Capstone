@@ -113,7 +113,7 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, #!
+    'order': 2, #!
     'r_bath': 10, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
