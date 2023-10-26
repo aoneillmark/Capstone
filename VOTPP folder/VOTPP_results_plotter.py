@@ -28,7 +28,7 @@ def plot_from_file(pickle_filenames):
                 label = f"Field: ({label_str})"
             else:
                 label = f"Value {v_key}"
-            plt.plot(df.index, df[0], label=label, marker='o')
+            plt.plot(df.index, df[0], label=label)#, marker='o')
 
         plt.legend()
         plt.xlabel('Time')
@@ -43,4 +43,4 @@ def plot_from_file(pickle_filenames):
         plt.show()
 
 # Provide the filenames you want to process as a list
-plot_from_file(['r_bath_results.pkl', 'r_dipole_results.pkl'])
+plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
