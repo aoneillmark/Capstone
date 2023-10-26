@@ -114,7 +114,7 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 20, #!
+    'r_bath': 10, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
     'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
