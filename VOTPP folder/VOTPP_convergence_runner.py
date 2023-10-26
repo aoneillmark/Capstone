@@ -97,7 +97,7 @@ nbstates_list = [128,]
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
     'timespace': np.linspace(0, 1e-2, 201), # 7e-2
-    'method': 'cce',
+    'method': 'gcce',
     'pulses': 1,
     'nbstates': 1024, #!
     'quantity': 'coherence',
