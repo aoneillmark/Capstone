@@ -40,4 +40,4 @@ output_filename = os.path.join(image_path, f"{variable_name}_concentration_{conc
 plt.savefig(output_filename, dpi=300)  # dpi is dots per inch (resolution). You can adjust as needed.
 
 # If you want to show the plot, you can uncomment the next line
-plt.show()
+# plt.show()
