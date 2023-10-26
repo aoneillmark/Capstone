@@ -61,7 +61,11 @@ def runner(concentration_value,
         # ls.append(l.real)
 
     simulator_parameters[changing_variable] = changing_invalue
-    # ls = pd.DataFrame(ls, columns=calc_parameters['timespace'], index=variable_values).T
+
+    ### !!!!!!!!!! Check here for problems with changing_variable 2 if you're using runner multiple times !!!!!!!!!!!!!!
+    if changing_variable2 in calc_parameters:
+        # Restore the original value of the changing_variable in calc_parameters
+        calc_parameters[changing_variable2] = variable_values2[0]
     return results
 
 
