@@ -114,7 +114,7 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 10, #!
+    'r_bath': 20, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
     'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
@@ -122,17 +122,18 @@ default_simulator_parameters = { ########## These should be greater when simulat
 
 magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
 # magnetic_field_list = [[500,0,0],[800,0,0],]
-timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
+# timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
+timespace_list = [np.linspace(0, 1e-2, 201), np.linspace(0, 2e-2, 201), np.linspace(0, 3e-2, 201), np.linspace(0, 4e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 6e-2, 201), ]
 
-magnetic_field_list = [[500,0,0],]
-timespace_list = [np.linspace(0, 1e-2, 201),] # 2e-4
+# magnetic_field_list = [[500,0,0],]
+# timespace_list = [np.linspace(0, 1e-2, 201),] # 2e-4
 
-# magnetic_results = {}
-# for conc in concentration_list:
-#     magnetic_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         changing_variable2='timespace', variable_values2=timespace_list,)
+magnetic_results = {}
+for conc in concentration_list:
+    magnetic_results[conc] = runner(concentration_value=conc,
+                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        changing_variable2='timespace', variable_values2=timespace_list,)
 
 
 # magnetic_nbstates_convergence = {}
@@ -152,23 +153,23 @@ timespace_list = [np.linspace(0, 1e-2, 201),] # 2e-4
 
 # print("Order results done")
 
-r_bath_results = {}
-for conc in concentration_list:
-    r_bath_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_bath', variable_values=r_bath_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+# r_bath_results = {}
+# for conc in concentration_list:
+#     r_bath_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=r_bath_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-if rank == 0:
-    print("r_bath results done")
+# if rank == 0:
+#     print("r_bath results done")
 
-r_dipole_results = {}
-for conc in concentration_list:
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=r_dipole_list,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+# r_dipole_results = {}
+# for conc in concentration_list:
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-if rank == 0:
-    print("r_dipole results done")
+# if rank == 0:
+#     print("r_dipole results done")
 
 # cell_size_results = {}
 # for conc in concentration_list:
@@ -193,18 +194,18 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
-    #     pickle.dump(magnetic_results, f)
-    #     print(magnetic_results)
+    with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
+        pickle.dump(magnetic_results, f)
+        # print(magnetic_results)
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
-    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_dipole_results, f)
 
     # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
     #     pickle.dump(cell_size_results, f)
