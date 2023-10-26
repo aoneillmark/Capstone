@@ -134,6 +134,7 @@ for conc in concentration_list:
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         changing_variable2='timespace', variable_values2=timespace_list,)
 
+
 # magnetic_nbstates_convergence = {}
 # for conc in concentration_list:
 #     magnetic_nbstates_convergence[conc] = runner(concentration_value=conc,
@@ -194,6 +195,7 @@ if rank == 0:
 
     with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
         pickle.dump(magnetic_results, f)
+        print(magnetic_results)
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
