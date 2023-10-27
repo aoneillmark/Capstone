@@ -56,9 +56,9 @@ cen = pc.CenterArray(size=2, position=[qpos,qpos],
                      beta=[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],)
 
 #parameters
-nb = 128
+nb = 25
 # ts = np.linspace(0, 2, 201) #expected T2 of 1015us
-ts = np.linspace(0, 2, 201) #expected T2 of 1015us
+ts = np.linspace(0, 0.06, 201) #expected T2 of 1015us
 cell = 60 #cell size 
 
 print(sic.isotopes)
