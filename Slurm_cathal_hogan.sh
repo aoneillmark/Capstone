@@ -18,4 +18,4 @@ mpirun -np 25 python "Cathal Hogan code/tbs n-n T2 MULTIPLE SPINS.py"
 wait
 
 # Run the MPI script for plotting using slurm 
-mpirun -np 1 python "VOTPP folder/VOTPP_results_plotter.py"
+mpirun -np 1 python "VOTPP folder/results_plotter_temp.py"
