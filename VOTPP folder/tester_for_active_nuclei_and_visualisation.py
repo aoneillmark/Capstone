@@ -111,18 +111,18 @@ default_simulator_parameters = { ########## These should be greater when simulat
 
 
 simulator = VOTPP_class(**default_bath_parameters) # Set up bath and atoms
-sim = simulator.setup_simulator(**default_simulator_parameters) # Set up simulator
+# sim = simulator.setup_simulator(**default_simulator_parameters) # Set up simulator
 
-active_positions = simulator.get_active_nuclei_positions(sim, default_simulator_parameters['r_bath'])
-active_nuclei = simulator.get_number_of_active_nuclei(sim, default_simulator_parameters['r_bath'])
-print("Active nuclei positions:")
-print("     x         y         z")
-print(active_positions)
-print("")
-print("Number of active nuclei:")
-print(active_nuclei)
+# active_positions = simulator.get_active_nuclei_positions(sim, default_simulator_parameters['r_bath'])
+# active_nuclei = simulator.get_number_of_active_nuclei(sim, default_simulator_parameters['r_bath'])
+# print("Active nuclei positions:")
+# print("     x         y         z")
+# print(active_positions)
+# print("")
+# print("Number of active nuclei:")
+# print(active_nuclei)
 
-print("Position of central spin:")
-print(simulator.qpos1)
+# print("Position of central spin:")
+# print(simulator.qpos1)
 
-simulator.visualize_cluster(sim)
+# simulator.visualize_cluster(sim)
