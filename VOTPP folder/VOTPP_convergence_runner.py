@@ -99,7 +99,7 @@ default_calc_parameters = {
     'timespace': np.linspace(0, 1e-2, 201), # 7e-2
     'method': 'cce',
     'pulses': 1,
-    'nbstates': 1024, #!
+    'nbstates': 25, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -126,7 +126,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # timespace_list = [np.linspace(0, 1e-2, 201), np.linspace(0, 2e-2, 201), np.linspace(0, 3e-2, 201), np.linspace(0, 4e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 6e-2, 201), ]
 
 magnetic_field_list = [[500,0,0],]
-timespace_list = [np.linspace(0, 1e-2, 201),] # 2e-4
+timespace_list = [np.linspace(0, 1e-3, 201),] # 2e-4
 
 magnetic_results = {}
 for conc in concentration_list:
