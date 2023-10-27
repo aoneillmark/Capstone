@@ -18,11 +18,11 @@ def fit(x, T2, n):
     return y
 
 #import xyz file
-uc = pd.read_csv(r'C:\Users\cchog\OneDrive\Documents\Spin Decoherence - Summer Internship 23\VoTTP\VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') # enter specific file directory
+uc = pd.read_csv('VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
 #seperate columns into numpy arrays
 N = np.array(uc[0])
 x = np.array(uc[1])
-x = np.array(x)
+x = np.array(x) ############# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 y = np.array(uc[2])
 z = np.array(uc[3])
 #set up unit cell
@@ -48,9 +48,11 @@ cen = pc.CenterArray(size=1, position=qpos,
 
 #parameters
 nb = 25
-ts = np.linspace(0, 2, 201) #expected T2 of 1015us
+# ts = np.linspace(0, 2, 201) #expected T2 of 1015us
+ts = np.linspace(0, 0.06, 201) #expected T2 of 1015us
 cell = 60 #cell size 
 
+print(sic.isotopes)
 
 #dictionary of parameters
 parameters = dict(
@@ -58,12 +60,12 @@ parameters = dict(
     r_bath=20,  # Size of the bath in A
     r_dipole=10,  # Cutoff of pairwise clusters in A
     pulses = 1, # N pulses in CPMG sequence
-    magnetic_field=[0,0,10000] #set to 1T
+    magnetic_field=[500,0,0] #set to 1T
 ) 
 
 #calculating T2 using 50 random seeds
 n = 1 #counter to keep track
-no_sims = 50 #number of sims to average over
+no_sims = 1 #number of sims to average over
 sims = []
 for i in range(no_sims):
     
