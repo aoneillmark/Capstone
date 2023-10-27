@@ -43,4 +43,4 @@ def plot_from_file(pickle_filenames):
         plt.show()
 
 # Provide the filenames you want to process as a list
-plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
+plot_from_file(['Cathal_hogan_double_spin.pkl', 'magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
