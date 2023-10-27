@@ -17,11 +17,13 @@ class VOTPP_class:
             'spin': [7/2, 1/2],
             'gyro': [-7.05,-17608.59705],
             'D': [-350, 0],
-            'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-            'beta': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+            'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
         self.interaction_matrix = self.create_interaction_tensor()
         self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
+
+        # print(self.atoms.isotopes)
 
     def setup_bath(self):
         #import xyz file
@@ -40,6 +42,8 @@ class VOTPP_class:
         sic.zdir = [0, 0, 1]
 
         if self.concentration == 0:
+            x = np.array(x)
+
             #populate cell
             for i in range(len(N)):
                 sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
@@ -52,6 +56,21 @@ class VOTPP_class:
             # print(qpos1)
             # print("")
             # print(qpos2)
+
+            print("sic.atoms:")
+            # print(*sic.atoms, sep="\n")
+            counts = {}
+            for atom_type, coordinates in sic.atoms.items():
+                counts[atom_type] = len(coordinates)
+            print(counts)
+
+            total_atoms = sum(len(coordinates) for coordinates in sic.atoms.values())
+            print("Total number of atoms:", total_atoms)
+
+
+            print("sic.isotopes:")
+            print(*sic.isotopes, sep="\n")
+
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
