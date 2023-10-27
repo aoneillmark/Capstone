@@ -85,7 +85,9 @@ for i in range(no_sims):
 
     #run simulation
     sim = calc.compute(ts, nbstates = nb,
-                        method='cce', quantity='coherence')
+                        method='cce', quantity='coherence',
+                        parallel=True,
+                        parallel_states=True)
     
     #use and interate counter to keep track of progress
     #print(n, ' done') # uncomment to print progress
