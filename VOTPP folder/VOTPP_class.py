@@ -23,6 +23,8 @@ class VOTPP_class:
         self.interaction_matrix = self.create_interaction_tensor()
         self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
 
+        print("init is being called")
+
 
     def setup_bath(self):
         #import xyz file
