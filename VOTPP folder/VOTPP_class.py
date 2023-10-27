@@ -23,13 +23,10 @@ class VOTPP_class:
         self.interaction_matrix = self.create_interaction_tensor()
         self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
 
-        # print(self.atoms.isotopes)
 
     def setup_bath(self):
         #import xyz file
         uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
-        # print("xyz file (uc):")
-        # print(uc)
         
         #seperate columns into numpy arrays
         N = np.array(uc[0])
@@ -53,23 +50,7 @@ class VOTPP_class:
             pos1 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
-            # print(qpos1)
-            # print("")
-            # print(qpos2)
 
-            print("sic.atoms:")
-            # print(*sic.atoms, sep="\n")
-            counts = {}
-            for atom_type, coordinates in sic.atoms.items():
-                counts[atom_type] = len(coordinates)
-            print(counts)
-
-            total_atoms = sum(len(coordinates) for coordinates in sic.atoms.values())
-            print("Total number of atoms:", total_atoms)
-
-
-            print("sic.isotopes:")
-            print(*sic.isotopes, sep="\n")
 
 
             #generate supercell - nuclear bath 
@@ -97,9 +78,7 @@ class VOTPP_class:
             pos2 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
-            # print(qpos1)
-            # print("")
-            # print(qpos2)
+
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
@@ -137,8 +116,6 @@ class VOTPP_class:
         # Create a 3x3 matrix from the list of data
         interaction_matrix = np.array(values).reshape((3, 3))
 
-        # print("Interaction tensor:")
-        # print(interaction_matrix)
 
         return interaction_matrix # self.cen
 
