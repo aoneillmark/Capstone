@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 import pycce as pc 
 import pandas as pd
 from scipy.optimize import curve_fit 
+from mpi4py import MPI
+
+rank = MPI.COMM_WORLD.Get_rank()
 
 def fit(x, T2, n):
     '''function to fit coherence curve'''
@@ -47,9 +50,9 @@ cen = pc.CenterArray(size=1, position=qpos,
                      alpha=[0,0,0,0,0,1,0,0], beta=[0,0,0,0,1,0,0,0]) #set to -3/2 to -1/2
 
 #parameters
-nb = 25
+nb = 15
 # ts = np.linspace(0, 2, 201) #expected T2 of 1015us
-ts = np.linspace(0, 0.06, 201) #expected T2 of 1015us
+ts = np.linspace(0, 2, 201) #expected T2 of 1015us
 cell = 60 #cell size 
 
 print(sic.isotopes)
@@ -93,42 +96,44 @@ for i in range(no_sims):
     #print(n, ' done') # uncomment to print progress
     n += 1
     
-    #plot this run and store it 
-    plt.plot(ts, sim.real)
-    sims.append(sim.real)
+    if rank ==0:
+        #plot this run and store it 
+        plt.plot(ts, sim.real)
+        sims.append(sim.real)
 
-#add labels and title to plot     
-plt.xlabel('Time [ms]')
-plt.ylabel('Coherence')
-plt.title('50 coherence curves for n-n cell=60 [2:20:6]')
-plt.show()
+if rank == 0:
+    #add labels and title to plot     
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Coherence')
+    plt.title('50 coherence curves for n-n cell=60 [2:20:6]')
+    plt.show()
 
-#use all 50 sims to calculate average curve 
-avg = np.zeros(201) #creates array of 0s same length as ts
-for i in range(201): 
-    for j in range(no_sims):
-        avg[i] += sims[j][i]   
-avg = avg/no_sims
+    #use all 50 sims to calculate average curve 
+    avg = np.zeros(201) #creates array of 0s same length as ts
+    for i in range(201): 
+        for j in range(no_sims):
+            avg[i] += sims[j][i]   
+    avg = avg/no_sims
 
-#plot the average coherence curve 
-plt.plot(ts, avg)
-plt.xlabel('Time [ms]')
-plt.ylabel('Coherence')
-plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
-plt.show()
+    #plot the average coherence curve 
+    plt.plot(ts, avg)
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Coherence')
+    plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
+    plt.show()
 
-#fit coherence curve 
-p_guess= [0.02, 2] #guessing T2 and the power respectively 
-par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
-err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
-print('params =', par) # print params
+    #fit coherence curve 
+    p_guess= [0.02, 2] #guessing T2 and the power respectively 
+    par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
+    err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
+    print('params =', par) # print params
 
-#plot fitted curve 
-label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
-plt.plot(ts, avg, label='average for 50')
-plt.plot(ts, fit(ts, *par), 'r-', label=label)
-plt.xlabel('Time [ms]')
-plt.ylabel('Coherence')
-plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
-plt.legend()
-plt.show()
+    #plot fitted curve 
+    label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
+    plt.plot(ts, avg, label='average for 50')
+    plt.plot(ts, fit(ts, *par), 'r-', label=label)
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Coherence')
+    plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
+    plt.legend()
+    plt.show()
