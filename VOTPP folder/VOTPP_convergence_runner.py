@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import time
 import pickle
+import pycce as pc
 
 # Start timer
 start = time.time()
@@ -125,7 +126,8 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'order': 2, #!
     'r_bath': 20, #!
     'r_dipole': 10, #!
-    'pulses': 1, # N pulses in CPMG sequence
+    # 'pulses': 1, # N pulses in CPMG sequence
+    'pulses': [pc.Pulse('x', np.pi)],
     'magnetic_field': [10000, 0, 0], # Magnetic field in Gauss
 }
 
