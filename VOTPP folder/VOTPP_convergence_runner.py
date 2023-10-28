@@ -21,7 +21,8 @@ size = MPI.COMM_WORLD.Get_size()
 def runner(concentration_value, 
            changing_variable, variable_values, 
            bath_parameters, simulator_parameters, calc_parameters,
-           changing_variable2=None, variable_values2=None, ):
+           num_spins=2, spin_type=None,
+           changing_variable2=None, variable_values2=None,):
     
     # Attempt to retrieve the changing_variable from each dictionary
     changing_invalue = None
@@ -37,7 +38,8 @@ def runner(concentration_value,
 
     bath_parameters['concentration'] = concentration_value # Set concentration value
 
-    simulator = VOTPP_class(**bath_parameters) # Set up bath and atoms
+
+    simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, **bath_parameters) # Set up bath and atoms
     sim = simulator.setup_simulator(**simulator_parameters) # Set up simulator
 
     results = {}
@@ -107,7 +109,7 @@ default_calc_parameters = {
     'timespace': np.linspace(0, 1e-2, 201), # 7e-2
     'method': 'cce',
     'pulses': 1,
-    'nbstates': 25, #!
+    'nbstates': 15, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -116,7 +118,6 @@ default_calc_parameters = {
 default_bath_parameters = {
     'concentration': 0, #!
     'cell_size': 60, #!
-    'displacement': 0, # Angstrom
     'seed': 8000
 }
 
@@ -125,7 +126,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'r_bath': 20, #!
     'r_dipole': 10, #!
     'pulses': 1, # N pulses in CPMG sequence
-    'magnetic_field': [500, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [10000, 0, 0], # Magnetic field in Gauss
 }
 
 # magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [2900,0,0]]
@@ -133,15 +134,18 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
 # timespace_list = [np.linspace(0, 1e-2, 201), np.linspace(0, 2e-2, 201), np.linspace(0, 3e-2, 201), np.linspace(0, 4e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 6e-2, 201), ]
 
-magnetic_field_list = [[500,0,0],]
-timespace_list = [np.linspace(0, 1e-3, 201),] # 2e-4
+magnetic_field_list = [[500,0,0],[1000,0,0], [2000,0,0]]
+timespace_list = [np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),] # 2e-4
 
 magnetic_results = {}
 for conc in concentration_list:
-    magnetic_results[conc] = runner(concentration_value=conc,
+    magnetic_results[conc] = runner(
+                        concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+                        num_spins=2, spin_type=None,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        changing_variable2='timespace', variable_values2=timespace_list,)
+                        changing_variable2='timespace', variable_values2=timespace_list,
+                        )
 
 
 # magnetic_nbstates_convergence = {}
