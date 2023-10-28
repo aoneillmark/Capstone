@@ -6,24 +6,50 @@ from scipy.optimize import curve_fit
 from mpi4py import MPI
 
 class VOTPP_class:
-    def __init__(self, concentration, cell_size, displacement, seed=8000):
+    def __init__(self, concentration, cell_size, num_spins, spin_type=None, seed=8000):
         self.concentration = concentration
         self.cell_size = cell_size
-        self.displacement = displacement
         self.seed = seed
         self.atoms, self.qpos1, self.qpos2 = self.setup_bath()
-        self.center_parameters = {
-            'position': [self.qpos1, self.qpos2],
-            'spin': [7/2, 1/2],
-            'gyro': [-7.05,-17608.59705],
-            'D': [-350, 0],
-            'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-            'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        }
-        self.interaction_matrix = self.create_interaction_tensor()
-        self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
 
-        print("init is being called")
+
+        if num_spins == 1:
+            if spin_type == 'electron':
+                self.center_parameters = {
+                    'size': 1,
+                    'position': [self.qpos1],
+                    'spin': [1/2],
+                    'gyro': [-17608.59705],
+                    'D': [0],
+                    'alpha': [0, 1],
+                    'beta': [1, 0],
+                }
+            elif spin_type == 'nuclear':
+                self.center_parameters = {
+                    'size': 1,
+                    'position': [self.qpos1],
+                    'spin': [7/2],
+                    'gyro': [-7.05],
+                    'D': [-350],
+                    'alpha': [0,0,0,0,0,1,0,0],
+                    'beta': [0,0,0,0,1,0,0,0],
+                }
+            self.cen = self.setup_center()
+
+        if num_spins == 2:
+            self.center_parameters = {
+                'size': 2,
+                'position': [self.qpos1, self.qpos2],
+                'spin': [7/2, 1/2],
+                'gyro': [-7.05,-17608.59705],
+                'D': [-350, 0],
+                'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+                'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            }
+            self.interaction_matrix = self.create_interaction_tensor()
+            self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
+
+        # print("init is being called")
 
 
     def setup_bath(self):
@@ -49,7 +75,7 @@ class VOTPP_class:
 
             #assign position of qubit 
             pos2 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos1 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
 
@@ -61,8 +87,8 @@ class VOTPP_class:
             #set          spin | gyro | quadrupole 
             spin_types = [('C',  1 / 2,  6.72828),    
                         ('H', 1 / 2, 26.7522),
-                        ('N', 1, 1.9331, 20.44 )
-                        #('V', 7/2, 7.05, -350)  # not added for consistency between tests
+                        ('N', 1, 1.9331, 20.44 ),
+                        # ('V', 7/2, 7.05, -350), # not added for consistency between tests
                         ]   
             atoms.add_type(*spin_types)
         
@@ -77,7 +103,7 @@ class VOTPP_class:
 
             #assign position of qubit 
             pos1 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos2 = x[76], y[76], z[76] # Position of the electron spin (displacement is in angstroms)
+            pos2 = x[76], y[76], z[76] # Position of the electron spin
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
 
@@ -93,10 +119,10 @@ class VOTPP_class:
     
         return atoms, qpos1, qpos2
 
-    def setup_center(self, interaction_matrix):
+    def setup_center(self, interaction_matrix=None):
         # set up the center
         cen = pc.CenterArray(
-            size=2, 
+            size=self.center_parameters['size'],
             position=self.center_parameters['position'], 
             spin=self.center_parameters['spin'], 
             gyro=self.center_parameters['gyro'], 
