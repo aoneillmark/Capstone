@@ -53,7 +53,15 @@ def runner(concentration_value,
             #     # Store the original value of the changing_variable in calc_parameters
             calc_parameters[changing_variable2] = variable_values2[idx]
 
-        setattr(simulator, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
+        setattr(sim, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
+        
+        # if rank == 0:
+        #     # print("Simulator magnetic field:")
+        #     # print(simulator.magnetic_field)
+
+        #     print("Sim magnetic field:")
+        #     print(sim.magnetic_field)
+
         l = sim.compute(**calc_parameters) # Run the simulation
         
         v_key = convert_to_key(v)
