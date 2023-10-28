@@ -5,7 +5,7 @@ import pickle
 import os
 
 def coherence_time_func(time, beta, T2):
-    y = np.exp(-((2*(time)/T2)**beta))
+    y = np.exp(-(((time)/T2)**beta))
     return y
 
 def load_data_from_file(path, pickle_filename):
