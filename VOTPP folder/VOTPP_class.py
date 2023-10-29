@@ -46,12 +46,11 @@ class VOTPP_class:
                 'D': [-350, 0],
                 # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
                 # 'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                'alpha': [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-                'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                'alpha': 10,
+                'beta': 8,
             }
-            self.interaction_matrix = self.get_interaction_tensor()
-            
 
+            self.interaction_matrix = self.get_interaction_tensor()
             self.cen = self.setup_center(interaction_matrix=self.interaction_matrix,)
 
         # print("init is being called")
