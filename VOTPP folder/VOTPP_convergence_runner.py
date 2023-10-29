@@ -87,6 +87,7 @@ def convert_to_key(value):
         return value
 
 
+
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
 concentration_list = [0]
@@ -131,6 +132,17 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
     'magnetic_field': [10000, 0, 0], # Magnetic field in Gauss
 }
+
+# alpha_and_beta = {
+#     'A1': {
+#         'alpha': 0.5,
+#         'beta': 0.025,
+#     },
+#     'A2': {
+#         'alpha': 0.5,
+#         'beta': 0.05,
+#     },
+# }
 
 magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
 # magnetic_field_list = [[500,0,0],[800,0,0],]
