@@ -42,12 +42,15 @@ class VOTPP_class:
                 'position': [self.qpos1, self.qpos2],
                 'spin': [7/2, 1/2],
                 'gyro': [-7.05,-17608.59705],
+                # 'gyro': [-7.05, [self.get_electron_gyro()]],
                 'D': [-350, 0],
                 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
                 'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             }
-            self.interaction_matrix = self.create_interaction_tensor()
-            self.cen = self.setup_center(interaction_matrix=self.interaction_matrix)
+            self.interaction_matrix = self.get_interaction_tensor()
+            
+
+            self.cen = self.setup_center(interaction_matrix=self.interaction_matrix,)
 
         # print("init is being called")
 
@@ -133,7 +136,7 @@ class VOTPP_class:
         )
         return cen
 
-    def create_interaction_tensor(self, printing=False):
+    def get_interaction_tensor(self, printing=False):
         with open(('VOTPP folder/VOTPP_opt.Atens'), 'r') as f:
             lines = f.readlines()
 
@@ -146,6 +149,16 @@ class VOTPP_class:
 
 
         return interaction_matrix # self.cen
+    
+    def get_electron_gyro(self):
+        with open(('VOTPP folder/VOTPP_opt.gtens'), 'r') as f:
+            lines = f.readlines()
+        
+        tensor = [float(x) for x in lines[0].split()]
+        tensor_converted_by_factor = [i*8794.10005384623 for i in tensor]
+
+        return tensor_converted_by_factor
+
 
     def setup_simulator(self, order, r_bath, r_dipole, pulses, magnetic_field):
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, pulses=pulses, magnetic_field=magnetic_field)
