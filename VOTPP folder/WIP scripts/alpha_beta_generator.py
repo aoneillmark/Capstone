@@ -73,7 +73,7 @@ def get_alpha_beta(initial_state, final_state):
 
 # Example usage:
 initial_state = (-7/2, -1/2)
-final_state = (7/2, 1/2)
+final_state = (-7/2, 1/2)
 alpha1, beta1 = get_alpha_beta(initial_state, final_state)
 
 print("Using initial ordering")
@@ -85,13 +85,21 @@ print(f"Beta:  {beta1}")
 
 def state_to_index2(m_s, m_e):
     combined_states = [
-        # -1/2
+        # m_s = -1/2:
         (-7/2, -1/2), (-5/2, -1/2), (-3/2, -1/2), (-1/2, -1/2),
         (1/2, -1/2), (3/2, -1/2), (5/2, -1/2), (7/2, -1/2),
-        # +1/2
+        # m_s = +1/2:
         (-7/2, 1/2), (-5/2, 1/2), (-3/2, 1/2), (-1/2, 1/2),
         (1/2, 1/2), (3/2, 1/2), (5/2, 1/2), (7/2, 1/2),
     ]
+    
+    # Valerio explanation:
+    # PyCCE organises alpha & beta (using [VO(TPP)] as an example) like this:
+    #  m_s = -1/2                             m_s = 1/2
+    # [-7/2, -5/2, -3/2, -1/2, 1/2, 3/2, 5/2, 7/2, -7/2, -5/2, -3/2, -1/2, 1/2, 3/2, 5/2, 7/2]
+    # So (-7/2, -1/2) to (7/2, 1/2) is:
+    # alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # (index=0)
+    # beta =  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0] # (index=8)
 
     return combined_states.index((m_s, m_e))
 
@@ -109,15 +117,13 @@ def get_alpha_beta2(initial_state, final_state):
     return alpha_array, beta_array
 
 # Example usage:
-# initial_state = (1/2, -1/2)
-# final_state = (3/2, -1/2)
 initial_state = (-7/2, -1/2)
 final_state = (-7/2, 1/2)
 alpha, beta = get_alpha_beta2(initial_state, final_state)
-print("Using other ordering method:")
 print(f"Alpha: {alpha}")
 print(f"Beta:  {beta}")
 
+print("Using other ordering method:")
 # print("Reverse the lists of alpha and beta")
 # alpha.reverse()
 # beta.reverse()
