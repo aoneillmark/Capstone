@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import time
 import pickle
 import pycce as pc
+import copy
 
 # Start timer
 start = time.time()
@@ -18,7 +19,6 @@ size = MPI.COMM_WORLD.Get_size()
 # print("Rank: {}".format(rank))
 
 
-# Runner to converge parameters
 def runner(concentration_value, 
            changing_variable, variable_values, 
            bath_parameters, simulator_parameters, calc_parameters,
@@ -39,46 +39,33 @@ def runner(concentration_value,
 
     bath_parameters['concentration'] = concentration_value # Set concentration value
 
-
     simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, **bath_parameters) # Set up bath and atoms
-    sim = simulator.setup_simulator(**simulator_parameters) # Set up simulator
+    sim_original = simulator.setup_simulator(**simulator_parameters) # Set up simulator
 
     results = {}
     for idx, v in enumerate(variable_values): # Iterate through variable values (e.g. order = 1, 2, 3)
+        sim = copy.deepcopy(sim_original) # Create a deep copy of the original simulator object. This ensures that you always start with a fresh simulator object for each value of changing_variable, and it should prevent the error caused by reusing and potentially modifying the same simulator object across iterations.
+
         # Progress printing
         if rank == 0:
             print("Rank: {}, {} = {}".format(rank, changing_variable, v))
 
         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
-        # If either is, then we need to change the value in calc_parameters to the value at this index in variable_values2
         if changing_variable2 in calc_parameters:
-            # if idx == 0:
-            #     # Store the original value of the changing_variable in calc_parameters
             calc_parameters[changing_variable2] = variable_values2[idx]
 
-        setattr(sim, changing_variable, v) # Set the variable in the simulator to the value (e.g. simulator['order'] = 1)
+        setattr(sim, changing_variable, v)
         
-        # if rank == 0:
-        #     # print("Simulator magnetic field:")
-        #     # print(simulator.magnetic_field)
-
-        #     print("Sim magnetic field:")
-        #     print(sim.magnetic_field)
-
         l = sim.compute(**calc_parameters) # Run the simulation
         
         v_key = convert_to_key(v)
         results[v_key] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
-        # ls.append(l.real)
 
     simulator_parameters[changing_variable] = changing_invalue
 
-    ### !!!!!!!!!! Check here for problems with changing_variable 2 if you're using runner multiple times !!!!!!!!!!!!!!
     if changing_variable2 in calc_parameters:
-        # Restore the original value of the changing_variable in calc_parameters
         calc_parameters[changing_variable2] = variable_values2[0]
     return results
-
 
 def convert_to_key(value):
     if isinstance(value, list):
@@ -94,7 +81,7 @@ concentration_list = [0]
 order_list = [1, 2, 3, 4] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
-r_bath_list = [5, 10, 15, 20]
+r_bath_list = [10, 15, 20, 25, 30]
 r_dipole_list = [5, 10, 15, 20]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
@@ -110,8 +97,8 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
     'timespace': np.linspace(0, 1e-1, 201), # 7e-2
     'method': 'cce',
-    'pulses': 1,
-    'nbstates': 50, #!
+    'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    'nbstates': 12, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -119,7 +106,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 60, #!
+    'cell_size': 100, #!
     'seed': 8000
 }
 
@@ -127,10 +114,10 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'order': 2, #!
     'r_bath': 20, #!
     'r_dipole': 10, #!
-    # 'pulses': 1, # N pulses in CPMG sequence
-    # 'pulses': [pc.Pulse('x', np.pi)]
-    'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
-    'magnetic_field': [10000, 0, 0], # Magnetic field in Gauss
+    # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
+    # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
+    'magnetic_field': [0, 0, 1500], # Magnetic field in Gauss
 }
 
 # alpha_and_beta = {
@@ -144,10 +131,15 @@ default_simulator_parameters = { ########## These should be greater when simulat
 #     },
 # }
 
-magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
-# magnetic_field_list = [[500,0,0],[800,0,0],]
+# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
+magnetic_field_list = [[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
+timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), ]
+# timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
+
+# magnetic_field_list = [[0,0,12000]]
+# magnetic_field_list = [[3000,0,0]]
 # timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
-timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
+
 
 # magnetic_field_list = [[500,0,0],[1000,0,0], [2000,0,0]]
 # timespace_list = [np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),] # 2e-4
@@ -157,7 +149,7 @@ for conc in concentration_list:
     magnetic_results[conc] = runner(
                         concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2, spin_type=None,
+                        num_spins=2,# spin_type='nuclear',
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         changing_variable2='timespace', variable_values2=timespace_list,
                         )
@@ -172,6 +164,15 @@ for conc in concentration_list:
 
 #####################################################################
 
+# cell_size_results = {}
+# for conc in concentration_list:
+#     cell_size_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='cell_size', variable_values=cell_size_list,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+
+# if rank == 0:
+#     print("cell_size results done")
+
 # order_results = {}
 # for conc in concentration_list:
 #     order_results[conc] = runner(concentration_value=conc,
@@ -182,9 +183,18 @@ for conc in concentration_list:
 
 # r_bath_results = {}
 # for conc in concentration_list:
-#     r_bath_results[conc] = runner(concentration_value=conc,
+#     r_bath_results[conc] = runner(
+#                         concentration_value=conc,
 #                         changing_variable='r_bath', variable_values=r_bath_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+#                         num_spins=2,# spin_type='nuclear',
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+
+#                         # concentration_value=conc,
+#                         # changing_variable='r_bath', variable_values=r_bath_list,
+#                         # num_spins=2,# spin_type='nuclear',
+#                         # bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 # if rank == 0:
 #     print("r_bath results done")
@@ -193,19 +203,12 @@ for conc in concentration_list:
 # for conc in concentration_list:
 #     r_dipole_results[conc] = runner(concentration_value=conc,
 #                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         num_spins=2,# spin_type='nuclear',
 #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
 # if rank == 0:
 #     print("r_dipole results done")
 
-# cell_size_results = {}
-# for conc in concentration_list:
-#     cell_size_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='cell_size', variable_values=cell_size_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
-
-# if rank == 0:
-#     print("cell_size results done")
 #####################################################################
 
 # Print time taken
@@ -228,14 +231,15 @@ if rank == 0:
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
+    # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
+    #     pickle.dump(cell_size_results, f)
+
     # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
     #     pickle.dump(r_bath_results, f)
     
     # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
     #     pickle.dump(r_dipole_results, f)
 
-    # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
-    #     pickle.dump(cell_size_results, f)
 
 
 
