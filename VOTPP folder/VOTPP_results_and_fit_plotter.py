@@ -5,7 +5,7 @@ import pickle
 import os
 
 def coherence_time_func(time, beta, T2):
-    y = np.exp(-(((time)/T2)**beta)) # Is there a scaling issue here?
+    y = np.exp(-(((2*time)/T2)**beta)) # Is there a scaling issue here?
     return y
 
 def load_data_from_file(path, pickle_filename):
@@ -93,5 +93,6 @@ def plot_from_file(pickle_filenames):
         plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path)
 
 # Provide the filenames you want to process as a list
-# plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
 plot_from_file(['magnetic_results.pkl',])
+# plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
+# plot_from_file(['cell_size_results.pkl'])
