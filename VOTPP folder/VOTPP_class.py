@@ -41,15 +41,11 @@ class VOTPP_class:
                 'size': 2,
                 'position': [self.qpos1, self.qpos2],
                 'spin': [7/2, 1/2],
-                # 'gyro': [-7.05,-17608.59705],
-                'gyro': [[self.get_nuclear_gyro()], [self.get_electron_gyro()]],
+                # 'gyro': [-7.05,-17608.59705], # isotropic
+                'gyro': [self.get_nuclear_gyro(), self.get_electron_gyro()], # anisotropic (not isotropic! Mostly the electron isn't isotropic but PyCCE expects similar shapes for both elements, so I've converted nuclear to a 3x3 const tensor)
                 'D': [-350, 0],
                 # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                # 'alpha': [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # modification
-                # 'beta':  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                # 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
                 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms= -1/2
                 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms=  1/2
             }   
@@ -160,17 +156,16 @@ class VOTPP_class:
             lines = f.readlines()
         
         tensor = [float(x) for x in lines[0].split()]
-        tensor_converted_by_factor = [i*8794.10005384623 for i in tensor]
+        tensor_converted_by_factor = [i * 8794.10005384623 for i in tensor]
 
-        return tensor_converted_by_factor
-    
+        # Reshape the tensor to a 3x3 matrix
+        return np.array(tensor_converted_by_factor).reshape(3, 3)
+        
     def get_nuclear_gyro(self):
         const = -7.05
         
-        # Make a list with the same dimensions as electron tensor, but with const in every element
-        const_list = [const]*9
-
-        return const_list
+        # Create a 3x3 matrix filled with the constant
+        return np.full((3, 3), const)
 
     def setup_simulator(self, order, r_bath, r_dipole, magnetic_field):
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field)
