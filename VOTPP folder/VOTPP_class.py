@@ -22,7 +22,7 @@ class VOTPP_class:
                     'gyro': [-17608.59705],
                     'D': [0],
                     'alpha': [0, 1],
-                    'beta': [1, 0],
+                    'beta':  [1, 0],
                 }
             elif spin_type == 'nuclear':
                 self.center_parameters = {
@@ -32,7 +32,7 @@ class VOTPP_class:
                     'gyro': [-7.05],
                     'D': [-350],
                     'alpha': [0,0,0,0,0,1,0,0],
-                    'beta': [0,0,0,0,1,0,0,0],
+                    'beta':  [0,0,0,0,1,0,0,0],
                 }
             self.cen = self.setup_center()
 
@@ -44,11 +44,13 @@ class VOTPP_class:
                 'gyro': [-7.05,-17608.59705],
                 # 'gyro': [-7.05, [self.get_electron_gyro()]],
                 'D': [-350, 0],
-                # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                # 'beta': [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                'alpha': 10,
-                'beta': 8,
-            }
+                'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+                'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                # 'alpha': [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # modification
+                # 'beta':  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                # 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            }   
 
             self.interaction_matrix = self.get_interaction_tensor()
             self.cen = self.setup_center(interaction_matrix=self.interaction_matrix,)
@@ -161,8 +163,8 @@ class VOTPP_class:
         return tensor_converted_by_factor
 
 
-    def setup_simulator(self, order, r_bath, r_dipole, pulses, magnetic_field):
-        calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, pulses=pulses, magnetic_field=magnetic_field)
+    def setup_simulator(self, order, r_bath, r_dipole, magnetic_field):
+        calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field)
         return calc
 
     def run_calculation(self, calc, timespace, method, pulses, nb_states, quantity, parallel, parallel_states):
