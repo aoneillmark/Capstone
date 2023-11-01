@@ -95,7 +95,7 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 1e-1, 201), # 7e-2
+    'timespace': np.linspace(0, 3, 201), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     'nbstates': 12, #!
@@ -132,11 +132,12 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # }
 
 # magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
-magnetic_field_list = [[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
-timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), ]
+# magnetic_field_list = [[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
+# timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), ]
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
 
-# magnetic_field_list = [[0,0,12000]]
+magnetic_field_list = [[500,0,0],]
+# magnetic_field_list = [[12000,0,0]]
 # magnetic_field_list = [[3000,0,0]]
 # timespace_list = [np.arange(0, 1e-2, 1e-5), np.arange(0, 2e-2, 2e-5), np.arange(0, 3e-2, 3e-5), np.arange(0, 4e-2, 4e-5), np.arange(0, 5e-2, 5e-5), np.arange(0, 6e-2, 6e-5), ]
 
@@ -149,9 +150,9 @@ for conc in concentration_list:
     magnetic_results[conc] = runner(
                         concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2,# spin_type='nuclear',
+                        num_spins=2,# spin_type='electron',
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        changing_variable2='timespace', variable_values2=timespace_list,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
                         )
 
 
