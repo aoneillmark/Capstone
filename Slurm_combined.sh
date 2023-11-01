@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH -n 32              # Request 128 cores
+#SBATCH -n 10              # Request 128 cores
 #SBATCH -t 0-12:05:00      # Request 12 hours and 5 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J CombinedJob     # Job name
@@ -12,7 +12,7 @@ source ~/miniconda3/bin/activate Capstone_conda_env2
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Run the MPI script for simulation using slurm 
-mpirun -np 32 python "VOTPP folder/VOTPP_convergence_runner.py"
+mpirun -np 10 python "VOTPP folder/VOTPP_convergence_runner.py"
 
 # Wait for the simulation to complete before starting plotting
 wait
