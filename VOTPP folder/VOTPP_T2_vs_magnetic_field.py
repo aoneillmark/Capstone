@@ -38,7 +38,7 @@ def plot_T2_vs_field(pickle_filename):
     # Start the tick markers at 0.04 and go up in increments of 0.04
     plt.xticks(np.arange(0.04, 0.36, 0.04))
     plt.xlim(0.04, 0.34)
-    plt.ylim(0, 70)
+    # plt.ylim(0, 70)
     plt.tight_layout()
     
     # Save and show plot
