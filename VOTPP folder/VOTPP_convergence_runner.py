@@ -222,8 +222,8 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
-    #     pickle.dump(magnetic_results, f)
+    with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
+        pickle.dump(magnetic_results, f)
 
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
@@ -232,11 +232,11 @@ if rank == 0:
     # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
     #     pickle.dump(cell_size_results, f)
 
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
-    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_dipole_results, f)
 
 
 
