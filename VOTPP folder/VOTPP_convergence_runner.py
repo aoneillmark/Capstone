@@ -95,10 +95,10 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 3, 201), # 7e-2
+    'timespace': np.linspace(0, 3, 401), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 12, #!
+    'nbstates': 128, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
