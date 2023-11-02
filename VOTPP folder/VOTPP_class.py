@@ -44,8 +44,10 @@ class VOTPP_class:
                 # 'gyro': [-7.05,-17608.59705], # isotropic
                 'gyro': [self.get_nuclear_gyro(), self.get_electron_gyro()], # anisotropic (not isotropic! Mostly the electron isn't isotropic but PyCCE expects similar shapes for both elements, so I've converted nuclear to a 3x3 const tensor)
                 'D': [-350, 0],
-                'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+                # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
+                'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2 in new basis
+                'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2 in new basis
                 # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms= -1/2
                 # 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms=  1/2
             }   
