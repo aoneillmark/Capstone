@@ -50,7 +50,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
 
     for v_key, df in loaded_results[0].items():
         plt.figure(figsize=(10,6))
-        ydata = df[0].abs()  # Taking absolute values
+        ydata = df[0]#.abs()  # Taking absolute values
         label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
         
         try:
