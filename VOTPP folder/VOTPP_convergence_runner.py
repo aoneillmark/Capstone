@@ -112,7 +112,7 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 30, #30
+    'r_bath': 35, #30
     'r_dipole': 20, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
@@ -165,14 +165,14 @@ magnetic_field_list = [[1500,0,0],]
 
 #####################################################################
 
-# cell_size_results = {}
-# for conc in concentration_list:
-#     cell_size_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='cell_size', variable_values=cell_size_list,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
+cell_size_results = {}
+for conc in concentration_list:
+    cell_size_results[conc] = runner(concentration_value=conc,
+                        changing_variable='cell_size', variable_values=cell_size_list,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,)
 
-# if rank == 0:
-#     print("cell_size results done")
+if rank == 0:
+    print("cell_size results done")
 
 # order_results = {}
 # for conc in concentration_list:
@@ -182,30 +182,30 @@ magnetic_field_list = [[1500,0,0],]
 
 # print("Order results done")
 
-r_bath_results = {}
-for conc in concentration_list:
-    r_bath_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='r_bath', variable_values=r_bath_list,
-                        num_spins=2,# spin_type='nuclear',
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
+# r_bath_results = {}
+# for conc in concentration_list:
+#     r_bath_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=r_bath_list,
+#                         num_spins=2,# spin_type='nuclear',
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
 
-if rank == 0:
-    print("r_bath results done")
+# if rank == 0:
+#     print("r_bath results done")
 
-r_dipole_results = {}
-for conc in concentration_list:
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=r_dipole_list,
-                        num_spins=2,# spin_type='nuclear',
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
+# r_dipole_results = {}
+# for conc in concentration_list:
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         num_spins=2,# spin_type='nuclear',
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
 
-if rank == 0:
-    print("r_dipole results done")
+# if rank == 0:
+#     print("r_dipole results done")
 
 #####################################################################
 
@@ -229,14 +229,14 @@ if rank == 0:
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
-    # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
-    #     pickle.dump(cell_size_results, f)
+    with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
+        pickle.dump(cell_size_results, f)
 
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
-    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_dipole_results, f)
 
 
 
