@@ -59,7 +59,7 @@ def runner(concentration_value,
         l = sim.compute(**calc_parameters) # Run the simulation
         
         v_key = convert_to_key(v)
-        results[v_key] = pd.DataFrame([l.real], columns=calc_parameters['timespace']).T
+        results[v_key] = pd.DataFrame([l], columns=calc_parameters['timespace']).T
 
     simulator_parameters[changing_variable] = changing_invalue
 
@@ -98,7 +98,7 @@ default_calc_parameters = {
     'timespace': np.linspace(0, 4, 201), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 64, #!
+    'nbstates': 4, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
