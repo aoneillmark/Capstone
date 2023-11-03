@@ -136,6 +136,55 @@ print(f"Alpha: {alpha}")
 print(f"Beta:  {beta}")
 
 
+#####################################################################
+#####################################################################
+
+def index_to_state(index):
+    combined_states = [
+        (-7/2, -1/2), (-5/2, -1/2), (-3/2, -1/2), (-1/2, -1/2),
+        (1/2, -1/2), (3/2, -1/2), (5/2, -1/2), (7/2, -1/2),
+        (-7/2, 1/2), (-5/2, 1/2), (-3/2, 1/2), (-1/2, 1/2),
+        (1/2, 1/2), (3/2, 1/2), (5/2, 1/2), (7/2, 1/2),
+    ]
+
+    combined_states2 = [
+        (-7/2, -1/2), (-7/2, 1/2), (-5/2, -1/2), (-5/2, 1/2),
+        (-3/2, -1/2), (-3/2, 1/2), (-1/2, -1/2), (-1/2, 1/2),
+        (1/2, -1/2), (1/2, 1/2), (3/2, -1/2), (3/2, 1/2),
+        (5/2, -1/2), (5/2, 1/2), (7/2, -1/2), (7/2, 1/2),
+    ]
+    
+    if index < len(combined_states):
+        return combined_states2[index]
+    else:
+        return None
+
+def alpha_beta_to_states(alpha, beta):
+    # Find the index of the '1' in the alpha and beta arrays
+    try:
+        alpha_index = alpha.index(1)
+        beta_index = beta.index(1)
+    except ValueError:
+        raise ValueError("Alpha and Beta arrays must each contain exactly one '1'.")
+
+    # Map the indices back to the corresponding states
+    initial_state = index_to_state(alpha_index)
+    final_state = index_to_state(beta_index)
+
+    return initial_state, final_state
+
+# Example usage:
+alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+beta =  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+
+alpha = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+beta =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+
+initial_state, final_state = alpha_beta_to_states(alpha, beta)
+print(f"Initial state: m_I = {initial_state[0]}, m_S = {initial_state[1]}")
+print(f"Final state: m_I = {final_state[0]}, m_S = {final_state[1]}")
+
+
 # print("Reverse the lists of alpha and beta")
 # alpha.reverse()
 # beta.reverse()
