@@ -34,7 +34,7 @@ class VOTPP_class:
                     'alpha': [0,0,0,0,0,1,0,0],
                     'beta':  [0,0,0,0,1,0,0,0],
                 }
-            else:
+            elif num_spins==1 and spin_type==None:
                 raise ValueError('spin_type must be "electron" or "nuclear" for num_spins=1')
             
             # Set up the center
@@ -64,7 +64,7 @@ class VOTPP_class:
             # Set up the center
             self.cen = self.setup_center(interaction_matrix=self.interaction_matrix,)
 
-        else:
+        if num_spins != 1 and num_spins != 2:
             raise ValueError('num_spins must be 1 or 2')
 
 
