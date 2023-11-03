@@ -6,12 +6,11 @@ from scipy.optimize import curve_fit
 from mpi4py import MPI
 
 class VOTPP_class:
-    def __init__(self, concentration, cell_size, num_spins, spin_type=None, seed=8000):
+    def __init__(self, concentration, cell_size, num_spins, alpha=None, beta=None, spin_type=None, seed=8000):
         self.concentration = concentration
         self.cell_size = cell_size
         self.seed = seed
         self.atoms, self.qpos1, self.qpos2 = self.setup_bath()
-
 
         if num_spins == 1:
             if spin_type == 'electron':
@@ -49,14 +48,16 @@ class VOTPP_class:
                 # 'gyro': [-7.05,-17608.59705], # isotropic
                 'gyro': [self.get_nuclear_gyro(), self.get_electron_gyro()], # anisotropic (not isotropic! Mostly the electron isn't isotropic but PyCCE expects similar shapes for both elements, so I've converted nuclear to a 3x3 const tensor)
                 'D': [-350, 0],
-                # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms= -1/2 (Valerio)
-                'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms=  1/2 (Valerio)
-                # 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2 in new basis
-                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2 in new basis
-                # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms= -1/2
-                # 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms=  1/2
+                'alpha': alpha,
+                'beta': beta,
+                # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
+                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Valerio)
+                # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
+                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Valerio)
+                # 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
+                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Mark)
+                # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
+                # 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Mark)
             }   
 
             # Get the interaction tensor

@@ -15,14 +15,14 @@ start = time.time()
 rank = MPI.COMM_WORLD.Get_rank()
 size = MPI.COMM_WORLD.Get_size()
 
-# Print the largest rank in the ranks
-# print("Rank: {}".format(rank))
-
+# File path for pickle files
+path = "VOTPP folder/Results/Pickle files/"
 
 def runner(concentration_value, 
            changing_variable, variable_values, 
            bath_parameters, simulator_parameters, calc_parameters,
            num_spins=2, spin_type=None,
+           alpha=None, beta=None,
            changing_variable2=None, variable_values2=None,):
     
     # Attempt to retrieve the changing_variable from each dictionary
@@ -39,7 +39,7 @@ def runner(concentration_value,
 
     bath_parameters['concentration'] = concentration_value # Set concentration value
 
-    simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, **bath_parameters) # Set up bath and atoms
+    simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters) # Set up bath and atoms
     sim_original = simulator.setup_simulator(**simulator_parameters) # Set up simulator
 
     results = {}
@@ -48,11 +48,12 @@ def runner(concentration_value,
 
         # Progress printing
         if rank == 0:
-            print("Rank: {}, {} = {}".format(rank, changing_variable, v))
+            print("{} = {}".format(changing_variable, v))
 
         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
         if changing_variable2 in calc_parameters:
-            calc_parameters[changing_variable2] = variable_values2[idx]
+            calc_parameters[changing_variable2] = variable_values2#[idx] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            print("{} = {}".format(changing_variable2, variable_values2))
 
         setattr(sim, changing_variable, v)
         
@@ -64,7 +65,8 @@ def runner(concentration_value,
     simulator_parameters[changing_variable] = changing_invalue
 
     if changing_variable2 in calc_parameters:
-        calc_parameters[changing_variable2] = variable_values2[0]
+        # calc_parameters[changing_variable2] = variable_values2[0]
+        calc_parameters[changing_variable2] = variable_values2
     return results
 
 def convert_to_key(value):
@@ -95,11 +97,11 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 4, 201), # 7e-2
+    'timespace': np.linspace(0, 1, 201), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 64, #!
+    'nbstates': 0, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -112,7 +114,7 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
+    'order': 3, #!
     'r_bath': 20, #35
     'r_dipole': 10, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
@@ -146,15 +148,58 @@ magnetic_field_list = [[3000,0,0],]
 # magnetic_field_list = [[500,0,0],[1000,0,0], [2000,0,0]]
 # timespace_list = [np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),] # 2e-4
 
-magnetic_results = {}
-for conc in concentration_list:
-    magnetic_results[conc] = runner(
-                        concentration_value=conc,
+# 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
+# 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Valerio)
+# 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
+# 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Valerio)
+# 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
+# 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Mark)
+# 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
+# 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Mark)
+
+alpha_and_beta = [
+    [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
+     [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],# m_I = 3/2, m_s = -1/2 (Valerio)
+    [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
+     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]],# m_I = -7/2, m_s=  1/2 (Valerio)
+    [[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
+     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]],# m_I = 3/2, m_s = -1/2 (Mark)
+    [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
+     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]] # m_I = -7/2, m_s=  1/2 (Mark)
+]
+
+timespace_list = [
+    np.linspace(0, 1e-1, 201),
+    np.linspace(0, 4, 201),
+    np.linspace(0, 4, 201),
+    np.linspace(0, 1e-1, 201),
+]
+# timespace_list = [
+#     np.linspace(0, 1e-1, 2),
+#     np.linspace(0, 4, 3),
+#     np.linspace(0, 4, 4),
+#     np.linspace(0, 1e-1, 5),
+# ]
+# timespace_list = [
+#     np.linspace(0, 1e-1, 2),
+# ]
+
+alphabeta_results = {}
+for idx, alphabetas in enumerate(alpha_and_beta):
+    print(timespace_list[idx])
+    # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
+    alphabeta_results[idx] = runner(
+                        concentration_value=0,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='nuclear',
+                        alpha=alphabetas[0], beta=alphabetas[1],
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        changing_variable2='timespace', variable_values2=timespace_list[idx],
                         )
+    
+    # Save the current state of alphabeta_results
+    with open((str(path) + f'alphabeta_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(alphabeta_results, f)
 
 
 # magnetic_nbstates_convergence = {}
@@ -216,7 +261,6 @@ for conc in concentration_list:
 
 # Print time taken
 end = time.time()
-path = "VOTPP folder/Results/Pickle files/"
 
 # Save this data to an external file
 if rank == 0:
@@ -227,8 +271,11 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+    # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
+    #     pickle.dump(magnetic_results, f)
+    
+    with open((str(path) + 'alphabeta_results.pkl'), 'wb') as f:
+        pickle.dump(alphabeta_results, f)
 
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
