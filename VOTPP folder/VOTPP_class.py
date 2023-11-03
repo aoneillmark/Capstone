@@ -34,7 +34,12 @@ class VOTPP_class:
                     'alpha': [0,0,0,0,0,1,0,0],
                     'beta':  [0,0,0,0,1,0,0,0],
                 }
+            else:
+                raise ValueError('spin_type must be "electron" or "nuclear" for num_spins=1')
+            
+            # Set up the center
             self.cen = self.setup_center()
+
 
         if num_spins == 2:
             self.center_parameters = {
@@ -54,10 +59,13 @@ class VOTPP_class:
                 # 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # -7/2, ms=  1/2
             }   
 
+            # Get the interaction tensor
             self.interaction_matrix = self.get_interaction_tensor()
+            # Set up the center
             self.cen = self.setup_center(interaction_matrix=self.interaction_matrix,)
 
-        # print("init is being called")
+        else:
+            raise ValueError('num_spins must be 1 or 2')
 
 
     def setup_bath(self):
