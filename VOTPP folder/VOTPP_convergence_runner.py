@@ -187,6 +187,7 @@ for conc in concentration_list:
     
 # print("Order results done")
 
+<<<<<<< HEAD
 # r_bath_results = {}
 # for conc in concentration_list:
 #     r_bath_results[conc] = runner(
@@ -196,10 +197,22 @@ for conc in concentration_list:
 #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
 #                         # changing_variable2='timespace', variable_values2=timespace_list,
 #                         )
+=======
+r_bath_results = {}
+for conc in concentration_list:
+    r_bath_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='r_bath', variable_values=r_bath_list,
+                        num_spins=1, spin_type='electron',
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
+>>>>>>> da05b4619a3501d29e40a9ad56d881bd8dcccd94
 
 # if rank == 0:
 #     print("r_bath results done")
 
+<<<<<<< HEAD
 # r_dipole_results = {}
 # for conc in concentration_list:
 #     r_dipole_results[conc] = runner(concentration_value=conc,
@@ -208,6 +221,16 @@ for conc in concentration_list:
 #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
 #                         # changing_variable2='timespace', variable_values2=timespace_list,
 #                         )
+=======
+r_dipole_results = {}
+for conc in concentration_list:
+    r_dipole_results[conc] = runner(concentration_value=conc,
+                        changing_variable='r_dipole', variable_values=r_dipole_list,
+                        num_spins=1, spin_type='electron',
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
+>>>>>>> da05b4619a3501d29e40a9ad56d881bd8dcccd94
 
 # if rank == 0:
 #     print("r_dipole results done")
