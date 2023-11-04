@@ -35,6 +35,7 @@ def plot_combined(loaded_results, variable_name, image_path):
     plt.ylabel('Coherence')
     plt.legend()
     plt.tight_layout()
+    plt.ylim(0,1)
     
     output_filename = os.path.join(image_path, f"{variable_name}_all_results.png")
     plt.savefig(output_filename, dpi=300)
@@ -78,6 +79,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
             plt.ylabel('Coherence')
             plt.legend()
             plt.tight_layout()
+            plt.ylim(0,1)
             
             output_filename = os.path.join(image_path, f"{variable_name}_{label_str}_with_fit.png")
             plt.savefig(output_filename, dpi=300)
@@ -101,8 +103,8 @@ def plot_from_file(pickle_filenames):
         plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path)
 
 # Provide the filenames you want to process as a list
-plot_from_file(['magnetic_results.pkl',])
-# plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
+# plot_from_file(['magnetic_results.pkl',])
+plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
 
 # plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
