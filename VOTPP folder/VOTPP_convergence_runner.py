@@ -53,7 +53,7 @@ def runner(concentration_value,
         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
         if changing_variable2 in calc_parameters:
             calc_parameters[changing_variable2] = variable_values2#[idx] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("{} = {}".format(changing_variable2, variable_values2))
+            # print("{} = {}".format(changing_variable2, variable_values2))
 
         setattr(sim, changing_variable, v)
         
@@ -101,7 +101,7 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 0, #!
+    'nbstates': 128, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -114,9 +114,9 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
-    'r_bath': 20, #35
-    'r_dipole': 10, #20
+    'order': 3, #!
+    'r_bath': 35, #35
+    'r_dipole': 20, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -186,8 +186,9 @@ timespace_list = [
 
 alphabeta_results = {}
 for idx, alphabetas in enumerate(alpha_and_beta):
-    print(timespace_list[idx])
-    # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
+    # print(timespace_list[idx])
+    if rank == 0:
+        print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
     alphabeta_results[idx] = runner(
                         concentration_value=0,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
@@ -198,7 +199,7 @@ for idx, alphabetas in enumerate(alpha_and_beta):
                         )
     
     # Save the current state of alphabeta_results
-    with open((str(path) + f'alphabeta_results_{idx}.pkl'), 'wb') as f:
+    with open((str(path) + f'alphabeta_order3_results_{idx}.pkl'), 'wb') as f:
         pickle.dump(alphabeta_results, f)
 
 
@@ -274,7 +275,7 @@ if rank == 0:
     # with open((str(path) + 'magnetic_results.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_results, f)
     
-    with open((str(path) + 'alphabeta_results.pkl'), 'wb') as f:
+    with open((str(path) + 'alphabeta_order3_results.pkl'), 'wb') as f:
         pickle.dump(alphabeta_results, f)
 
 
