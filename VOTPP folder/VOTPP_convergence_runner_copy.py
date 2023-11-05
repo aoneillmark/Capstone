@@ -99,7 +99,7 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
     'timespace': np.linspace(0, 1, 201), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
-    'method': 'cce',
+    'method': 'gcce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     'nbstates': 128, #!
     'quantity': 'coherence',
