@@ -180,6 +180,9 @@ beta =  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 alpha = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 beta =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
 
+alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+beta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+
 initial_state, final_state = alpha_beta_to_states(alpha, beta)
 print(f"Initial state: m_I = {initial_state[0]}, m_S = {initial_state[1]}")
 print(f"Final state: m_I = {final_state[0]}, m_S = {final_state[1]}")

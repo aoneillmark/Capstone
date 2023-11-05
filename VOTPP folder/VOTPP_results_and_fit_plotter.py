@@ -106,7 +106,8 @@ def plot_from_file(pickle_filenames):
 # plot_from_file(['magnetic_results.pkl',])
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
-plot_from_file(['alphabeta_order2_results.pkl',])
+# plot_from_file(['alphabeta_order2_results.pkl',])
+plot_from_file(['alphabeta_combination_results.pkl',])
 
 # plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
 # plot_from_file(['order_results.pkl'])
