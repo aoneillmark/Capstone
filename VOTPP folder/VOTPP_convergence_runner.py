@@ -235,7 +235,8 @@ for idx, alphabetas in enumerate(alpha_and_beta):
     # Save the current state of alphabeta_results
     with open((str(path) + f'alphabeta_combination_results_{idx}.pkl'), 'wb') as f:
         pickle.dump(alphabeta_results, f)
-    print("Saved alphabeta results to file:" + str(path) + f'alphabeta_combination_results_{idx}.pkl')
+    if rank == 0:
+        print("Saved alphabeta results to file:" + str(path) + f'alphabeta_combination_results_{idx}.pkl')
 
 
 # magnetic_nbstates_convergence = {}
