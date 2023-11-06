@@ -47,13 +47,15 @@ qpos = sic.to_cell(pos1)
 #set up the center 
 cen = pc.CenterArray(size=1, position=qpos, 
                      spin=7/2, D=-350, gyro=-7.05,  
-                     alpha=[0,0,0,0,0,1,0,0], beta=[0,0,0,0,1,0,0,0]) #set to -3/2 to -1/2
+                     alpha=[0,0,0,0,0,1,0,0], beta=[0,0,0,0,1,0,0,0] #set to -3/2 to -1/2
+                    # alpha = [1,0,0,0,0,0,0,0], beta = [0,0,0,0,0,0,0,1] #set to -7/2 to 7/2
+)
 
 #parameters
-nb = 15
+nb = 6
 # ts = np.linspace(0, 2, 201) #expected T2 of 1015us
 ts = np.linspace(0, 2, 201) #expected T2 of 1015us
-cell = 60 #cell size 
+cell = 100 #cell size 
 
 print(sic.isotopes)
 
@@ -62,8 +64,8 @@ parameters = dict(
     order=2, # CCE order
     r_bath=20,  # Size of the bath in A
     r_dipole=10,  # Cutoff of pairwise clusters in A
-    pulses = 1, # N pulses in CPMG sequence
-    magnetic_field=[500,0,0] #set to 1T
+    pulses = [pc.Pulse('x', np.pi)], # N pulses in CPMG sequence
+    magnetic_field=[3000,0,0] #set to 1T
 ) 
 
 #calculating T2 using 50 random seeds
