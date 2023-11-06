@@ -207,7 +207,7 @@ for conc in concentration_list:
     # if rank == 0:
         # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
     magnetic_results[conc] = runner(
-                        concentration_value=0,
+                        concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='electronic',
                         alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 

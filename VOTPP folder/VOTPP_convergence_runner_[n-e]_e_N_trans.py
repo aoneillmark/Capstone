@@ -79,7 +79,7 @@ def convert_to_key(value):
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
-concentration_list = [0]
+concentration_list = [0.02]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
@@ -111,14 +111,14 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 100, #!
+    'cell_size': 300, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 60, #35
-    'r_dipole': 20, #20
+    'r_bath': 200, #35
+    'r_dipole': 100, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -209,9 +209,11 @@ for conc in concentration_list:
     magnetic_results[conc] = runner(
                         concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=1, spin_type='electron',
-                        # alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-                        # beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        num_spins=2, #spin_type='electron',
+                        alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        # alpha= [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        # beta=  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
@@ -297,7 +299,7 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    with open((str(path) + 'magnetic_results_e_n.pkl'), 'wb') as f:
+    with open((str(path) + 'magnetic_results_[n-e]_e_N_trans.pkl'), 'wb') as f:
         pickle.dump(magnetic_results, f)
     
     # with open((str(path) + 'alphabeta_order2_results.pkl'), 'wb') as f:

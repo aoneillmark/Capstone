@@ -116,7 +116,7 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
+    'order': 3, #!
     'r_bath': 60, #35
     'r_dipole': 20, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
@@ -207,7 +207,7 @@ for conc in concentration_list:
     # if rank == 0:
         # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
     magnetic_results[conc] = runner(
-                        concentration_value=0,
+                        concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=1, spin_type='nuclear',
                         # alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
