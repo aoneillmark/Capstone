@@ -20,8 +20,10 @@ class VOTPP_class:
                     'spin': [1/2],
                     'gyro': [-17608.59705],
                     'D': [0],
-                    'alpha': [0, 1],
-                    'beta':  [1, 0],
+                    # 'alpha': [0, 1],
+                    # 'beta':  [1, 0],
+                    'alpha': [1, 0],
+                    'beta':  [0, 1],
                 }
             elif spin_type == 'nuclear':
                 self.center_parameters = {
@@ -30,8 +32,8 @@ class VOTPP_class:
                     'spin': [7/2],
                     'gyro': [-7.05],
                     'D': [-350],
-                    'alpha': [0,0,0,0,0,1,0,0],
-                    'beta':  [0,0,0,0,1,0,0,0],
+                    'alpha': [0,0,0,0,1,0,0,0],
+                    'beta':  [0,0,0,0,0,1,0,0],
                 }
             elif num_spins==1 and spin_type==None:
                 raise ValueError('spin_type must be "electron" or "nuclear" for num_spins=1')
