@@ -216,23 +216,23 @@ timespace_list = [np.linspace(0,4,201)]
 
 #####################################################################
 
-cell_size_results = {}
-for idx, conc in enumerate(concentration_list):
-    cell_size_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='cell_size', variable_values=cell_size_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-                        beta=  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
-    # Save the current state of results
-    with open((str(path) + f'cell_size_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(cell_size_results, f)
+# cell_size_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     cell_size_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='cell_size', variable_values=cell_size_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+#                         beta=  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+#     # Save the current state of results
+#     with open((str(path) + f'cell_size_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(cell_size_results, f)
 
-if rank == 0:
-    print("cell_size results done")
+# if rank == 0:
+#     print("cell_size results done")
 
 # order_results = {}
 # for conc in concentration_list:
