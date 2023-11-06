@@ -305,8 +305,8 @@ if rank == 0:
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
-    with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
-        pickle.dump(cell_size_results, f)
+    # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
+    #     pickle.dump(cell_size_results, f)
 
     with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
         pickle.dump(r_bath_results, f)
