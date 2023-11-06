@@ -83,8 +83,10 @@ concentration_list = [0]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
-r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_dipole_list = [5, 10, 15, 20, 25, 30]
+# r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
+r_bath_list = [35, 40, 45, 50, 55, 60]
+# r_dipole_list = [5, 10, 15, 20, 25, 30]
+r_dipole_list = [20, 25, 30,35, 40]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
 nbstates_list = [128,]
@@ -115,8 +117,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 20, #35
-    'r_dipole': 10, #20
+    'r_bath': 40, #35
+    'r_dipole': 20, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
