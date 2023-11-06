@@ -105,8 +105,10 @@ def plot_from_file(pickle_filenames):
 # Provide the filenames you want to process as a list
 # plot_from_file(['magnetic_results.pkl',])
 
-plot_from_file(['magnetic_results_e_n.pkl',])
-plot_from_file(['magnetic_results_n_n.pkl',])
+# plot_from_file(['magnetic_results_e_n.pkl',])
+# plot_from_file(['magnetic_results_n_n.pkl',])
+plot_from_file(['magnetic_results_[n-e]_e.pkl',])
+
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
 # plot_from_file(['alphabeta_order2_results.pkl',])
