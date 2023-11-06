@@ -52,7 +52,7 @@ def runner(concentration_value,
 
         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
         if changing_variable2 in calc_parameters:
-            calc_parameters[changing_variable2] = variable_values2#[idx] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            calc_parameters[changing_variable2] = variable_values2[idx] #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             # print("{} = {}".format(changing_variable2, variable_values2))
 
         setattr(sim, changing_variable, v)
@@ -65,8 +65,8 @@ def runner(concentration_value,
     simulator_parameters[changing_variable] = changing_invalue
 
     if changing_variable2 in calc_parameters:
-        # calc_parameters[changing_variable2] = variable_values2[0]
-        calc_parameters[changing_variable2] = variable_values2
+        calc_parameters[changing_variable2] = variable_values2[0]
+        # calc_parameters[changing_variable2] = variable_values2
     return results
 
 def convert_to_key(value):
@@ -115,8 +115,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 20, #35
-    'r_dipole': 10, #20
+    'r_bath': 35, #35
+    'r_dipole': 20, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -213,7 +213,7 @@ for conc in concentration_list:
                         concentration_value=0,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='nuclear',
-                        alpha=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], 
+                        alpha= [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
                         beta= [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         changing_variable2='timespace', variable_values2=timespace_list,
