@@ -3,7 +3,7 @@
 #SBATCH -n 128              # Request 128 cores
 #SBATCH -t 0-12:00:00      # Request 1 hours and 0 minutes
 #SBATCH -p compute         # Use the "compute" partition
-#SBATCH -J CombinedJob     # Job name
+#SBATCH -J e_n     # Job name
 #SBATCH -o "Capstone/VOTPP folder/Slurm_combined/slurm-%j.out"
 #SBATCH -e "Capstone/VOTPP folder/Slurm_combined/slurm-%j.err"
 
