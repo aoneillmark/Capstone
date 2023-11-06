@@ -116,3 +116,7 @@ plot_from_file(['magnetic_results_n_n.pkl',])
 # plot_from_file(['r_bath_results.pkl'])
 # plot_from_file(['r_dipole_results.pkl'])
 # plot_from_file(['cell_size_results.pkl'])
+
+# plot_from_file(['r_bath_results.pkl'])
+# plot_from_file(['r_dipole_results.pkl'])
+# plot_from_file(['cell_size_results.pkl'])
