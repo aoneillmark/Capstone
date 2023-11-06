@@ -1,9 +1,9 @@
 import numpy as np
 
 # Initial state
-m_I1, m_S1 = 1/2, -1/2
+m_I1, m_S1 = 3/2, -1/2
 # Final state
-m_I2, m_S2 = 3/2, -1/2
+m_I2, m_S2 = 1/2, -1/2
 
 def nuclear_vector(m_I):
     # Define the basis vectors for nuclear spin
@@ -177,11 +177,11 @@ def alpha_beta_to_states(alpha, beta):
 alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 beta =  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
 
-alpha = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
-beta =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+# alpha = [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]
+# beta =  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
 
-alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-beta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+# alpha = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# beta = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 
 initial_state, final_state = alpha_beta_to_states(alpha, beta)
 print(f"Initial state: m_I = {initial_state[0]}, m_S = {initial_state[1]}")
