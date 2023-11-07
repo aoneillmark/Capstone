@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH -n 128              # Request 128 cores
+#SBATCH -n 32              # Request 128 cores
 #SBATCH -t 0-12:00:00      # Request 1 hours and 0 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J n_n     # Job name
