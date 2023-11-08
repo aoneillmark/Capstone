@@ -51,25 +51,27 @@ def save_fit_results(fit_results, result_name, save_path):
     print("Saved fit results to file:")
     print(output_filename)
 
-def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path):
+def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=slice(None)):
     fit_results = {}  # Dictionary to store fit parameters for all results
     
     for outer_key in loaded_results.keys():  # Loop over each key in the loaded_results
         for v_key, df in loaded_results[outer_key].items():  # Then loop over the items under this key
             plt.figure(figsize=(10,6))
-            ydata = df[0]
+            ydata = df[0].iloc[data_range]  # Apply the data range
+            time_data = df.index[data_range]  # Apply the data range to the index as well
+            
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
             
             try:
-                params, _ = curve_fit(coherence_time_func, df.index, ydata, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1,0.025])
+                params, _ = curve_fit(coherence_time_func, time_data, ydata, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1,0.025])
                 beta_fit, T2_fit = params
                 
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
                 # Save the results in the dictionary
                 fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit} 
                 
-                plt.plot(df.index, ydata, 'o', label=f'Data for {label_str}')
-                plt.plot(df.index, coherence_time_func(df.index, *params), '--', 
+                plt.plot(time_data, ydata, 'o', label=f'Data for {label_str}')
+                plt.plot(time_data, coherence_time_func(time_data, *params), '--', 
                          label=f'Fit: Beta={beta_fit:.3f}, T2={T2_fit:.3f}')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
@@ -88,7 +90,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
     save_fit_results(fit_results, variable_name, pickle_path)  # Save the fit results once all fits are done
 
 
-def plot_from_file(pickle_filenames):
+def plot_from_file(pickle_filenames, data_range=slice(None)):
     pickle_path = "VOTPP folder/Results/Pickle files/"
     image_path = "VOTPP folder/Results/Plots/"
 
@@ -100,10 +102,11 @@ def plot_from_file(pickle_filenames):
         plot_combined(loaded_results, variable_name, image_path)
         
         # Plot individual results with fit
-        plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path)
+        plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=data_range)
 
 # Provide the filenames you want to process as a list
 plot_from_file(['magnetic_results.pkl',])
+# plot_from_file(['magnetic_results.pkl'], data_range=slice(0, 50))
 
 # plot_from_file(['magnetic_results_e_n.pkl',])
 # plot_from_file(['magnetic_results_n_n.pkl',])
