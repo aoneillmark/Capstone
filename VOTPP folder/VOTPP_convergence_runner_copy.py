@@ -99,7 +99,7 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 1e-1, 201), # 7e-2
+    'timespace': np.linspace(0, 4, 201), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
@@ -210,8 +210,10 @@ for conc in concentration_list:
                         concentration_value=conc,
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='electronic',
-                        alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
-                        beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        # alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+                        # beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        alpha = 4,
+                        beta = 5,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )

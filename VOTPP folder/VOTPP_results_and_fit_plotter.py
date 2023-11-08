@@ -103,13 +103,13 @@ def plot_from_file(pickle_filenames):
         plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path)
 
 # Provide the filenames you want to process as a list
-# plot_from_file(['magnetic_results.pkl',])
+plot_from_file(['magnetic_results.pkl',])
 
 # plot_from_file(['magnetic_results_e_n.pkl',])
 # plot_from_file(['magnetic_results_n_n.pkl',])
 # plot_from_file(['magnetic_results_[n-e]_e.pkl',])
 # plot_from_file(['magnetic_results_e_e.pkl',])
-plot_from_file(['magnetic_results_n_e.pkl',])
+# plot_from_file(['magnetic_results_n_e.pkl',])
 
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',])
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
