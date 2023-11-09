@@ -105,8 +105,8 @@ def plot_from_file(pickle_filenames, data_range=slice(None)):
         plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=data_range)
 
 # Provide the filenames you want to process as a list
-plot_from_file(['magnetic_results.pkl',])
-# plot_from_file(['magnetic_results.pkl'], data_range=slice(0, 50))
+# plot_from_file(['magnetic_results.pkl',])
+plot_from_file(['magnetic_results.pkl'], data_range=slice(0, 40))
 
 # plot_from_file(['magnetic_results_e_n.pkl',])
 # plot_from_file(['magnetic_results_n_n.pkl',])
