@@ -119,8 +119,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 20, #35
-    'r_dipole': 15, #20
+    'r_bath': 15, #35
+    'r_dipole': 10, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -159,7 +159,6 @@ magnetic_field_list = [[3000,0,0],]
 
 
 
-
 # magnetic_results = {}
 # for conc in concentration_list:
 #     magnetic_results[conc] = runner(
@@ -173,10 +172,13 @@ magnetic_field_list = [[3000,0,0],]
 #                         )
 
 seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+# seed_list = [8000,9000]
 magnetic_results = {}
 for seed in seed_list:
     # Change the value of the seed in the default parameters
     default_bath_parameters['seed'] = seed
+    if rank == 0:
+        print("Seed: {}".format(seed))
 
     magnetic_results[seed] = runner(
                         concentration_value=0,
