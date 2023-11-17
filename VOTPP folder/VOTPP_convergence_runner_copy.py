@@ -103,9 +103,9 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
     'timespace': np.linspace(0, 4, 201), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
-    'method': 'gcce',
+    'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 0, #!
+    'nbstates': 128, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -172,9 +172,9 @@ magnetic_field_list = [[3000,0,0],]
 #                         )
 
 seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-# seed_list = [8000,9000]
+# seed_list = [8000,9000, 10000]
 magnetic_results = {}
-for seed in seed_list:
+for idx, seed in enumerate(seed_list):
     # Change the value of the seed in the default parameters
     default_bath_parameters['seed'] = seed
     if rank == 0:
@@ -189,6 +189,10 @@ for seed in seed_list:
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
+    
+    # Save the current state of results
+    with open((str(path) + f'magnetic_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(magnetic_results, f)
 
 #####################################################################
 
