@@ -145,8 +145,9 @@ def plot_individual_with_fit_average(averaged_results, variable_name, image_path
     
     for sub_key, series in averaged_results.items():  # Now iterating over averaged results
         plt.figure(figsize=(10,6))
-        ydata = series.iloc[data_range]  # Apply the data range directly to the series
-        time_data = series.index[data_range]  # Apply the data range to the index
+        # Interpolate to fill NaN values
+        ydata = series.interpolate().iloc[data_range]  
+        time_data = series.index[data_range]
         
         label_str = ', '.join(map(str, sub_key)) if isinstance(sub_key, tuple) else f"Value {sub_key}"
         
@@ -175,6 +176,7 @@ def plot_individual_with_fit_average(averaged_results, variable_name, image_path
         plt.show()
 
     save_fit_results(fit_results, variable_name, pickle_path)
+
 
 
 def plot_combined_average(averaged_results, variable_name, image_path):
@@ -239,7 +241,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None)):
 plot_combined(load_data_from_file("VOTPP folder/Results/Pickle files/", "magnetic_results.pkl"), "magnetic", "VOTPP folder/Results/Plots/")
 
 # For plotting with averaging
-plot_from_file_average(['magnetic_results.pkl'])#, data_range=slice(0, 40))
+plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
 
 
 # plot_from_file(['magnetic_results_e_n.pkl',])

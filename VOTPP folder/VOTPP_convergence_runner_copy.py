@@ -105,7 +105,7 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 128, #!
+    'nbstates': 6, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -113,7 +113,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 100, #!
+    'cell_size': 30, #!
     'seed': 8000
 }
 
@@ -171,8 +171,8 @@ magnetic_field_list = [[3000,0,0],]
 #                         # changing_variable2='timespace', variable_values2=timespace_list,
 #                         )
 
-seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-# seed_list = [8000,9000, 10000]
+# seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+seed_list = [8000,9000, 10000]
 magnetic_results = {}
 for idx, seed in enumerate(seed_list):
     # Change the value of the seed in the default parameters
