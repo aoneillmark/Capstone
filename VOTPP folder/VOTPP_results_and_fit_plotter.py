@@ -239,7 +239,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None)):
 plot_combined(load_data_from_file("VOTPP folder/Results/Pickle files/", "magnetic_results.pkl"), "magnetic", "VOTPP folder/Results/Plots/")
 
 # For plotting with averaging
-plot_from_file_average(['magnetic_results.pkl'], data_range=slice(0, 40))
+plot_from_file_average(['magnetic_results.pkl'])#, data_range=slice(0, 40))
 
 
 # plot_from_file(['magnetic_results_e_n.pkl',])
