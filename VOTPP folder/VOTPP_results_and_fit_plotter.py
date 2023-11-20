@@ -73,7 +73,7 @@ def average_results_by_seed(loaded_results, debug=False):
 
 
 
-def plot_combined(loaded_results, variable_name, image_path):
+def plot_combined(loaded_results, variable_name, image_path, ylim=None):
     plt.figure(figsize=(10,6))
     
     for outer_key in loaded_results.keys():  # Loop over each key in the loaded_results
@@ -86,7 +86,7 @@ def plot_combined(loaded_results, variable_name, image_path):
     plt.ylabel('Coherence')
     plt.legend()
     plt.tight_layout()
-    plt.ylim(0,1)
+    plt.ylim(ylim)
     
     output_filename = os.path.join(image_path, f"{variable_name}_all_results.png")
     plt.savefig(output_filename, dpi=300)
@@ -102,7 +102,7 @@ def save_fit_results(fit_results, result_name, save_path):
     print("Saved fit results to file:")
     print(output_filename)
 
-def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=slice(None)):
+def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=slice(None), ylim=None):
     fit_results = {}  # Dictionary to store fit parameters for all results
     
     for outer_key in loaded_results.keys():  # Loop over each key in the loaded_results
@@ -132,7 +132,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
             plt.ylabel('Coherence')
             plt.legend()
             plt.tight_layout()
-            plt.ylim(0,1)
+            plt.ylim(ylim)
             
             output_filename = os.path.join(image_path, f"{variable_name}_{label_str}_with_fit.png")
             plt.savefig(output_filename, dpi=300)
@@ -140,7 +140,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
 
     save_fit_results(fit_results, variable_name, pickle_path)  # Save the fit results once all fits are done
 
-def plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=slice(None)):
+def plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=slice(None), ylim=None):
     fit_results = {}  # Dictionary to store fit parameters for all results
     
     for sub_key, series in averaged_results.items():  # Now iterating over averaged results
@@ -169,7 +169,7 @@ def plot_individual_with_fit_average(averaged_results, variable_name, image_path
         plt.ylabel('Coherence')
         plt.legend()
         plt.tight_layout()
-        plt.ylim(0,1)
+        plt.ylim(ylim)
         
         output_filename = os.path.join(image_path, f"{variable_name}_{label_str}_with_fit.png")
         plt.savefig(output_filename, dpi=300)
@@ -179,7 +179,7 @@ def plot_individual_with_fit_average(averaged_results, variable_name, image_path
 
 
 
-def plot_combined_average(averaged_results, variable_name, image_path):
+def plot_combined_average(averaged_results, variable_name, image_path, ylim=None):
     plt.figure(figsize=(10,6))
     
     for sub_key, series in averaged_results.items():
@@ -191,14 +191,14 @@ def plot_combined_average(averaged_results, variable_name, image_path):
     plt.ylabel('Coherence')
     plt.legend()
     plt.tight_layout()
-    plt.ylim(0,1)
+    plt.ylim(ylim)
     
     output_filename = os.path.join(image_path, f"{variable_name}_all_results.png")
     plt.savefig(output_filename, dpi=300)
     plt.show()
 
 
-def plot_from_file(pickle_filenames, data_range=slice(None)):
+def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None):
     pickle_path = "VOTPP folder/Results/Pickle files/"
     image_path = "VOTPP folder/Results/Plots/"
 
@@ -207,12 +207,12 @@ def plot_from_file(pickle_filenames, data_range=slice(None)):
         loaded_results = load_data_from_file(pickle_path, pickle_filename)
         
         # Plot all results combined without fit
-        plot_combined(loaded_results, variable_name, image_path)
+        plot_combined(loaded_results, variable_name, image_path, ylim=ylim)
         
         # Plot individual results with fit
-        plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=data_range)
+        plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=data_range, ylim=ylim)
 
-def plot_from_file_average(pickle_filenames, data_range=slice(None)):
+def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
     pickle_path = "VOTPP folder/Results/Pickle files/"
     image_path = "VOTPP folder/Results/Plots/"
 
@@ -224,10 +224,10 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None)):
         averaged_results = average_results_by_seed(loaded_results, debug=False)
 
         # Plot all results combined without fit, using the plot_combined_average function
-        plot_combined_average(averaged_results, variable_name, image_path)
+        plot_combined_average(averaged_results, variable_name, image_path, ylim=ylim)
 
         # Plot individual results with fit
-        plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=data_range)
+        plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=data_range, ylim=ylim)
 
 
 
@@ -238,10 +238,10 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None)):
 # # Modify the path and filename to match your file's location
 # check_pickle_structure("VOTPP folder/Results/Pickle files/", "magnetic_results.pkl")
 
-plot_combined(load_data_from_file("VOTPP folder/Results/Pickle files/", "magnetic_results.pkl"), "magnetic", "VOTPP folder/Results/Plots/")
+# plot_combined(load_data_from_file("VOTPP folder/Results/Pickle files/", "magnetic_results.pkl"), "magnetic", "VOTPP folder/Results/Plots/")
 
 # For plotting with averaging
-plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
+# plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
 
 
 # plot_from_file(['magnetic_results_e_n.pkl',])
@@ -250,7 +250,7 @@ plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
 # plot_from_file(['magnetic_results_e_e.pkl',])
 # plot_from_file(['magnetic_results_n_e.pkl',])
 
-# plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',])
+plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',])
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
 
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
