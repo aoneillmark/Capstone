@@ -250,7 +250,8 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_e_e.pkl',])
 # plot_from_file(['magnetic_results_n_e.pkl',])
 
-plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',])
+# plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
+
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
 
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
@@ -261,7 +262,7 @@ plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',])
 # plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
 # plot_from_file(['r_bath_results.pkl'])
 # plot_from_file(['r_dipole_results.pkl'])
-# plot_from_file(['cell_size_results.pkl'])
+plot_from_file(['cell_size_results.pkl'])
 
 # plot_from_file(['r_bath_results.pkl'])
 # plot_from_file(['r_dipole_results.pkl'])

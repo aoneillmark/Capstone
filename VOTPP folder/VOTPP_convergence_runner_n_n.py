@@ -103,7 +103,7 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 128, #!
+    'nbstates': 6, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -111,14 +111,14 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 100, #!
+    'cell_size': 30, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 60, #35
-    'r_dipole': 20, #20
+    'r_bath': 15, #35
+    'r_dipole': 10, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],

@@ -32,8 +32,8 @@ class VOTPP_class:
                     'spin': [7/2],
                     'gyro': [-7.05],
                     'D': [-350],
-                    'alpha': [0,0,0,0,1,0,0,0],
-                    'beta':  [0,0,0,0,0,1,0,0],
+                    'alpha': 4,
+                    'beta':  5,
                 }
             elif num_spins==1 and spin_type==None:
                 raise ValueError('spin_type must be "electron" or "nuclear" for num_spins=1')
@@ -52,14 +52,6 @@ class VOTPP_class:
                 'D': [-350, 0],
                 'alpha': alpha,
                 'beta': beta,
-                # 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
-                # 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Valerio)
-                # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
-                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Valerio)
-                # 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
-                # 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Mark)
-                # 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
-                # 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Mark)
             }   
 
             # Get the interaction tensor

@@ -18,66 +18,147 @@ size = MPI.COMM_WORLD.Get_size()
 # File path for pickle files
 path = "VOTPP folder/Results/Pickle files/"
 
-def runner(concentration_value, 
-           changing_variable, variable_values, 
-           bath_parameters, simulator_parameters, calc_parameters,
-           num_spins=2, spin_type=None,
-           alpha=None, beta=None,
-           changing_variable2=None, variable_values2=None,):
+# def runner(concentration_value, 
+#            changing_variable, variable_values, 
+#            bath_parameters, simulator_parameters, calc_parameters,
+#            num_spins=2, spin_type=None,
+#            alpha=None, beta=None,
+#            changing_variable2=None, variable_values2=None,):
     
-    # Attempt to retrieve the changing_variable from each dictionary
-    changing_invalue = None
-    for param_dict in [simulator_parameters, bath_parameters, calc_parameters]:
-        try:
-            changing_invalue = param_dict[changing_variable]
-            break
-        except KeyError:
-            continue
+#     # Attempt to retrieve the changing_variable from each dictionary
+#     changing_invalue = None
+#     for param_dict in [simulator_parameters, bath_parameters, calc_parameters]:
+#         try:
+#             changing_invalue = param_dict[changing_variable]
+#             break
+#         except KeyError:
+#             continue
 
-    if changing_invalue is None:
-        raise ValueError(f"'{changing_variable}' not found in any of the provided dictionaries.")
+#     if changing_invalue is None:
+#         raise ValueError(f"'{changing_variable}' not found in any of the provided dictionaries.")
 
-    bath_parameters['concentration'] = concentration_value # Set concentration value
+#     bath_parameters['concentration'] = concentration_value # Set concentration value
 
-    simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters) # Set up bath and atoms
-    sim_original = simulator.setup_simulator(**simulator_parameters) # Set up simulator
+#     simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters) # Set up bath and atoms
+#     sim_original = simulator.setup_simulator(**simulator_parameters) # Set up simulator
 
-    # Print the number of active nuclei in the simulation
-    if rank == 0:
-        print("Number of active nuclei: {}".format(simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath']) ))
+#     # Print the number of active nuclei in the simulation
+#     if rank == 0:
+#         print("Number of active nuclei: {}".format(simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath']) ))
 
-    results = {}
-    for idx, v in enumerate(variable_values): # Iterate through variable values (e.g. order = 1, 2, 3)
-        sim = copy.deepcopy(sim_original) # Create a deep copy of the original simulator object. This ensures that you always start with a fresh simulator object for each value of changing_variable, and it should prevent the error caused by reusing and potentially modifying the same simulator object across iterations.
+#     results = {}
+#     for idx, v in enumerate(variable_values): # Iterate through variable values (e.g. order = 1, 2, 3)
+#         sim = copy.deepcopy(sim_original) # Create a deep copy of the original simulator object. This ensures that you always start with a fresh simulator object for each value of changing_variable, and it should prevent the error caused by reusing and potentially modifying the same simulator object across iterations.
 
-        # Progress printing
-        if rank == 0:
-            print("{} = {}".format(changing_variable, v))
+#         # Progress printing
+#         if rank == 0:
+#             print("{} = {}".format(changing_variable, v))
 
-        # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
-        if changing_variable2 in calc_parameters:
-            calc_parameters[changing_variable2] = variable_values2[idx] #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            # print("{} = {}".format(changing_variable2, variable_values2))
+#         # Need an if statement here to check if changing_variable or changing_variable2 is in calc_parameters
+#         if changing_variable2 in calc_parameters:
+#             calc_parameters[changing_variable2] = variable_values2[idx] #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#             # print("{} = {}".format(changing_variable2, variable_values2))
 
-        setattr(sim, changing_variable, v)
+#         setattr(sim, changing_variable, v)
         
-        l = sim.compute(**calc_parameters) # Run the simulation
+#         l = sim.compute(**calc_parameters) # Run the simulation
         
-        v_key = convert_to_key(v)
-        results[v_key] = pd.DataFrame([l], columns=calc_parameters['timespace']).T
+#         v_key = convert_to_key(v)
+#         results[v_key] = pd.DataFrame([l], columns=calc_parameters['timespace']).T
 
-    simulator_parameters[changing_variable] = changing_invalue
+#     simulator_parameters[changing_variable] = changing_invalue
 
-    if changing_variable2 in calc_parameters:
-        calc_parameters[changing_variable2] = variable_values2[0]
-        # calc_parameters[changing_variable2] = variable_values2
-    return results
+#     if changing_variable2 in calc_parameters:
+#         calc_parameters[changing_variable2] = variable_values2[0]
+#         # calc_parameters[changing_variable2] = variable_values2
+#     return results
+
+
+
+
+
 
 def convert_to_key(value):
     if isinstance(value, list):
         return tuple(value)
     else:
         return value
+
+
+def update_parameters(changing_variable, value, bath_parameters, simulator_parameters):
+    if changing_variable == 'cell_size':
+        bath_parameters['cell_size'] = value
+    elif changing_variable == 'r_bath':
+        simulator_parameters['r_bath'] = value
+    elif changing_variable == 'r_dipole':
+        simulator_parameters['r_dipole'] = value
+    elif changing_variable == 'order':
+        simulator_parameters['order'] = value
+    elif changing_variable == 'magnetic_field':
+        simulator_parameters['magnetic_field'] = value
+    elif changing_variable == 'pulses':
+        simulator_parameters['pulses'] = value
+    elif changing_variable == 'nbstates':
+        simulator_parameters['nbstates'] = value
+    
+
+
+def get_changing_invalue(changing_variable, param_dicts):
+    for param_dict in param_dicts:
+        try:
+            return param_dict[changing_variable]
+        except KeyError:
+            continue
+    raise ValueError(f"'{changing_variable}' not found in any of the provided dictionaries.")
+
+
+def setup_simulator(concentration_value, bath_parameters, simulator_parameters, num_spins, spin_type, alpha, beta):
+    bath_parameters['concentration'] = concentration_value
+    simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters)
+    sim_original = simulator.setup_simulator(**simulator_parameters)
+    return simulator, sim_original
+
+
+def run_single_simulation(concentration_value, bath_parameters, simulator_parameters, calc_parameters, num_spins, spin_type, alpha, beta, changing_variable, value, changing_variable2=None, variable_value2=None):
+    update_parameters(changing_variable, value, bath_parameters, simulator_parameters)
+    simulator, sim_original = setup_simulator(concentration_value, bath_parameters, simulator_parameters, num_spins, spin_type, alpha, beta)
+
+    # Run the simulation and return the result
+    return sim_original.compute(**calc_parameters)
+
+
+def process_results(simulation_results, calc_parameters):
+    results = {}
+    for v_key, result in simulation_results.items():
+        results[v_key] = pd.DataFrame([result], columns=calc_parameters['timespace']).T
+    return results
+
+
+def runner(concentration_value, changing_variable, variable_values, bath_parameters, simulator_parameters, calc_parameters, num_spins=2, spin_type=None, alpha=None, beta=None, changing_variable2=None, variable_values2=None):
+    changing_invalue = get_changing_invalue(changing_variable, [simulator_parameters, bath_parameters, calc_parameters])
+
+    simulation_results = {}
+    for v in variable_values:
+        if rank == 0:
+            print(f"Running simulation with {changing_variable}: {v}")
+
+        # Use a hashable key
+        v_key = convert_to_key(v)
+        simulation_results[v_key] = run_single_simulation(concentration_value, bath_parameters, simulator_parameters, calc_parameters, num_spins, spin_type, alpha, beta, changing_variable, v, changing_variable2, variable_values2)
+
+    results = process_results(simulation_results, calc_parameters)
+
+    # Reset the original values of the changing variables
+    if changing_variable in bath_parameters:
+        bath_parameters[changing_variable] = changing_invalue
+    elif changing_variable in simulator_parameters:
+        simulator_parameters[changing_variable] = changing_invalue
+
+    if changing_variable2 in calc_parameters:
+        calc_parameters[changing_variable2] = variable_values2[0] if variable_values2 else None
+
+    return results
+
 
 
 
@@ -114,8 +195,8 @@ default_calc_parameters = {
 }
 
 default_bath_parameters = {
-    'concentration': 0, #!
-    'cell_size': 100, #!
+    'concentration': 0.02, #!
+    'cell_size': 500, #!
     'seed': 8000
 }
 
@@ -305,9 +386,6 @@ if rank == 0:
 
     # with open((str(path) + 'magnetic_results_[n-e]_e_N_trans.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_results, f)
-    
-    # with open((str(path) + 'alphabeta_order2_results.pkl'), 'wb') as f:
-    #     pickle.dump(alphabeta_results, f)
 
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:

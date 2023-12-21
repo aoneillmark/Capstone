@@ -172,7 +172,7 @@ magnetic_field_list = [[3000,0,0],]
 #                         )
 
 # seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-seed_list = [8000,9000, 10000]
+seed_list = [8000,]
 magnetic_results = {}
 for idx, seed in enumerate(seed_list):
     # Change the value of the seed in the default parameters
