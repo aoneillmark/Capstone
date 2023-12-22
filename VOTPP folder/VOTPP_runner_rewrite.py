@@ -109,7 +109,7 @@ def get_changing_invalue(changing_variable, param_dicts):
             return param_dict[changing_variable]
         except KeyError:
             continue
-    raise ValueError(f"'{changing_variable}' not found in any of the provided dictionaries.")
+    raise ValueError("'" + changing_variable + "' not found in any of the provided dictionaries.")
 
 
 def setup_simulator(concentration_value, bath_parameters, simulator_parameters, num_spins, spin_type, alpha, beta):
@@ -122,6 +122,11 @@ def setup_simulator(concentration_value, bath_parameters, simulator_parameters, 
 def run_single_simulation(concentration_value, bath_parameters, simulator_parameters, calc_parameters, num_spins, spin_type, alpha, beta, changing_variable, value, changing_variable2=None, variable_value2=None):
     update_parameters(changing_variable, value, bath_parameters, simulator_parameters)
     simulator, sim_original = setup_simulator(concentration_value, bath_parameters, simulator_parameters, num_spins, spin_type, alpha, beta)
+
+    # Print number of active nuclei
+    if rank == 0:
+        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath'])
+        print(f"Number of active nuclei: {num_active_nuclei}")
 
     # Run the simulation and return the result
     return sim_original.compute(**calc_parameters)
@@ -169,9 +174,9 @@ order_list = [1, 2, 3]
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_bath_list = [200,250,300,350,400,450]
+r_bath_list = [200,300,400,]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
-r_dipole_list = [150,200,250,300,350]
+r_dipole_list = [100,200,300]
 # cell_size_list = [60,100,200]
 cell_size_list = [100,500,1000,2000]
 nbstates_list = [128,]
@@ -188,7 +193,7 @@ default_calc_parameters = {
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 6, #!
+    'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -196,14 +201,17 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 500, #!
+    'cell_size': 2000, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, #!
-    'r_bath': 200, #35
-    'r_dipole': 100, #20
+    # 'order': 3, #!
+    # 'r_bath': 400, #35
+    # 'r_dipole': 300, #20
+    'order': 2, #!
+    'r_bath': 400, #35
+    'r_dipole': 300, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -235,25 +243,6 @@ magnetic_field_list = [[3000,0,0],]
 # magnetic_field_list = [[500,0,0],[1000,0,0], [2000,0,0]]
 # timespace_list = [np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),np.linspace(0, 1e-1, 201),] # 2e-4
 
-# 'alpha': [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
-# 'beta':  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Valerio)
-# 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
-# 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Valerio)
-# 'alpha': [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
-# 'beta':  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # m_I = 3/2, m_s = -1/2 (Mark)
-# 'alpha': [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
-# 'beta':  [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s=  1/2 (Mark)
-
-alpha_and_beta = [
-    [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Valerio)
-     [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],# m_I = 3/2, m_s = -1/2 (Valerio)
-    [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Valerio)
-     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]],# m_I = -7/2, m_s=  1/2 (Valerio)
-    [[0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], # m_I = 1/2, m_s = -1/2 (Mark)
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]],# m_I = 3/2, m_s = -1/2 (Mark)
-    [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # m_I = -7/2, m_s= -1/2 (Mark)
-     [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]] # m_I = -7/2, m_s=  1/2 (Mark)
-]
 
 # timespace_list = [
 #     np.linspace(0, 1e-1, 201),
@@ -262,30 +251,8 @@ alpha_and_beta = [
 #     np.linspace(0, 1e-1, 201),
 # ]
 
-# timespace_list = [
-#     np.linspace(0, 1e-1, 2),
-# ]
 
-# alphabeta_results = {}
-# for idx, alphabetas in enumerate(alpha_and_beta):
-#     # print(timespace_list[idx])
-#     if rank == 0:
-#         print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
-#     alphabeta_results[idx] = runner(
-#                         concentration_value=0,
-#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-#                         num_spins=2,# spin_type='nuclear',
-#                         alpha=alphabetas[0], beta=alphabetas[1],
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         changing_variable2='timespace', variable_values2=timespace_list[idx],
-#                         )
-    
-#     # Save the current state of alphabeta_results
-#     with open((str(path) + f'alphabeta_order2_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(alphabeta_results, f)
-
-
-# # # timespace_list = [np.linspace(0,1e-1,201)]
+# # timespace_list = [np.linspace(0,1e-1,201)]
 # magnetic_results = {}
 # for conc in concentration_list:
 #     # print(timespace_list[idx])
@@ -335,40 +302,40 @@ if rank == 0:
     
 # print("Order results done")
 
-# r_bath_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     r_bath_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='r_bath', variable_values=r_bath_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
-#     # Save the current state of results
-#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
+r_bath_results = {}
+for idx, conc in enumerate(concentration_list):
+    r_bath_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='r_bath', variable_values=r_bath_list,
+                        num_spins=2, #spin_type='nuclear',
+                        alpha= 4,
+                        beta=  5,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
+    # Save the current state of results
+    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
-# if rank == 0:
-#     print("r_bath results done")
+if rank == 0:
+    print("r_bath results done")
 
-# r_dipole_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     r_dipole_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='r_dipole', variable_values=r_dipole_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
-#     # Save the current state of results
-#     with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_dipole_results, f)
+r_dipole_results = {}
+for idx, conc in enumerate(concentration_list):
+    r_dipole_results[conc] = runner(concentration_value=conc,
+                        changing_variable='r_dipole', variable_values=r_dipole_list,
+                        num_spins=2, #spin_type='nuclear',
+                        alpha= 4,
+                        beta=  5,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
+    # Save the current state of results
+    with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_dipole_results, f)
 
-# if rank == 0:
-#     print("r_dipole results done")
+if rank == 0:
+    print("r_dipole results done")
 
 #####################################################################
 
@@ -394,11 +361,11 @@ if rank == 0:
     with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
         pickle.dump(cell_size_results, f)
 
-    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-    #     pickle.dump(r_bath_results, f)
+    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
     
-    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-    #     pickle.dump(r_dipole_results, f)
+    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+        pickle.dump(r_dipole_results, f)
 
 
 
