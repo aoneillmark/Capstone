@@ -176,7 +176,7 @@ order_list = [1, 2, 3]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
 r_bath_list = [200,300,400,]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
-r_dipole_list = [100,200,300]
+r_dipole_list = [300,400,500,600,700]
 # cell_size_list = [60,100,200]
 cell_size_list = [100,500,1000,2000]
 nbstates_list = [128,]
@@ -201,7 +201,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 2000, #!
+    'cell_size': 500, #!
     'seed': 8000
 }
 
@@ -272,23 +272,23 @@ magnetic_field_list = [[3000,0,0],]
 
 #####################################################################
 
-cell_size_results = {}
-for idx, conc in enumerate(concentration_list):
-    cell_size_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='cell_size', variable_values=cell_size_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= 4,
-                        beta=  5,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
-    # Save the current state of results
-    with open((str(path) + f'cell_size_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(cell_size_results, f)
+# cell_size_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     cell_size_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='cell_size', variable_values=cell_size_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+#     # Save the current state of results
+#     with open((str(path) + f'cell_size_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(cell_size_results, f)
 
-if rank == 0:
-    print("cell_size results done")
+# if rank == 0:
+#     print("cell_size results done")
 
 # order_results = {}
 # for conc in concentration_list:
@@ -302,23 +302,23 @@ if rank == 0:
     
 # print("Order results done")
 
-r_bath_results = {}
-for idx, conc in enumerate(concentration_list):
-    r_bath_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='r_bath', variable_values=r_bath_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= 4,
-                        beta=  5,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
-    # Save the current state of results
-    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+# r_bath_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     r_bath_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=r_bath_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+#     # Save the current state of results
+#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_bath_results, f)
 
-if rank == 0:
-    print("r_bath results done")
+# if rank == 0:
+#     print("r_bath results done")
 
 r_dipole_results = {}
 for idx, conc in enumerate(concentration_list):
@@ -358,11 +358,11 @@ if rank == 0:
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
     #     pickle.dump(order_results, f)
     
-    with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
-        pickle.dump(cell_size_results, f)
+    # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
+    #     pickle.dump(cell_size_results, f)
 
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
     with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
         pickle.dump(r_dipole_results, f)
