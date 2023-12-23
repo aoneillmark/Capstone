@@ -174,7 +174,7 @@ order_list = [1, 2, 3]
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_bath_list = [200,300,400,]
+r_bath_list = [300,400,500,600]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
 r_dipole_list = [300,400,500,600,700]
 # cell_size_list = [60,100,200]
@@ -201,7 +201,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 500, #!
+    'cell_size': 1000, #!
     'seed': 8000
 }
 
@@ -302,28 +302,11 @@ magnetic_field_list = [[3000,0,0],]
     
 # print("Order results done")
 
-# r_bath_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     r_bath_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='r_bath', variable_values=r_bath_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
-#     # Save the current state of results
-#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
-
-# if rank == 0:
-#     print("r_bath results done")
-
-r_dipole_results = {}
+r_bath_results = {}
 for idx, conc in enumerate(concentration_list):
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=r_dipole_list,
+    r_bath_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='r_bath', variable_values=r_bath_list,
                         num_spins=2, #spin_type='nuclear',
                         alpha= 4,
                         beta=  5,
@@ -331,11 +314,28 @@ for idx, conc in enumerate(concentration_list):
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
     # Save the current state of results
-    with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
 if rank == 0:
-    print("r_dipole results done")
+    print("r_bath results done")
+
+# r_dipole_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+#     # Save the current state of results
+#     with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_dipole_results, f)
+
+# if rank == 0:
+#     print("r_dipole results done")
 
 #####################################################################
 
@@ -361,11 +361,11 @@ if rank == 0:
     # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
     #     pickle.dump(cell_size_results, f)
 
-    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-    #     pickle.dump(r_bath_results, f)
+    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
     
-    with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_dipole_results, f)
 
 
 
