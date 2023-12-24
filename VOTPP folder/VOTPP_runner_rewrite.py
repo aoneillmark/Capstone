@@ -201,7 +201,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 1000, #!
+    'cell_size': 500, #!
     'seed': 8000
 }
 
@@ -209,9 +209,9 @@ default_simulator_parameters = { ########## These should be greater when simulat
     # 'order': 3, #!
     # 'r_bath': 400, #35
     # 'r_dipole': 300, #20
-    'order': 2, #!
-    'r_bath': 400, #35
-    'r_dipole': 300, #20
+    'order': 3, #!
+    'r_bath': 250, #35
+    'r_dipole': 200, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -253,22 +253,22 @@ magnetic_field_list = [[3000,0,0],]
 
 
 # # timespace_list = [np.linspace(0,1e-1,201)]
-# magnetic_results = {}
-# for conc in concentration_list:
-#     # print(timespace_list[idx])
-#     # if rank == 0:
-#         # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
-#     magnetic_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-#                         num_spins=2, #spin_type='electron',
-#                         # alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#                         # beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
+magnetic_results = {}
+for conc in concentration_list:
+    # print(timespace_list[idx])
+    # if rank == 0:
+        # print("Alpha: {}, Beta: {}".format(alphabetas[0], alphabetas[1]))
+    magnetic_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
+                        num_spins=2, #spin_type='electron',
+                        # alpha= [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        # beta=  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                        alpha= 4,
+                        beta=  5,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
 
 #####################################################################
 
@@ -302,23 +302,23 @@ magnetic_field_list = [[3000,0,0],]
     
 # print("Order results done")
 
-r_bath_results = {}
-for idx, conc in enumerate(concentration_list):
-    r_bath_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='r_bath', variable_values=r_bath_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= 4,
-                        beta=  5,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
-    # Save the current state of results
-    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+# r_bath_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     r_bath_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=r_bath_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+#     # Save the current state of results
+#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_bath_results, f)
 
-if rank == 0:
-    print("r_bath results done")
+# if rank == 0:
+#     print("r_bath results done")
 
 # r_dipole_results = {}
 # for idx, conc in enumerate(concentration_list):
@@ -351,8 +351,8 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    # with open((str(path) + 'magnetic_results_[n-e]_e_N_trans.pkl'), 'wb') as f:
-    #     pickle.dump(magnetic_results, f)
+    with open((str(path) + 'magnetic_results_[n-e]_e_N_trans.pkl'), 'wb') as f:
+        pickle.dump(magnetic_results, f)
 
 
     # with open((str(path) + 'order_results.pkl'), 'wb') as f:
@@ -361,8 +361,8 @@ if rank == 0:
     # with open((str(path) + 'cell_size_results.pkl'), 'wb') as f:
     #     pickle.dump(cell_size_results, f)
 
-    with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+    # with open((str(path) + 'r_bath_results.pkl'), 'wb') as f:
+    #     pickle.dump(r_bath_results, f)
     
     # with open((str(path) + 'r_dipole_results.pkl'), 'wb') as f:
     #     pickle.dump(r_dipole_results, f)
