@@ -1,4 +1,4 @@
-from VOTPP_class import VOTPP_class
+from VOTPP_class_copy import VOTPP_class
 from mpi4py import MPI
 import numpy as np
 import pandas as pd
@@ -125,8 +125,11 @@ def run_single_simulation(concentration_value, bath_parameters, simulator_parame
 
     # Print number of active nuclei
     if rank == 0:
-        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath'])
+        # bath = sim_original.bath
+        num_active_nuclei = simulator.get_number_of_active_nuclei(atoms=sim_original.bath, r_bath=simulator_parameters['r_bath'], central_spin_position=[0.50446035, 0.50446035, 0.55872939])
         print(f"Number of active nuclei: {num_active_nuclei}")
+        # print(f"Printing bath: ")
+        # call = simulator.print_bath(sim_original)
 
     # Run the simulation and return the result
     return sim_original.compute(**calc_parameters)
@@ -201,7 +204,7 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 500, #!
+    'cell_size': 100, #!
     'seed': 8000
 }
 
@@ -210,8 +213,8 @@ default_simulator_parameters = { ########## These should be greater when simulat
     # 'r_bath': 400, #35
     # 'r_dipole': 300, #20
     'order': 3, #!
-    'r_bath': 250, #35
-    'r_dipole': 200, #20
+    'r_bath': 15, #35
+    'r_dipole': 10, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -351,7 +354,7 @@ if rank == 0:
     # with open((str(path) + 'magnetic_nbstates_convergence.pkl'), 'wb') as f:
     #     pickle.dump(magnetic_nbstates_convergence, f)
 
-    with open((str(path) + 'magnetic_results_[n-e]_e_N_trans.pkl'), 'wb') as f:
+    with open((str(path) + 'magnetic_results_combined_bath.pkl'), 'wb') as f:
         pickle.dump(magnetic_results, f)
 
 
