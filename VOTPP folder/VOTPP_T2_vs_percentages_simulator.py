@@ -109,7 +109,7 @@ def runner(concentration_value, changing_variable, variable_values, bath_paramet
 
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.3, 0.5]
-concentration_list = [0.5,]
+concentration_list = [0.3]
 # concentration_list = [0.02]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
@@ -130,7 +130,7 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 0.25, 101), # 7e-2
+    'timespace': np.linspace(0, 1e-3, 101), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
@@ -148,8 +148,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 150, #35
-    'r_dipole': 100, #20
+    'r_bath': 180, #35
+    'r_dipole': 120, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -209,8 +209,8 @@ for conc in concentration_list:
         changing_variable='magnetic_field',
         variable_values=magnetic_field_list,
         num_spins=2,  # spin_type='electron',
-        alpha=4,
-        beta=5,
+        alpha=0,
+        beta=8,
         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
     )
 
