@@ -128,8 +128,8 @@ def run_single_simulation(concentration_value, bath_parameters, simulator_parame
         # bath = sim_original.bath
         num_active_nuclei = simulator.get_number_of_active_nuclei(atoms=sim_original.bath, r_bath=simulator_parameters['r_bath'], central_spin_position=[0.50446035, 0.50446035, 0.55872939])
         print(f"Number of active nuclei: {num_active_nuclei}")
-        # print(f"Printing bath: ")
-        # call = simulator.print_bath(sim_original)
+        print(f"Printing bath: ")
+        call = simulator.print_bath(sim_original)
 
     # Run the simulation and return the result
     return sim_original.compute(**calc_parameters)
@@ -172,7 +172,7 @@ def runner(concentration_value, changing_variable, variable_values, bath_paramet
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
-concentration_list = [0.02]
+concentration_list = [0.5]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
