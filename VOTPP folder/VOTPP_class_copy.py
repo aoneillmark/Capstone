@@ -120,14 +120,9 @@ class VOTPP_class:
             sic.isotopes['H']['2H'] = 0.000115
             sic.isotopes['N']['14N'] = 0.9963200000000001
             sic.isotopes['N']['15N'] = 0.00368
-            # sic.isotopes['V']['50V'] = 1-self.concentration # 0.0025
-            sic.isotopes['V']['50V'] = 0.29
+            sic.isotopes['V']['50V'] = 1-self.concentration # 0.0025
             sic.isotopes['V']['51V'] = self.concentration
-                    
 
-
-            # #populate unit cell with V
-            sic.add_atoms((N[76], [x[76], y[76], z[76]]), type='angstrom')
 
             #assign position of qubit 
             pos1 = x[76], y[76], z[76] # Position of the nuclear spin
@@ -135,16 +130,17 @@ class VOTPP_class:
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
 
-            #generate supercell - nuclear bath 
-            cell=self.cell_size
+            # #generate supercell - nuclear bath 
+            # cell=self.cell_size
 
 
             atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
             # atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed,) #generate supercell 
         
-
-            #set          spin | gyro | quadrupole 
-            spin_types = [('C',  1 / 2,  6.72828),    
+            # Setting the spin types and gyromagnetic ratios etc
+            spin_types = [
+            #set        spin | gyro | quadrupole 
+                        ('C',  1 / 2,  6.72828),    
                         ('H', 1 / 2, 26.7522),
                         ('N', 1, 1.9331, 20.44 ),
                         ('V', 7/2, 7.05, -350), # not added for consistency between tests
@@ -232,8 +228,17 @@ class VOTPP_class:
         
     def get_active_nuclei_positions(self, atoms, r_bath, central_spin_position):
         # Assuming 'atoms' is a BathArray object
-        # Extract positions of nuclei from the supercell
-        positions = atoms['xyz']  # Directly access the xyz attribute for positions
+        # Extract positions and types of nuclei from the supercell
+        positions = atoms['xyz']  # Positions of bath spins
+        types = atoms['N']  # Types of bath spins
+
+        # Debug print
+        print(f"Central spin position: {central_spin_position}")
+
+        # Check for any atom overlapping with the central spin
+        for i, (pos, atom_type) in enumerate(zip(positions, types)):
+            if np.allclose(pos, central_spin_position, atol=1e-3):  # Increased atol
+                print(f"Warning: An atom of type {atom_type} at index {i} overlaps with the central spin.")
 
         # Calculate distances from the central spin
         distances = np.linalg.norm(positions - np.array(central_spin_position), axis=1)
