@@ -120,7 +120,8 @@ class VOTPP_class:
             sic.isotopes['H']['2H'] = 0.000115
             sic.isotopes['N']['14N'] = 0.9963200000000001
             sic.isotopes['N']['15N'] = 0.00368
-            sic.isotopes['V']['50V'] = 0.0025
+            # sic.isotopes['V']['50V'] = 1-self.concentration # 0.0025
+            sic.isotopes['V']['50V'] = 0.29
             sic.isotopes['V']['51V'] = self.concentration
                     
 
