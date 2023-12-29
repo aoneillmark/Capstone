@@ -1,4 +1,4 @@
-from VOTPP_class import VOTPP_class
+from VOTPP_class_copy import VOTPP_class
 from mpi4py import MPI
 import numpy as np
 import pandas as pd
@@ -66,7 +66,8 @@ def run_single_simulation(concentration_value, bath_parameters, simulator_parame
 
     # Print number of active nuclei
     if rank == 0:
-        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath'])
+        # bath = sim_original.bath
+        num_active_nuclei = simulator.get_number_of_active_nuclei(atoms=sim_original.bath, r_bath=simulator_parameters['r_bath'], central_spin_position=[0.50446035, 0.50446035, 0.55872939])
         print(f"Number of active nuclei: {num_active_nuclei}")
 
     # Run the simulation and return the result
@@ -108,8 +109,8 @@ def runner(concentration_value, changing_variable, variable_values, bath_paramet
 
 
 
-# concentration_list = [0, 0.02, 0.05, 0.1, 0.3, 0.5]
-concentration_list = [0.3]
+concentration_list = [0, 0.02, 0.05, 0.1, 0.3, 0.5]
+# concentration_list = [0.3]
 # concentration_list = [0.02]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
@@ -130,7 +131,7 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 1e-3, 101), # 7e-2
+    'timespace': np.linspace(0, 2, 101), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
@@ -142,14 +143,14 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0, #!
-    'cell_size': 500, #!
+    'cell_size': 100, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
-    'r_bath': 180, #35
-    'r_dipole': 120, #20
+    'order': 3, #!
+    'r_bath': 15, #35
+    'r_dipole': 10, #20
     # 'pulses': 1, # N pulses in CPMG sequence (=1 is Hahn-echo, =0 is free induction decay)
     # 'pulses': [pc.Pulse('x', 2*(np.pi)/3)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [pc.Pulse('x', np.pi), pc.Pulse('y', np.pi)],
@@ -209,8 +210,8 @@ for conc in concentration_list:
         changing_variable='magnetic_field',
         variable_values=magnetic_field_list,
         num_spins=2,  # spin_type='electron',
-        alpha=0,
-        beta=8,
+        alpha=4,
+        beta=5,
         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
     )
 
@@ -221,7 +222,7 @@ for conc in concentration_list:
 
 
     # Save results to pickle file
-    with open(f'{path}results_conc_{conc}.pkl', 'wb') as f:
+    with open(f'{path}results_combined_conc_{conc}.pkl', 'wb') as f:
         pickle.dump(results, f)
 
 #####################################################################
