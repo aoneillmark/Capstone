@@ -9,13 +9,13 @@ import pandas as pd
 def coherence_time_func(time, beta, T2):
     return np.exp(-(((2*time)/T2)**beta))
 
-concentration_list = [0.02, 0.05, 0.1, 0.3]
+concentration_list = [0.02, 0.05, 0.1, 0.3,0.5]
 T2_values = []
 path = "VOTPP folder/Results/Pickle files/"
 
 for conc in concentration_list:
     conc_percentage = conc * 100
-    with open(f'{path}results_combined_conc_{conc}.pkl', 'rb') as f:
+    with open(f'{path}results_combined_E_trans_conc_{conc}.pkl', 'rb') as f:
         data = pickle.load(f)
 
     for key, df in data.items():
@@ -52,14 +52,14 @@ for conc in concentration_list:
         plt.savefig(output_filename, dpi=300)
         plt.show()
 
-plt.xlabel('Time (ms)')
-plt.ylabel('Coherence')
-plt.title('Coherence vs Time with Fitted Curves')
-# plt.xlim(-0.01, 0.51)
-plt.legend()
-plt.tight_layout()
-plt.savefig(f'{path}coherence_for_different_concentrations_(E_trans).png', dpi=300)
-plt.show()
+# plt.xlabel('Time (ms)')
+# plt.ylabel('Coherence')
+# plt.title('Coherence vs Time with Fitted Curves')
+# # plt.xlim(-0.01, 0.51)
+# plt.legend()
+# plt.tight_layout()
+# plt.savefig(f'{path}coherence_for_different_concentrations_(E_trans).png', dpi=300)
+# plt.show()
 
 # Plot T2 vs concentration in a separate plot
 plt.figure(figsize=(10, 6))

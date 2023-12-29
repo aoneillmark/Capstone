@@ -131,7 +131,7 @@ nbstates_list = [128,]
 
 default_calc_parameters = {
     # 'timespace': np.linspace(0, 7e-2, 201),
-    'timespace': np.linspace(0, 2, 101), # 7e-2
+    'timespace': np.linspace(0, 0.1, 101), # 7e-2
     # 'timespace': np.linspace(0, , 2), # 7e-2
     'method': 'cce',
     'pulses': [pc.Pulse('x', np.pi)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
@@ -210,8 +210,8 @@ for conc in concentration_list:
         changing_variable='magnetic_field',
         variable_values=magnetic_field_list,
         num_spins=2,  # spin_type='electron',
-        alpha=4,
-        beta=5,
+        alpha=0,
+        beta=8,
         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
     )
 
@@ -222,7 +222,7 @@ for conc in concentration_list:
 
 
     # Save results to pickle file
-    with open(f'{path}results_combined_conc_{conc}.pkl', 'wb') as f:
+    with open(f'{path}results_combined_E_trans_conc_{conc}.pkl', 'wb') as f:
         pickle.dump(results, f)
 
 #####################################################################
