@@ -77,77 +77,51 @@ class VOTPP_class:
         # z axis in cell coordinates
         sic.zdir = [0, 0, 1]
 
-        if self.concentration == 0:
-            x = np.array(x)
-
-            #populate cell
-            for i in range(len(N)):
-                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
-
-            #assign position of qubit 
-            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos1 = x[76], y[76], z[76] # Position of the electron spin
-            qpos1 = sic.to_cell(pos1)
-            qpos2 = sic.to_cell(pos2)
-            
-
-
-            #generate supercell - nuclear bath 
-            cell=self.cell_size
-            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
-            #set          spin | gyro | quadrupole 
-            spin_types = [('C',  1 / 2,  6.72828),    
-                        ('H', 1 / 2, 26.7522),
-                        ('N', 1, 1.9331, 20.44 ),
-                        # ('V', 7/2, 7.05, -350), # not added for consistency between tests
-                        ]   
-            atoms.add_type(*spin_types)
         
-        if self.concentration > 0:
-            x = np.array(x)
-            
-            #populate cell
-            for i in range(len(N)):
-                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
-
-
-            # #setting concentration
-            # sic.isotopes['V']['51V'] = self.concentration
-            
-            # Manually set isotopic concentrations (C, H, N abundances are extracted from PyCCE defaults)
-            sic.isotopes['C']['13C'] = 0.010700000000000001
-            sic.isotopes['H']['1H'] = 0.999885
-            sic.isotopes['H']['2H'] = 0.000115
-            sic.isotopes['N']['14N'] = 0.9963200000000001
-            sic.isotopes['N']['15N'] = 0.00368
-            sic.isotopes['V']['50V'] = 1-self.concentration # 0.0025
-            sic.isotopes['V']['51V'] = self.concentration
-
-
-            #assign position of qubit 
-            pos1 = x[76], y[76], z[76] # Position of the nuclear spin
-            pos2 = x[76], y[76], z[76] # Position of the electron spin
-            qpos1 = sic.to_cell(pos1)
-            qpos2 = sic.to_cell(pos2)
-
-            # #generate supercell - nuclear bath 
-            # cell=self.cell_size
-
-
-            atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
-            # atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed,) #generate supercell 
+        x = np.array(x)
         
-            # Setting the spin types and gyromagnetic ratios etc
-            spin_types = [
-            #set        spin | gyro | quadrupole 
-                        ('C',  1 / 2,  6.72828),    
-                        ('H', 1 / 2, 26.7522),
-                        ('N', 1, 1.9331, 20.44 ),
-                        ('V', 7/2, 7.05, -350), # not added for consistency between tests
-                        ('51V',  1/2, -17608.59705)
-                        ]  
-            # spin_types = ['51V',  1/2, self.get_electron_gyro()]   #electronic bath
-            atoms.add_type(*spin_types)
+        #populate cell
+        for i in range(len(N)):
+            sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+
+        # #setting concentration
+        # sic.isotopes['V']['51V'] = self.concentration
+        
+        # Manually set isotopic concentrations (C, H, N abundances are extracted from PyCCE defaults)
+        sic.isotopes['C']['13C'] = 0.010700000000000001
+        sic.isotopes['H']['1H'] = 0.999885
+        sic.isotopes['H']['2H'] = 0.000115
+        sic.isotopes['N']['14N'] = 0.9963200000000001
+        sic.isotopes['N']['15N'] = 0.00368
+        sic.isotopes['V']['50V'] = 1-self.concentration # 0.0025
+        sic.isotopes['V']['51V'] = self.concentration
+
+
+        #assign position of qubit 
+        pos1 = x[76], y[76], z[76] # Position of the nuclear spin
+        pos2 = x[76], y[76], z[76] # Position of the electron spin
+        qpos1 = sic.to_cell(pos1)
+        qpos2 = sic.to_cell(pos2)
+
+        # #generate supercell - nuclear bath 
+        # cell=self.cell_size
+
+
+        atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
+        # atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed,) #generate supercell 
+    
+        # Setting the spin types and gyromagnetic ratios etc
+        spin_types = [
+        #set        spin | gyro | quadrupole 
+                    ('C',  1 / 2,  6.72828),    
+                    ('H', 1 / 2, 26.7522),
+                    ('N', 1, 1.9331, 20.44 ),
+                    ('50V', 7/2, 7.05, -350), # not added for consistency between tests
+                    ('51V',  1/2, -17608.59705)
+                    ]  
+        # spin_types = ['51V',  1/2, self.get_electron_gyro()]   #electronic bath
+        atoms.add_type(*spin_types)
 
     
         return atoms, qpos1, qpos2
