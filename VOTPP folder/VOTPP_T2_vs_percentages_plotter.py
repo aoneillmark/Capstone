@@ -9,7 +9,7 @@ import pandas as pd
 def coherence_time_func(time, beta, T2):
     return np.exp(-(((2*time)/T2)**beta))
 
-concentration_list = [0.02, 0.05, 0.1, 0.3,0.5]
+concentration_list = [0,0.02, 0.05, 0.1, 0.3,0.5]
 T2_values = []
 path = "VOTPP folder/Results/Pickle files/"
 
