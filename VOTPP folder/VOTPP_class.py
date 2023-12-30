@@ -191,18 +191,48 @@ class VOTPP_class:
         plt.ylabel('Coherence')
         plt.show()
     
-    def get_active_nuclei_positions(self, calc, r_bath):
-        # Extracting positions from the setup
-        uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python')
-        positions = uc[[1, 2, 3]].values  # Extracting x, y, z columns as numpy array
+    def get_active_nuclei_positions(self, atoms, r_bath):
+        central_spin_position = self.qpos1
+        # Assuming 'atoms' is a BathArray object
+        # Extract positions and types of nuclei from the supercell
+        positions = atoms['xyz']  # Positions of bath spins
+        types = atoms['N']  # Types of bath spins
 
-        central_spin_position = np.array(self.qpos1)  # Using qpos1 as the central spin position
-        distances = np.linalg.norm(positions - central_spin_position, axis=1)
+        # Debug print
+        print(f"Central spin position: {central_spin_position}")
+
+        # Check for any atom overlapping with the central spin
+        for i, (pos, atom_type) in enumerate(zip(positions, types)):
+            if np.allclose(pos, central_spin_position, atol=1e-3):  # Increased atol
+                print(f"Warning: An atom of type {atom_type} at index {i} overlaps with the central spin.")
+
+        # Calculate distances from the central spin
+        distances = np.linalg.norm(positions - np.array(central_spin_position), axis=1)
+
+        # Find indices of nuclei within the r_bath radius
         active_indices = np.where(distances <= r_bath)[0]
+
         return positions[active_indices]
 
-    def get_number_of_active_nuclei(self, calc, r_bath):
-        return len(self.get_active_nuclei_positions(calc, r_bath))
+    def get_number_of_active_nuclei(self, atoms, r_bath):
+        central_spin_position = self.qpos1
+        active_positions = self.get_active_nuclei_positions(atoms, r_bath)
+        return len(active_positions)
+
+    def print_bath(self, calc):
+        # with np.printoptions(threshold=np.inf):
+            # print(np.array(calc.bath.N))
+            # print(np.array(calc.bath))
+        from collections import Counter
+
+        element_counts = Counter(calc.bath.N)
+
+        # Now, element_counts is a dictionary with elements as keys and their counts as values
+        # To print them, you can iterate over this dictionary
+        for element, count in element_counts.items():
+            print(f"{element}: {count}")
+
+        return
 
     def visualize_cluster(self, calc):
         central_spin_pos = self.qpos1
