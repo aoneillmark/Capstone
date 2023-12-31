@@ -66,8 +66,11 @@ def run_single_simulation(concentration_value, bath_parameters, simulator_parame
 
     # Print number of active nuclei
     if rank == 0:
-        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original, simulator_parameters['r_bath'])
+        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original.bath, simulator_parameters['r_bath'])
         print(f"Number of active nuclei: {num_active_nuclei}")
+
+        print("Bath: ")
+        call = simulator.print_bath(sim_original)
 
     # Run the simulation and return the result
     return sim_original.compute(**calc_parameters)
