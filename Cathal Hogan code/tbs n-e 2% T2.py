@@ -17,6 +17,48 @@ def fit(x, T2, n):
     y = np.exp(-(((2*x)/T2)**n))
     return y
 
+def get_active_nuclei_positions(atoms, r_bath):
+    central_spin_position = [0.50446035, 0.50446035, 0.55872939]
+    # Assuming 'atoms' is a BathArray object
+    # Extract positions and types of nuclei from the supercell
+    positions = atoms['xyz']  # Positions of bath spins
+    types = atoms['N']  # Types of bath spins
+
+    # Debug print
+    print(f"Central spin position: {central_spin_position}")
+
+    # Check for any atom overlapping with the central spin
+    for i, (pos, atom_type) in enumerate(zip(positions, types)):
+        if np.allclose(pos, central_spin_position, atol=1e-3):  # Increased atol
+            print(f"Warning: An atom of type {atom_type} at index {i} overlaps with the central spin.")
+
+    # Calculate distances from the central spin
+    distances = np.linalg.norm(positions - np.array(central_spin_position), axis=1)
+
+    # Find indices of nuclei within the r_bath radius
+    active_indices = np.where(distances <= r_bath)[0]
+
+    return positions[active_indices]
+
+def get_number_of_active_nuclei(atoms, r_bath):
+    # central_spin_position = [0.50446035, 0.50446035, 0.55872939]
+    active_positions = get_active_nuclei_positions(atoms, r_bath)
+    return len(active_positions)
+
+def print_bath(calc):
+    # with np.printoptions(threshold=np.inf):
+        # print(np.array(calc.bath.N))
+        # print(np.array(calc.bath))
+    from collections import Counter
+
+    element_counts = Counter(calc.bath.N)
+
+    # Now, element_counts is a dictionary with elements as keys and their counts as values
+    # To print them, you can iterate over this dictionary
+    for element, count in element_counts.items():
+        print(f"{element}: {count}")
+
+
 #import xyz file - enter specific directory
 uc = pd.read_csv('VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python')
 #seperate columns into numpy arrays
@@ -64,7 +106,7 @@ parameters = {
     'r_bath': 200,  # Size of the bath in A
     'r_dipole': 180,  # Cutoff of pairwise clusters in A
     'pulses': 1, # N pulses in CPMG sequence
-    'magnetic_field': [0,0,10000], # Magnetic field in Gauss
+    'magnetic_field': [3000,0,0], # Magnetic field in Gauss
     }
 
 #calculating T2 using 50 random seeds
@@ -83,6 +125,9 @@ for i in range(no_sims):
 
     #set up simulation
     calc = pc.Simulator(spin=cen, bath=atoms, **parameters)
+
+    print('Number of active nuclei:', get_number_of_active_nuclei(calc.bath, parameters['r_bath']))
+    print_bath(calc)
 
     #run simulation
     sim = calc.compute(ts, nbstates = nb,
