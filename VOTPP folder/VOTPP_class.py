@@ -90,16 +90,24 @@ class VOTPP_class:
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
 
+            sic.isotopes['C']['13C'] = 0.010700000000000001
+            sic.isotopes['H']['1H'] = 0.999885
+            sic.isotopes['H']['2H'] = 0.000115
+            sic.isotopes['N']['14N'] = 0.9963200000000001
+            sic.isotopes['N']['15N'] = 0.00368
+            sic.isotopes['V']['50V'] = 0.0025
+            sic.isotopes['V']['51V'] = 0
+
 
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
             atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
             #set          spin | gyro | quadrupole 
-            spin_types = [('C',  1 / 2,  6.72828),    
-                        ('H', 1 / 2, 26.7522),
+            spin_types = [('13C',  1 / 2,  6.72828),    
+                        ('1H', 1 / 2, 26.7522),
                         ('N', 1, 1.9331, 20.44 ),
-                        # ('V', 7/2, 7.05, -350), # not added for consistency between tests
+                        ('V', 7/2, 7.05, -350), # not added for consistency between tests
                         ]   
             atoms.add_type(*spin_types)
         
@@ -107,6 +115,7 @@ class VOTPP_class:
             x = np.array(x)
 
             #setting concentration
+            # sic.isotopes['V']['50V'] = 1 - self.concentration
             sic.isotopes['V']['51V'] = self.concentration
 
             #populate unit cell with V
@@ -125,7 +134,10 @@ class VOTPP_class:
 
             atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
             #set          spin | gyro | quadrupole 
-            spin_types = ['51V',  1/2, -17608.59705]   #electronic bath
+            spin_types = [
+                '51V',  1/2, -17608.59705
+                # ('50V',   7/2,    7.05,       -350), # not added for consistency between tests
+                ]   #electronic bath
             atoms.add_type(*spin_types)
     
         return atoms, qpos1, qpos2
