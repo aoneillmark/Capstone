@@ -23,6 +23,20 @@ def fit(x, T2, n):
     y = np.exp(-(((2*x)/T2)**n))
     return y
 
+def get_interaction_tensor(printing=False):
+    with open(('Cathal Hogan code/VOTPP_opt.Atens'), 'r') as f:
+        lines = f.readlines()
+
+    # Extract numerical values from the string
+    values = lines[0].strip().split()
+    values = [float(value)*1e3 for value in values]
+
+    # Create a 3x3 matrix from the list of data
+    interaction_matrix = np.array(values).reshape((3, 3))
+
+
+    return interaction_matrix # self.cen
+
 #import xyz file
 uc = pd.read_csv('VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
 #seperate columns into numpy arrays
@@ -52,13 +66,14 @@ cen = pc.CenterArray(size=2, position=[qpos,qpos],
                      spin=[7/2,1/2], 
                      D=[-350, 0], 
                      gyro=[-7.05, -17608.59705],  
-                     alpha=[0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # nuclear 1/2 to 3/2 for m_s = -1/2
-                     beta=[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],)
+                     alpha=4, # nuclear 1/2 to 3/2 for m_s = -1/2
+                     beta=5,
+                     imap = get_interaction_tensor() )
 
 #parameters
-nb = 25
-# ts = np.linspace(0, 2, 201) #expected T2 of 1015us
-ts = np.linspace(0, 0.06, 201) #expected T2 of 1015us
+nb = 10
+ts = np.linspace(0, 2, 201) #expected T2 of 1015us
+# ts = np.linspace(0, 0.06, 201) #expected T2 of 1015us
 cell = 60 #cell size 
 
 print(sic.isotopes)
@@ -69,7 +84,7 @@ parameters = dict(
     r_bath=20,  # Size of the bath in A
     r_dipole=10,  # Cutoff of pairwise clusters in A
     pulses = 1, # N pulses in CPMG sequence
-    magnetic_field=[500,0,0] #set to 1T
+    magnetic_field=[3000,0,0] #set to 1T
 ) 
 
 # Initialize the dictionary to store results
@@ -127,32 +142,32 @@ if rank == 0:
     with open((str(path) + 'Cathal_hogan_double_spin.pkl'), 'wb') as f:
         pickle.dump(results, f)
 
-# #use all 50 sims to calculate average curve 
-# avg = np.zeros(201) #creates array of 0s same length as ts
-# for i in range(201): 
-#     for j in range(no_sims):
-#         avg[i] += sims[j][i]   
-# avg = avg/no_sims
+    #use all 50 sims to calculate average curve 
+    avg = np.zeros(201) #creates array of 0s same length as ts
+    for i in range(201): 
+        for j in range(no_sims):
+            avg[i] += sims[j][i]   
+    avg = avg/no_sims
 
-# #plot the average coherence curve 
-# plt.plot(ts, avg)
-# plt.xlabel('Time [ms]')
-# plt.ylabel('Coherence')
-# plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
-# plt.show()
+    #plot the average coherence curve 
+    plt.plot(ts, avg)
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Coherence')
+    plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
+    plt.show()
 
-# #fit coherence curve 
-# p_guess= [0.02, 2] #guessing T2 and the power respectively 
-# par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
-# err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
-# print('params =', par) # print params
+    #fit coherence curve 
+    p_guess= [0.02, 2] #guessing T2 and the power respectively 
+    par, cov = curve_fit(fit, ts, avg, p0=p_guess) #find best fitting parameters and covariance matrix
+    err = np.sqrt(np.diag(cov)) #calculating the errors based on the fit 
+    print('params =', par) # print params
 
-# #plot fitted curve 
-# label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
-# plt.plot(ts, avg, label='average for 50')
-# plt.plot(ts, fit(ts, *par), 'r-', label=label)
-# plt.xlabel('Time [ms]')
-# plt.ylabel('Coherence')
-# plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
-# plt.legend()
-# plt.show()
+    #plot fitted curve 
+    label = 'Fit - T2=' + str(round(par[0]*1e3,3)) + ' \u00B1 ' + str(round(err[0]*1e3,3)) + ' us'
+    plt.plot(ts, avg, label='average for 50')
+    plt.plot(ts, fit(ts, *par), 'r-', label=label)
+    plt.xlabel('Time [ms]')
+    plt.ylabel('Coherence')
+    plt.title('Averaged coherence curves for n-n cell=60 [2:20:6]')
+    plt.legend()
+    plt.show()
