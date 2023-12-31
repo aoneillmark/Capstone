@@ -64,6 +64,59 @@ class VOTPP_class:
 
 
     def setup_bath(self):
+        # #import xyz file
+        # uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
+        
+        # #seperate columns into numpy arrays
+        # N = np.array(uc[0])
+        # x = np.array(uc[1])
+        # y = np.array(uc[2])
+        # z = np.array(uc[3])
+        # #set up unit cell
+        # sic = pc.BathCell(13.2613, 13.2613, 9.6851, 90, 90, 90, 'deg') #used optimized structure note there is also an x-ray structure with slightly different values
+        # # z axis in cell coordinates
+        # sic.zdir = [0, 0, 1]
+
+        
+        # x = np.array(x)
+        
+        # #populate unit cell with V
+        # sic.add_atoms((N[76], [x[76], y[76], z[76]]), type='angstrom')
+
+
+        # # #setting concentration
+        # # sic.isotopes['V']['51V'] = self.concentration
+        
+        # # Manually set isotopic concentrations (C, H, N abundances are extracted from PyCCE defaults)
+        # sic.isotopes['V']['50V'] = 1 - self.concentration # 0.0025
+        # sic.isotopes['V']['51V'] = self.concentration
+
+
+        # #assign position of qubit 
+        # pos1 = x[76], y[76], z[76] # Position of the nuclear spin
+        # pos2 = x[76], y[76], z[76] # Position of the electron spin
+        # qpos1 = sic.to_cell(pos1)
+        # qpos2 = sic.to_cell(pos2)
+
+        # # #generate supercell - nuclear bath 
+        # # cell=self.cell_size
+
+
+        # atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
+        # # atoms = sic.gen_supercell(size=self.cell_size, seed=self.seed,) #generate supercell 
+    
+        # # Setting the spin types and gyromagnetic ratios etc
+        # spin_types = [
+        # #set        spin | gyro | quadrupole 
+        #             ('50V', 7/2, 7.05, -350), # not added for consistency between tests
+        #             ('51V',  1/2, -17608.59705)
+        #             ]  
+        # # spin_types = ['51V',  1/2, self.get_electron_gyro()]   #electronic bath
+        # atoms.add_type(*spin_types)
+
+    
+        # return atoms, qpos1, qpos2
+    
         #import xyz file
         uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
         
@@ -113,12 +166,12 @@ class VOTPP_class:
     
         # Setting the spin types and gyromagnetic ratios etc
         spin_types = [
-        #set        spin | gyro | quadrupole 
-                    ('C',  1 / 2,  6.72828),    
-                    ('H', 1 / 2, 26.7522),
-                    ('N', 1, 1.9331, 20.44 ),
-                    ('50V', 7/2, 7.05, -350), # not added for consistency between tests
-                    ('51V',  1/2, -17608.59705)
+        #set:           |    spin |  gyro |      quadrupole |
+                    ('13C',   1/2,    6.72828),    
+                    ('1H',    1/2,    26.7522),
+                    ('14N',   1,      1.9331,     20.44 ),
+                    ('50V',   7/2,    7.05,       -350), # not added for consistency between tests
+                    ('51V',   1/2,    -17608.59705)
                     ]  
         # spin_types = ['51V',  1/2, self.get_electron_gyro()]   #electronic bath
         atoms.add_type(*spin_types)
@@ -200,7 +253,8 @@ class VOTPP_class:
     # def get_number_of_active_nuclei(self, calc, r_bath):
     #     return len(self.get_active_nuclei_positions(calc, r_bath))
         
-    def get_active_nuclei_positions(self, atoms, r_bath, central_spin_position):
+    def get_active_nuclei_positions(self, atoms, r_bath):
+        central_spin_position = self.qpos1
         # Assuming 'atoms' is a BathArray object
         # Extract positions and types of nuclei from the supercell
         positions = atoms['xyz']  # Positions of bath spins
@@ -222,14 +276,24 @@ class VOTPP_class:
 
         return positions[active_indices]
 
-    def get_number_of_active_nuclei(self, atoms, r_bath, central_spin_position):
-        active_positions = self.get_active_nuclei_positions(atoms, r_bath, central_spin_position)
+    def get_number_of_active_nuclei(self, atoms, r_bath):
+        active_positions = self.get_active_nuclei_positions(atoms, r_bath)
         return len(active_positions)
 
 
     def print_bath(self, calc):
-        with np.printoptions(threshold=np.inf):
-            print(np.array(calc.bath.N))
+        # with np.printoptions(threshold=np.inf):
+            # print(np.array(calc.bath.N))
+            # print(np.array(calc.bath))
+        from collections import Counter
+
+        element_counts = Counter(calc.bath.N)
+
+        # Now, element_counts is a dictionary with elements as keys and their counts as values
+        # To print them, you can iterate over this dictionary
+        for element, count in element_counts.items():
+            print(f"{element}: {count}")
+
         return
 
     def visualize_cluster(self, calc):
