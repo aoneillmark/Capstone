@@ -105,25 +105,36 @@ def save_fit_results(fit_results, result_name, save_path):
 def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=slice(None), ylim=None):
     fit_results = {}  # Dictionary to store fit parameters for all results
     
-    for outer_key in loaded_results.keys():  # Loop over each key in the loaded_results
-        for v_key, df in loaded_results[outer_key].items():  # Then loop over the items under this key
-            plt.figure(figsize=(10,6))
-            ydata = df[0].iloc[data_range]  # Apply the data range
-            time_data = df.index[data_range]  # Apply the data range to the index as well
-            
+    for outer_key in loaded_results.keys():
+        for v_key, df in loaded_results[outer_key].items():
+            plt.figure(figsize=(10, 6))
+            ydata_original = df[0].iloc[data_range]  # Coherence data
+            time_data = df.index[data_range]
+
+            # Convert to Pandas Series and handle '--'
+            ydata_series = pd.Series(ydata_original).replace('--', np.nan).astype(float)
+
+            # Boolean mask for NaNs
+            nan_mask = ydata_series.isna()
+
+            # Plotting data with NaNs replaced by 0
+            ydata_plot = ydata_series.fillna(0)
+
+            # Data for fitting: Exclude NaNs
+            ydata_fit = ydata_series[~nan_mask]
+            time_data_fit = time_data[~nan_mask]
+
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
-            
+
             try:
-                params, _ = curve_fit(coherence_time_func, time_data, ydata, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1,0.025])
+                params, _ = curve_fit(coherence_time_func, time_data_fit, ydata_fit, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.025])
                 beta_fit, T2_fit = params
-                
+
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
-                # Save the results in the dictionary
-                fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit} 
-                
-                plt.plot(time_data, ydata, 'o', label=f'Data for {label_str}')
-                plt.plot(time_data, coherence_time_func(time_data, *params), '--', 
-                         label=f'Fit: Beta={beta_fit:.3f}, T2={T2_fit:.3f}')
+                fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit}
+
+                plt.plot(time_data, ydata_plot, 'o', label=f'Data for {label_str}')
+                plt.plot(time_data_fit, coherence_time_func(time_data_fit, *params), '--', label=f'Fit: Beta={beta_fit:.3f}, T2={T2_fit:.3f}')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
 
@@ -133,12 +144,12 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
             plt.legend()
             plt.tight_layout()
             plt.ylim(ylim)
-            
+
             output_filename = os.path.join(image_path, f"{variable_name}_{label_str}_with_fit.png")
             plt.savefig(output_filename, dpi=300)
             plt.show()
 
-    save_fit_results(fit_results, variable_name, pickle_path)  # Save the fit results once all fits are done
+    save_fit_results(fit_results, variable_name, pickle_path)
 
 def plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=slice(None), ylim=None):
     fit_results = {}  # Dictionary to store fit parameters for all results
@@ -253,6 +264,8 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
+# plot_from_file(['[n-e]-(e).pkl',])
+plot_from_file(['[n-e]-(n).pkl',])
 
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
@@ -268,4 +281,4 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['r_dipole_results.pkl'])
 # plot_from_file(['cell_size_results.pkl'])
         
-plot_from_file(['magnetic_results_combined_bath.pkl'], data_range=slice(0, 100))
+# plot_from_file(['magnetic_results_combined_bath.pkl'], data_range=slice(0, 100))
