@@ -136,7 +136,7 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 1, 201)
+timespace_absolute = np.linspace(0, 1, 401)
 
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
