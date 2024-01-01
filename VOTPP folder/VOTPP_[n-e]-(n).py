@@ -1,4 +1,4 @@
-from VOTPP_class import VOTPP_class
+from VOTPP_class_copy_2 import VOTPP_class
 from mpi4py import MPI
 import numpy as np
 import pandas as pd
@@ -150,15 +150,15 @@ default_calc_parameters = {
 }
 
 default_bath_parameters = {
-    'concentration': 0, #!
+    'concentration': 1313, #!
     'cell_size': 500, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 10, #16,
-    'r_dipole': 5, #6,
+    'r_bath': 40, #16,
+    'r_dipole': 30, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
