@@ -11,7 +11,7 @@ timespace = np.linspace(0, 1, 201)
 
 # Series parameters
 series_params = [
-    {"beta": 0.537, "T2": 0.110},  # Series 1
+    {"beta": 0.482, "T2": 0.093},  # Series 1
     {"beta": 2.152, "T2": 0.611},   # Series 2
     # {"beta": 2.185, "T2": 0.249},  # Series 1
     # {"beta": 3.539, "T2": 1.028},   # Series 2
