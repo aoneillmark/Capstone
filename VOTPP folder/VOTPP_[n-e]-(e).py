@@ -116,14 +116,14 @@ def runner(concentration_value, changing_variable, variable_values, bath_paramet
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
-concentration_list = [0.02]
+# concentration_list = [0.02]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_bath_list = [100, 125, 150, 175, 200]
+r_bath_list = [35, 40, 45, 50, 55, 60]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
-r_dipole_list = [100, 125, 150, 175, 200]
+r_dipole_list = [20, 25, 30,35, 40]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
 nbstates_list = [128,]
@@ -133,7 +133,7 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 1, 401)
+timespace_absolute = np.linspace(0, 1, 101)
 
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
@@ -148,14 +148,14 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 1000, #!
+    'cell_size': 500, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
-    'r_bath': 175, #16,
-    'r_dipole': 175, #6,
+    'order': 3, #!
+    'r_bath': 75, #16,
+    'r_dipole': 60, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
