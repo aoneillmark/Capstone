@@ -155,7 +155,7 @@ default_bath_parameters = {
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
     'r_bath': 80, #16,
-    'r_dipole': 60, #6,
+    'r_dipole': 70, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
@@ -186,8 +186,8 @@ magnetic_field_list = [[3000,0,0],]
 #                         # changing_variable2='timespace', variable_values2=timespace_list,
 #                         )
 
-seed_list = [8000, 9000, 10000, 11000,]
-# seed_list = [8000,]
+# seed_list = [8000, 9000, 10000, 11000,]
+seed_list = [8000,]
 magnetic_results = {}
 for idx, seed in enumerate(seed_list):
     # Change the value of the seed in the default parameters
