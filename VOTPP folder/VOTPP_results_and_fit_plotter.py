@@ -163,7 +163,7 @@ def plot_individual_with_fit_average(averaged_results, variable_name, image_path
         label_str = ', '.join(map(str, sub_key)) if isinstance(sub_key, tuple) else f"Value {sub_key}"
         
         try:
-            params, _ = curve_fit(coherence_time_func, time_data, ydata, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1,0.025])
+            params, _ = curve_fit(coherence_time_func, time_data, ydata, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[0.5,0.025])
             beta_fit, T2_fit = params
             
             fit_key = sub_key
@@ -266,8 +266,9 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
 # plot_from_file(['[n-e]-(e).pkl',])
 # plot_from_file(['[n-e]-(n).pkl',])
-plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
-plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
+# plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
+# plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
+plot_from_file_average(['[n-e]-(e).pkl'])
 
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
