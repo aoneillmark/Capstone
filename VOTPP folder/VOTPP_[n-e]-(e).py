@@ -133,7 +133,7 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 0.5, 201)
+timespace_absolute = np.linspace(0, 1, 101)
 
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
@@ -153,9 +153,9 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
-    'r_bath': 100, #16,
-    'r_dipole': 100, #6,
+    'order': 3, #!
+    'r_bath': 75, #16,
+    'r_dipole': 60, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
@@ -164,13 +164,13 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # Set up runner and run the simulation
 #####################################################################
 
-magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
+# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], [1500,0,0], [2000,0,0], [3000,0,0]]
 # magnetic_field_list = [[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), ]
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
 
 # magnetic_field_list = [[3000,0,0],[1500,0,0],[500,0,0]]
-
+magnetic_field_list = [[1500,0,0]]
 
 
 
