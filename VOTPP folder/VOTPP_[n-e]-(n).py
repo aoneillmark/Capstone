@@ -159,7 +159,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'order': 2, #!
     'r_bath': 10, #16,
     'r_dipole': 5, #6,
-    'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [1500, 0, 0], # Magnetic field in Gauss
 }
 
 
