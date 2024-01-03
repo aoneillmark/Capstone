@@ -103,38 +103,31 @@ def save_fit_results(fit_results, result_name, save_path):
     print(output_filename)
 
 def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_path, data_range=slice(None), ylim=None):
-    fit_results = {}  # Dictionary to store fit parameters for all results
-    
+    fit_results = {}
+
     for outer_key in loaded_results.keys():
         for v_key, df in loaded_results[outer_key].items():
             plt.figure(figsize=(10, 6))
-            ydata_original = df[0].iloc[data_range]  # Coherence data
-            time_data = df.index[data_range]
+            ydata_series = pd.Series(df[0].iloc[data_range]).replace('--', np.nan).astype(float)
 
-            # Convert to Pandas Series and handle '--'
-            ydata_series = pd.Series(ydata_original).replace('--', np.nan).astype(float)
+            # Create a mask for valid data points (not NaN and finite)
+            valid_mask = ~ydata_series.isna() & np.isfinite(ydata_series)
 
-            # Boolean mask for NaNs
-            nan_mask = ydata_series.isna()
-
-            # Plotting data with NaNs replaced by 0
-            ydata_plot = ydata_series.fillna(0)
-
-            # Data for fitting: Exclude NaNs
-            ydata_fit = ydata_series[~nan_mask]
-            time_data_fit = time_data[~nan_mask]
+            # Data for plotting and fitting
+            ydata_plot = ydata_series[valid_mask]
+            time_data = df.index[data_range][valid_mask]
 
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
 
             try:
-                params, _ = curve_fit(coherence_time_func, time_data_fit, ydata_fit, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.025])
+                params, _ = curve_fit(coherence_time_func, time_data, ydata_plot, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.025])
                 beta_fit, T2_fit = params
 
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
                 fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit}
 
                 plt.plot(time_data, ydata_plot, 'o', label=f'Data for {label_str}')
-                plt.plot(time_data_fit, coherence_time_func(time_data_fit, *params), '--', label=f'Fit: Beta={beta_fit:.3f}, T2={T2_fit:.3f}')
+                plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: Beta={beta_fit:.3f}, T2={T2_fit:.3f}')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
 
@@ -148,6 +141,9 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
             output_filename = os.path.join(image_path, f"{variable_name}_{label_str}_with_fit.png")
             plt.savefig(output_filename, dpi=300)
             plt.show()
+
+    save_fit_results(fit_results, variable_name, pickle_path)
+
 
     save_fit_results(fit_results, variable_name, pickle_path)
 
@@ -264,11 +260,11 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
-# plot_from_file(['[n-e]-(e).pkl',])
+plot_from_file(['[n-e]-(e).pkl',])
 # plot_from_file(['[n-e]-(n).pkl',])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
-plot_from_file_average(['[n-e]-(e).pkl'])
+# plot_from_file_average(['[n-e]-(e).pkl'])
 
 # plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
 # plot_from_file(['alphabeta_results.pkl',])
