@@ -150,15 +150,15 @@ default_calc_parameters = {
 }
 
 default_bath_parameters = {
-    'concentration': 1313, #!
+    'concentration': 1111, #!
     'cell_size': 500, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 40, #16,
-    'r_dipole': 30, #6,
+    'r_bath': 10, #16,
+    'r_dipole': 5, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
