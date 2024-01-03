@@ -154,7 +154,7 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 75, #16,
+    'r_bath': 80, #16,
     'r_dipole': 60, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
