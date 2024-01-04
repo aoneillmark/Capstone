@@ -159,7 +159,8 @@ pulse_90 = pc.Pulse(axis='x', angle=2*np.pi/3, delay=None)  # 90° pulse around 
 
 # Define the sequence
 hahn_echo_sequence = pc.Sequence([pulse_90, pulse_90,
-                                  {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}
+                                  {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}, 
+                                  {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}, 
                                   ])
 
 # # Define an array for delays with the same length as timespace_absolute
