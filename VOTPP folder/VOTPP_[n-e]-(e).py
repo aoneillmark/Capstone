@@ -54,6 +54,9 @@ def setup_simulator(concentration_value, bath_parameters, simulator_parameters, 
     bath_parameters['concentration'] = concentration_value
     simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters)
     sim_original = simulator.setup_simulator(**simulator_parameters)
+    if rank == 0:
+        print(sim_original)
+
     return simulator, sim_original
 
 
@@ -63,8 +66,8 @@ def run_single_simulation(concentration_value, bath_parameters, simulator_parame
 
     # Print number of active nuclei
     if rank == 0:
-        num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original.bath, simulator_parameters['r_bath'])
-        print(f"Number of active nuclei: {num_active_nuclei}")
+        # num_active_nuclei = simulator.get_number_of_active_nuclei(sim_original.bath, simulator_parameters['r_bath'])
+        # print(f"Number of active nuclei: {num_active_nuclei}")
 
         print("Bath: ")
         call = simulator.print_bath(sim_original)
@@ -133,13 +136,55 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 1, 101)
+# timespace_absolute = np.linspace(0, 1, 201)
+# # Define the pulses as dictionaries
+# pulse1 = {'axis': 'x', 'angle': '2*pi/3'}  # First (2π/3) pulse
+# pulse2 = {'axis': 'x', 'angle': '2*pi/3'}  # Second (2π/3) pulse
+
+# # Define the delay in seconds (3 microseconds)
+# delay = 3e-6  
+
+# # Create the Hahn-echo sequence using the Pulse class and dictionaries
+# hahn_echo_sequence = pc.Sequence([
+#     {'pulse': pc.Pulse(**pulse1), 'delay': 3e-6},  # First pulse followed by a delay
+#     {'pulse': pc.Pulse(**pulse2), 'delay': 3e-6}   # Second pulse followed by a delay
+# ])
+
+# Define the timespace
+timespace_absolute = np.linspace(0, 0.1, 101)
+
+delay_between_pulses = 2e-9  # Delay of 2 between the 90° and 180° pulses
+pulse_90 = pc.Pulse(axis='x', angle=2*np.pi/3, delay=None)  # 90° pulse around x-axis
+# pulse_180 = pc.Pulse(axis='x', angle=2*np.pi/3, delay=delay_between_pulses)   # 180° pulse around x-axis
+
+# Define the sequence
+hahn_echo_sequence = pc.Sequence([pulse_90, pulse_90,
+                                  {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}
+                                  ])
+
+# # Define an array for delays with the same length as timespace_absolute
+# # Set most values to zero (or a value indicating no pulse) and only a few to the actual delay times
+# delay_array = np.zeros_like(timespace_absolute)
+# delay_array[[0, 50, 100]] = [0,0,0]  # Example positions for pulses
+
+# # Define the pulse sequence
+# hahn_echo_sequence = pc.Sequence([('x', ((2*np.pi)/3),)])
+
+
+if rank ==0:
+    print(hahn_echo_sequence)
 
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': hahn_echo_sequence, # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': [('x', ((2*np.pi)/3),  np.linspace(0, 0.3, 201)),
+    #            {'axis': 'x', 'angle': ((2*np.pi)/3), 'delay': 0 },  
+    #            {'axis': 'x', 'angle': 'pi', 'delay': 0, 'bath_names': '51V'}],
+    # 'pulses': [pc.Pulse('x', 2*np.pi/3), pc.Pulse('x', 2*np.pi/3)],
+    'pulses': hahn_echo_sequence,
     'nbstates': 30, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -154,9 +199,9 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, #!
-    'r_bath': 75, #16,
-    'r_dipole': 60, #6,
-    'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'r_bath': 50, #16,
+    'r_dipole': 50, #6,
+    'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
 }
 
 
@@ -170,7 +215,7 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
 
 # magnetic_field_list = [[3000,0,0],[1500,0,0],[500,0,0]]
-magnetic_field_list = [[1500,0,0]]
+magnetic_field_list = [[0,0,3000]]
 
 
 
