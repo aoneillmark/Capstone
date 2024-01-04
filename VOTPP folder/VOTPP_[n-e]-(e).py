@@ -158,19 +158,11 @@ pulse_90 = pc.Pulse(axis='x', angle=2*np.pi/3, delay=None)  # 90° pulse around 
 # pulse_180 = pc.Pulse(axis='x', angle=2*np.pi/3, delay=delay_between_pulses)   # 180° pulse around x-axis
 
 # Define the sequence
-hahn_echo_sequence = pc.Sequence([pulse_90, pulse_90,
+hahn_echo_sequence = pc.Sequence([pulse_90, 
+                                  pulse_90,
                                   {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}, 
                                   {'axis': 'x', 'angle': 2*np.pi/3, 'delay': None, 'bath_names': '51V'}, 
                                   ])
-
-# # Define an array for delays with the same length as timespace_absolute
-# # Set most values to zero (or a value indicating no pulse) and only a few to the actual delay times
-# delay_array = np.zeros_like(timespace_absolute)
-# delay_array[[0, 50, 100]] = [0,0,0]  # Example positions for pulses
-
-# # Define the pulse sequence
-# hahn_echo_sequence = pc.Sequence([('x', ((2*np.pi)/3),)])
-
 
 if rank ==0:
     print(hahn_echo_sequence)
@@ -199,7 +191,7 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, #!
+    'order': 2, #!
     'r_bath': 50, #16,
     'r_dipole': 50, #6,
     'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
@@ -216,7 +208,10 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
 
 # magnetic_field_list = [[3000,0,0],[1500,0,0],[500,0,0]]
-magnetic_field_list = [[0,0,3000]]
+# magnetic_field_list = [[0,0,3000],[0,0,1500],[0,0,500]]
+# magnetic_field_list =[[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
+magnetic_field_list = [[0,0,200], [0,0,400], [0,0,600], [0,0,800], [0,0,1000], [0,0,1200], [0,0,1400], [0,0,1600], [0,0,1800], [0,0,2000], [0,0,2200], [0,0,2400], [0,0,2600], [0,0,2800], [0,0,3000]]
+# magnetic_field_list = [[0,0,3000]]
 
 
 

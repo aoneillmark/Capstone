@@ -84,7 +84,7 @@ def plot_T2_vs_field(pickle_filename, data_range=None):
     fit_results = load_fit_results(path, pickle_filename)
 
     # Since the keys are tuples, we directly extract the first element as the numerical key
-    x_values = [key[1] for key in fit_results.keys()]
+    x_values = [key[3] for key in fit_results.keys()]
 
     # If you want to plot against the magnetic field magnitude, you would calculate it here
     # If the second element in the tuple is the magnetic field magnitude, you could use:
