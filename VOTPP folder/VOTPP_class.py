@@ -249,7 +249,32 @@ class VOTPP_class:
             #             ('V', 7/2, 7.05, -350), # not added for consistency between tests
             #             ]   
             # atoms.add_type(*spin_types)
-    
+
+        if self.concentration == 5151:
+            x = np.array(x)
+
+            #populate cell
+            for i in range(len(N)):
+                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+            #assign position of qubit 
+            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
+            qpos1 = sic.to_cell(pos1)
+            qpos2 = sic.to_cell(pos2)
+
+            sic.isotopes['V']['50V'] = 0.0025
+            sic.isotopes['V']['51V'] = 0
+
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
+            #set          spin | gyro | quadrupole 
+            spin_types = [ 
+                        '50V', 7/2, 7.05, -350 # not added for consistency between tests
+                        ] 
+            atoms.add_type(*spin_types)
+
         return atoms, qpos1, qpos2
 
     def setup_center(self, interaction_matrix=None):
@@ -412,6 +437,10 @@ class VOTPP_class:
         ax.scatter3D(central_spin_pos[0], central_spin_pos[1], central_spin_pos[2], c='red', s=100, label='Central Spin')
 
         ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)')
+        # # Align this plot with the x axis
+        # ax.view_init(0, 0)
+        # Save this image
+        plt.savefig("VOTPP folder/Results/Plots/cluster.png", dpi=300)
         plt.show()
 
 

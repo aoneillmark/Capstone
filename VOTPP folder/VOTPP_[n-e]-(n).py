@@ -59,7 +59,7 @@ def setup_simulator(concentration_value, bath_parameters, simulator_parameters, 
     sim_original = simulator.setup_simulator(**simulator_parameters)
     if rank == 0:
         print(sim_original)
-        call = simulator.visualize_cluster(sim_original)
+        # call = simulator.visualize_cluster(sim_original)
     return simulator, sim_original
 
 
@@ -139,10 +139,14 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 1, 201)
+timespace_absolute = np.linspace(0, 1, 101)
 
 pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=None, 
-                      bath_names='51V') # 120° pulse around x-axis applied to bath spins
+                      bath_names=('1H', '2H',
+                                  '13C',
+                                  '14N', '15N',
+                                  '50V', '51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
 
 # Define the sequence
 hahn_echo_sequence = pc.Sequence([
@@ -154,7 +158,7 @@ default_calc_parameters = {
     'method': 'gcce',
     # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'pulses': hahn_echo_sequence,
+    'pulses': 1,
     'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -162,20 +166,20 @@ default_calc_parameters = {
 }
 
 default_bath_parameters = {
-    'concentration': 1414, #!
+    'concentration': 5151, #!
     'cell_size': 500, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 15, #16,
-    'r_dipole': 5, #6,
+    'r_bath': 150, #16,
+    'r_dipole': 100, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
 magnetic_field_list = [[3000,0,0]]
-
+# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 #####################################################################
 # Set up runner and run the simulation
 #####################################################################
