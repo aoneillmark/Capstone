@@ -4,6 +4,8 @@ import pycce as pc
 import pandas as pd
 from scipy.optimize import curve_fit
 from mpi4py import MPI
+from mpl_toolkits.mplot3d import Axes3D
+
 
 class VOTPP_class:
     def __init__(self, concentration, cell_size, num_spins, alpha=None, beta=None, spin_type=None, seed=8000):
@@ -50,8 +52,8 @@ class VOTPP_class:
                 # 'gyro': [-7.05,-17608.59705], # isotropic
                 'gyro': [self.get_nuclear_gyro(), self.get_electron_gyro()], # anisotropic (not isotropic! Mostly the electron isn't isotropic but PyCCE expects similar shapes for both elements, so I've converted nuclear to a 3x3 const tensor)
                 'D': [-350, 0],
-                'alpha': alpha,
-                'beta': beta,
+                'alpha': alpha, # 4, # nuclear 1/2 to 3/2 for m_s = -1/2
+                'beta': beta, # 5, # nuclear 1/2 to 3/2 for m_s = -1/2
             }   
 
             # Get the interaction tensor
@@ -111,7 +113,7 @@ class VOTPP_class:
                         ]   
             atoms.add_type(*spin_types)
         
-        if self.concentration > 0:
+        if 0 < self.concentration <= 1:
             x = np.array(x)
 
             #setting concentration
@@ -139,6 +141,114 @@ class VOTPP_class:
                 # ('50V',   7/2,    7.05,       -350), # not added for consistency between tests
                 ]   #electronic bath
             atoms.add_type(*spin_types)
+        
+        if self.concentration == 1234:
+            x = np.array(x)
+
+            #populate cell
+            for i in range(len(N)):
+                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+            #assign position of qubit 
+            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
+            qpos1 = sic.to_cell(pos1)
+            qpos2 = sic.to_cell(pos2)
+
+            sic.isotopes['C']['13C'] = 0.010700000000000001
+            sic.isotopes['H']['1H'] = 0
+            sic.isotopes['H']['2H'] = 0
+            sic.isotopes['N']['14N'] = 0.9963200000000001
+            sic.isotopes['N']['15N'] = 0.00368
+            sic.isotopes['V']['50V'] = 0.0025
+            sic.isotopes['V']['51V'] = 0
+
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
+            #set          spin | gyro | quadrupole 
+            spin_types = [('13C',  1 / 2,  6.72828),    
+                        # ('1H', 1 / 2, 26.7522),
+                        ('N', 1, 1.9331, 20.44 ),
+                        ('V', 7/2, 7.05, -350), # not added for consistency between tests
+                        ] 
+            atoms.add_type(*spin_types)
+
+        if self.concentration == 1111:
+            x = np.array(x)
+
+            #populate cell
+            for i in range(len(N)):
+                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+            #assign position of qubit 
+            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
+            qpos1 = sic.to_cell(pos1)
+            qpos2 = sic.to_cell(pos2)
+
+            sic.isotopes['H']['1H'] = 0.999885
+            sic.isotopes['H']['2H'] = 0.000115
+
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
+            #set          spin | gyro | quadrupole 
+            spin_types = [
+                        '1H', 1 / 2, 26.7522
+                        ]   
+            atoms.add_type(*spin_types)
+        
+        if self.concentration == 1313:
+            x = np.array(x)
+
+            #populate cell
+            for i in range(len(N)):
+                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+            #assign position of qubit 
+            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
+            qpos1 = sic.to_cell(pos1)
+            qpos2 = sic.to_cell(pos2)
+
+            sic.isotopes['C']['13C'] = 0.010700000000000001
+            # sic.isotopes['C']['12C'] = 1- 0.010700000000000001 # We don't consider 12C because it has an effective spin of 0
+
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
+            #set          spin | gyro | quadrupole 
+            spin_types = ['13C',  1 / 2,  6.72828,    
+                        ]   
+            atoms.add_type(*spin_types)
+    
+        if self.concentration == 1414:
+            x = np.array(x)
+
+            #populate cell
+            for i in range(len(N)):
+                sic.add_atoms((N[i], [x[i], y[i], z[i]]), type='angstrom')
+
+            #assign position of qubit 
+            pos2 = x[76], y[76], z[76] # Position of the nuclear spin
+            pos1 = x[76], y[76], z[76] # Position of the electron spin
+            qpos1 = sic.to_cell(pos1)
+            qpos2 = sic.to_cell(pos2)
+
+            sic.isotopes['N']['14N'] = 0.9963200000000001
+            sic.isotopes['N']['15N'] = 0.00368
+
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+            atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #left fixed for convergence tests to avoid changes
+            #set          spin | gyro | quadrupole 
+            # spin_types = [('13C',  1 / 2,  6.72828),    
+            #             ('1H', 1 / 2, 26.7522),
+            #             ('N', 1, 1.9331, 20.44 ),
+            #             ('V', 7/2, 7.05, -350), # not added for consistency between tests
+            #             ]   
+            # atoms.add_type(*spin_types)
     
         return atoms, qpos1, qpos2
 
@@ -246,32 +356,64 @@ class VOTPP_class:
 
         return
 
+    # def visualize_cluster(self, calc):
+    #     central_spin_pos = self.qpos1
+
+    #     # add 3D axis
+    #     fig = plt.figure(figsize=(6,6))
+    #     ax = fig.add_subplot(projection='3d')
+
+    #     # We want to visualize the smaller bath
+    #     data = calc.bath
+
+    #     # First plot the positions of the bath
+    #     colors = np.abs(data.A[:,1,2]/data.A[:,1,2].max())
+    #     ax.scatter3D(data.x, data.y, data.z, c=colors, cmap='viridis');
+
+    #     ax.scatter3D(central_spin_pos[0], central_spin_pos[1], central_spin_pos[2], c='red', s=100, label='Central Spin');
+    #     # Plot all pairs of nuclear spins, which are contained
+    #     # in the calc.clusters dictionary under they key 2
+    #     for c in calc.clusters[1]:
+    #         ax.plot3D(data.x[c], data.y[c], data.z[c], color='grey')
+    #     # for c in calc.clusters[2]:
+    #     #     ax.plot3D(data.x[c], data.y[c], data.z[c], color='blue', ls='--', lw=0.5)
+
+    #     # # Plot all triplets of nuclear spins, which are contained
+    #     # # in the calc.clusters dictionary under they key 3
+    #     # for c in mock.clusters[3]:
+    #     #     ax.plot3D(data.x[c], data.y[c], data.z[c], color='red', ls='--', lw=0.5)
+
+    #     ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)');
+    #     plt.show()
+
     def visualize_cluster(self, calc):
         central_spin_pos = self.qpos1
 
-        # add 3D axis
-        fig = plt.figure(figsize=(6,6))
+        fig = plt.figure(figsize=(6, 6))
         ax = fig.add_subplot(projection='3d')
 
-        # We want to visualize the smaller bath
         data = calc.bath
 
-        # First plot the positions of the bath
-        colors = np.abs(data.A[:,1,2]/data.A[:,1,2].max())
-        ax.scatter3D(data.x, data.y, data.z, c=colors, cmap='viridis');
+        # Normalizing colors to be within 0-1
+        max_value = data.A[:, 1, 2].max()
+        if max_value != 0:
+            colors = np.abs(data.A[:, 1, 2]) / max_value
+        else:
+            colors = np.full(data.A[:, 1, 2].shape, 0.5)
 
-        ax.scatter3D(central_spin_pos[0], central_spin_pos[1], central_spin_pos[2], c='red', s=100, label='Central Spin');
-        # Plot all pairs of nuclear spins, which are contained
-        # in the calc.clusters dictionary under they key 2
-        for c in calc.clusters[1]:
-            ax.plot3D(data.x[c], data.y[c], data.z[c], color='grey')
-        # # Plot all triplets of nuclear spins, which are contained
-        # # in the calc.clusters dictionary under they key 3
-        # for c in mock.clusters[3]:
-        #     ax.plot3D(data.x[c], data.y[c], data.z[c], color='red', ls='--', lw=0.5)
+        # Clamp colors to 0-1 range
+        colors = np.clip(colors, 0, 1)
 
-        ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)');
+        # Debugging: Log the min and max of colors
+        print("Colors Min:", np.min(colors))
+        print("Colors Max:", np.max(colors))
+
+        ax.scatter3D(data.x, data.y, data.z, c=colors, cmap='viridis')
+        ax.scatter3D(central_spin_pos[0], central_spin_pos[1], central_spin_pos[2], c='red', s=100, label='Central Spin')
+
+        ax.set(xlabel='x (A)', ylabel='y (A)', zlabel='z (A)')
         plt.show()
+
 
 
 # Usage:
