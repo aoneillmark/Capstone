@@ -1,4 +1,4 @@
-from VOTPP_class_copy_2 import VOTPP_class
+from VOTPP_class import VOTPP_class
 from mpi4py import MPI
 import numpy as np
 import pandas as pd
@@ -57,6 +57,9 @@ def setup_simulator(concentration_value, bath_parameters, simulator_parameters, 
     bath_parameters['concentration'] = concentration_value
     simulator = VOTPP_class(num_spins=num_spins, spin_type=spin_type, alpha=alpha, beta=beta, **bath_parameters)
     sim_original = simulator.setup_simulator(**simulator_parameters)
+    if rank == 0:
+        print(sim_original)
+        call = simulator.visualize_cluster(sim_original)
     return simulator, sim_original
 
 
@@ -138,12 +141,21 @@ nbstates_list = [128,]
 
 timespace_absolute = np.linspace(0, 1, 201)
 
+pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=None, 
+                      bath_names='51V') # 120° pulse around x-axis applied to bath spins
+
+# Define the sequence
+hahn_echo_sequence = pc.Sequence([
+                                pulse_bath,
+                                ])
+
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 30, #!
+    'pulses': hahn_echo_sequence,
+    'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -157,11 +169,12 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 10, #16,
-    'r_dipole': 5, #6,
-    'magnetic_field': [1500, 0, 0], # Magnetic field in Gauss
+    'r_bath': 12, #16,
+    'r_dipole': 6, #6,
+    'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
+magnetic_field_list = [[3000,0,0]]
 
 #####################################################################
 # Set up runner and run the simulation
@@ -172,7 +185,6 @@ default_simulator_parameters = { ########## These should be greater when simulat
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), np.linspace(0, 1e-1, 201), ]
 # timespace_list = [np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 5e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), np.linspace(0, 7e-2, 201), ]
 
-magnetic_field_list = [[3000,0,0],]
 
 # alphabeta_results = {}
 # for idx, alphabetas in enumerate(alpha_and_beta):
@@ -219,8 +231,8 @@ for idx, seed in enumerate(seed_list):
                         concentration_value=default_bath_parameters['concentration'],
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='electronic',
-                        alpha = 4,
-                        beta = 5,
+                        alpha = 2,
+                        beta = 3,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
