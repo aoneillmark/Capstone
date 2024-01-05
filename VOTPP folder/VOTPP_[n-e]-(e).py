@@ -156,9 +156,12 @@ timespace_absolute = np.linspace(0, 0.5, 401)
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
 pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=None, 
-                      bath_names='51V') # 120° pulse around x-axis applied to bath spins
-# pulse_bath2 = pc.Pulse(axis='z', angle='2*pi/3', delay=None, 
-#                       bath_names='51V') # 120° pulse around x-axis applied to bath spins
+                      bath_names=('1H', '2H',
+                                  '13C',
+                                  '14N', '15N',
+                                  '50V', '51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+
 
 # Define the sequence
 hahn_echo_sequence = pc.Sequence([
@@ -175,7 +178,7 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
-    'nbstates': 10, #!
+    'nbstates': 30, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -188,14 +191,14 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
-    'r_bath': 50, #16,
-    'r_dipole': 50, #6,
+    'order': 3, #!
+    'r_bath': 80, #16,
+    'r_dipole': 75, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
-# magnetic_field_list = [[3000,0,0]]
-magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+magnetic_field_list = [[3000,0,0]]
+# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 
 #####################################################################
 # Set up runner and run the simulation
