@@ -21,7 +21,7 @@ def check_pickle_structure(pickle_path, pickle_filename):
 
 
 def coherence_time_func(time, beta, T2):
-    y = np.exp(-(((2*time)/T2)**beta)) # Is there a scaling issue here?
+    y = np.exp(-(((time)/T2)**1)) # Is there a scaling issue here?
     return y
 
 def load_data_from_file(path, pickle_filename):
@@ -260,7 +260,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
-plot_from_file(['[n-e]-(e).pkl',])
+plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 # plot_from_file(['magnetic_results_0.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
