@@ -152,21 +152,21 @@ nbstates_list = [128,]
 # ])
 
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.1, 401)
+timespace_absolute = np.linspace(0, 0.5, 401)
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='pi', delay=0,
+pulse_bath = pc.Pulse(axis='z', angle='2*pi/3',# delay=0,
                       bath_names=('1H', '2H',
                                   '13C',
                                   '14N', '15N',
                                   '50V', '51V',
                                   )) # 120° pulse around x-axis applied to bath spins
-# pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=2e-10, 
-#                       bath_names=('1H', '2H',
-#                                   '13C',
-#                                   '14N', '15N',
-#                                   '50V', '51V',
-#                                   )) # 120° pulse around x-axis applied to bath spins
+pulse_bath2 = pc.Pulse(axis='z', angle='2*pi/3',# delay=2e-10, 
+                      bath_names=('1H', '2H',
+                                  '13C',
+                                  '14N', '15N',
+                                  '50V', '51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
 
 
 # Define the sequence
@@ -174,7 +174,7 @@ hahn_echo_sequence = pc.Sequence([
                                 # pulse_central, 
                                 pulse_bath,
                                 # pulse_bath,
-                                # pulse_bath2,
+                                pulse_bath2,
                                 # pulse_central, 
                                 # pulse_bath2,
                                 ])
@@ -254,9 +254,9 @@ for idx, seed in enumerate(seed_list):
     magnetic_results[seed] = runner(
                         concentration_value=default_bath_parameters['concentration'],
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=1, spin_type='nuclear',
-                        alpha = 2, #3!
-                        beta = 3, #4!
+                        num_spins=2, #spin_type='nuclear',
+                        alpha = 4, #
+                        beta = 5, #
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
