@@ -187,14 +187,14 @@ default_calc_parameters = {
 
 default_bath_parameters = {
     'concentration': 0.02, #!
-    'cell_size': 500, #!
+    'cell_size': 1000, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, #!
+    'order': 3, #!
     'r_bath': 100, #16,
-    'r_dipole': 50, #6,
+    'r_dipole': 40, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
@@ -294,49 +294,15 @@ for idx, seed in enumerate(seed_list):
     
 # print("Order results done")
 
-# r_bath_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     if rank == 0:
-#         # Start timer
-#         start = time.time()
-
-#     r_bath_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='r_bath', variable_values=r_bath_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 2,
-#                         beta=  3,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
-    
-#     if rank == 0:
-#         # Print time
-#         end = time.time()
-#         print("Time taken: {} seconds".format(end - start))
-    
-#     # Save the current state of results
-#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
-
-# if rank == 0:
-#     with open((str(path) + '[n-e]-(e)_r_bath_results.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
-
-#     print("r_bath results done")
-        
-
-
-
-
-r_dipole_results = {}
+r_bath_results = {}
 for idx, conc in enumerate(concentration_list):
     if rank == 0:
         # Start timer
         start = time.time()
 
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=r_dipole_list,
+    r_bath_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='r_bath', variable_values=r_bath_list,
                         num_spins=2, #spin_type='nuclear',
                         alpha= 2,
                         beta=  3,
@@ -348,16 +314,50 @@ for idx, conc in enumerate(concentration_list):
         # Print time
         end = time.time()
         print("Time taken: {} seconds".format(end - start))
-
+    
     # Save the current state of results
-    with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
 if rank == 0:
-    with open((str(path) + '[n-e]-(e)_r_dipole_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    with open((str(path) + '[n-e]-(e)_r_bath_results.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
-    print("r_dipole results done")
+    print("r_bath results done")
+        
+
+
+
+
+# r_dipole_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     if rank == 0:
+#         # Start timer
+#         start = time.time()
+
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 2,
+#                         beta=  3,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+    
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
+
+#     # Save the current state of results
+#     with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_dipole_results, f)
+
+# if rank == 0:
+#     with open((str(path) + '[n-e]-(e)_r_dipole_results.pkl'), 'wb') as f:
+#         pickle.dump(r_dipole_results, f)
+
+#     print("r_dipole results done")
 
 
 #####################################################################
