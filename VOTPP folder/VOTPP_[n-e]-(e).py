@@ -206,8 +206,8 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
-magnetic_field_list = [[3000,0,0]]
-# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+# magnetic_field_list = [[3000,0,0]]
+magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 
 #####################################################################
 # Set up runner and run the simulation
