@@ -153,15 +153,12 @@ nbstates_list = [128,]
 
 # Define the timespace
 timespace_absolute = np.linspace(0, 0.5, 401)
+# Create a an array with the same shape as timespace, but with all values set to 0, except for the final value, which is set to 0.25
+timespace_absolute2 = np.zeros_like(timespace_absolute)
+timespace_absolute2[-1] = 0.25
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='2*pi/3',# delay=0,
-                      bath_names=('1H', '2H',
-                                  '13C',
-                                  '14N', '15N',
-                                  '50V', '51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
-pulse_bath2 = pc.Pulse(axis='z', angle='2*pi/3',# delay=2e-10, 
+pulse_bath = pc.Pulse(axis='z', angle='pi', 
                       bath_names=('1H', '2H',
                                   '13C',
                                   '14N', '15N',
@@ -174,10 +171,10 @@ hahn_echo_sequence = pc.Sequence([
                                 # pulse_central, 
                                 pulse_bath,
                                 # pulse_bath,
-                                pulse_bath2,
                                 # pulse_central, 
                                 # pulse_bath2,
                                 ])
+
 
 if rank ==0:
     print(hahn_echo_sequence)
@@ -186,7 +183,6 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
-    # 'pulses': 0,
     'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -200,15 +196,16 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, # 3
+    'order': 2, # 3
     'r_bath': 80, # 80
     'r_dipole': 50, # 50
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'pulses': hahn_echo_sequence,
 }
 
 # magnetic_field_list = [[3000,0,0]]
-magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
-
+# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
 # Set up runner and run the simulation
 #####################################################################
