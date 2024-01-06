@@ -158,7 +158,7 @@ timespace_absolute2 = np.zeros_like(timespace_absolute)
 timespace_absolute2[-1] = 0.25
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='pi', 
+pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', 
                       bath_names=('1H', '2H',
                                   '13C',
                                   '14N', '15N',
