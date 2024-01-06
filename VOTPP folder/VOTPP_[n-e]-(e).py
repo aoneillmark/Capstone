@@ -155,12 +155,18 @@ nbstates_list = [128,]
 timespace_absolute = np.linspace(0, 0.1, 401)
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=None, )
-                    #   bath_names=('1H', '2H',
-                    #               '13C',
-                    #               '14N', '15N',
-                    #               '50V', '51V',
-                    #               )) # 120° pulse around x-axis applied to bath spins
+pulse_bath = pc.Pulse(axis='z', angle='pi', delay=0,
+                      bath_names=('1H', '2H',
+                                  '13C',
+                                  '14N', '15N',
+                                  '50V', '51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+# pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=2e-10, 
+#                       bath_names=('1H', '2H',
+#                                   '13C',
+#                                   '14N', '15N',
+#                                   '50V', '51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
 
 
 # Define the sequence
@@ -168,6 +174,7 @@ hahn_echo_sequence = pc.Sequence([
                                 # pulse_central, 
                                 pulse_bath,
                                 # pulse_bath,
+                                # pulse_bath2,
                                 # pulse_central, 
                                 # pulse_bath2,
                                 ])
@@ -179,6 +186,7 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
+    # 'pulses': 0,
     'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -192,9 +200,9 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, #!
-    'r_bath': 80, #16,
-    'r_dipole': 50, #6,
+    'order': 3, # 3
+    'r_bath': 80, # 80
+    'r_dipole': 50, # 50
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
 }
 
@@ -246,7 +254,7 @@ for idx, seed in enumerate(seed_list):
     magnetic_results[seed] = runner(
                         concentration_value=default_bath_parameters['concentration'],
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2,# spin_type='electronic',
+                        num_spins=1, spin_type='nuclear',
                         alpha = 2, #3!
                         beta = 3, #4!
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
