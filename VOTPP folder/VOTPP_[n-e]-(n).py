@@ -141,15 +141,16 @@ nbstates_list = [128,]
 
 timespace_absolute = np.linspace(0, 1, 101)
 
-pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=None, 
-                      bath_names=('1H', '2H',
-                                  '13C',
-                                  '14N', '15N',
-                                  '50V', '51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
+pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute / 2,) 
+                    #   bath_names=('1H', '2H',
+                    #               '13C',
+                    #               '14N', '15N',
+                    #               '50V', '51V',
+                    #               )) # 120° pulse around x-axis applied to bath spins
 
 # Define the sequence
 hahn_echo_sequence = pc.Sequence([
+                                pulse_bath,
                                 pulse_bath,
                                 ])
 
@@ -158,7 +159,7 @@ default_calc_parameters = {
     'method': 'gcce',
     # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'pulses': 1,
+    'pulses': hahn_echo_sequence,
     'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -166,20 +167,21 @@ default_calc_parameters = {
 }
 
 default_bath_parameters = {
-    'concentration': 5151, #!
-    'cell_size': 500, #!
+    'concentration': 1111, #!
+    'cell_size': 100, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 150, #16,
-    'r_dipole': 100, #6,
+    'r_bath': 10, #16,
+    'r_dipole': 5, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'pulses': hahn_echo_sequence,
 }
 
-magnetic_field_list = [[3000,0,0]]
-# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+# magnetic_field_list = [[3000,0,0]]
+magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 #####################################################################
 # Set up runner and run the simulation
 #####################################################################
@@ -235,8 +237,8 @@ for idx, seed in enumerate(seed_list):
                         concentration_value=default_bath_parameters['concentration'],
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2,# spin_type='electronic',
-                        alpha = 2,
-                        beta = 3,
+                        alpha = 4,
+                        beta = 5,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )

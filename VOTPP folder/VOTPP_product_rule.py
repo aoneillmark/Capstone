@@ -4,19 +4,19 @@ from scipy.optimize import curve_fit
 
 # Define the coherence time function
 def coherence_time_func(time, beta, T2):
-    return np.exp(-(((2*time)/T2)**beta))
+    return np.exp(-(((2*time)/T2)**1))
 
 # Time range
 timespace = np.linspace(0, 1, 201)
 
 # Series parameters
 series_params = [
-    {"beta": 0.482, "T2": 0.093},  # Series 1
-    {"beta": 2.152, "T2": 0.611},   # Series 2
+    {"beta": 1, "T2": 0.111},  # Series 1
+    {"beta": 1, "T2": 0.160},   # Series 2
     # {"beta": 2.185, "T2": 0.249},  # Series 1
     # {"beta": 3.539, "T2": 1.028},   # Series 2
-    {"beta": 0.221, "T2": 144881},  # Series 3
-    {"beta": 0.213, "T2": 241023},  # Series 4
+    # {"beta": 0.221, "T2": 144881},  # Series 3
+    # {"beta": 0.213, "T2": 241023},  # Series 4
 ]
 
 # Calculate coherence for each series and store it
