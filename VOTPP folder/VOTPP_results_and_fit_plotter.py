@@ -1,9 +1,32 @@
 import numpy as np
 from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import pickle
 import os
 import pandas as pd
+
+def coherence_time_func(time, beta, T2):
+    y = np.exp(-(((2*time)/T2)**1)) # Is there a scaling issue here?
+    return y
+
+
+def get_colorblind_friendly_colors():
+    # Custom color palette with shades from blue to red
+    colors = [
+        "#1f77b4",  # Muted blue
+        "#ff7f0e",  # Safety orange
+        "#2ca02c",  # Cooked asparagus green
+        "#d62728",  # Brick red
+        "#9467bd",  # Muted purple
+        "#8c564b",  # Chestnut brown
+        "#e377c2",  # Raspberry yogurt pink
+        "#7f7f7f",  # Middle gray
+        "#bcbd22",  # Curry yellow-green
+        "#17becf"   # Blue-teal
+    ]
+    return colors
+
 
 
 def check_pickle_structure(pickle_path, pickle_filename):
@@ -18,11 +41,6 @@ def check_pickle_structure(pickle_path, pickle_filename):
             print(f"  Seed: {seed}")
             for sub_key, df in data.items():
                 print(f"    Sub_key: {sub_key}, Type: {type(df)}, Structure: {type(df[0]) if isinstance(df, (list, tuple)) else 'N/A'}")
-
-
-def coherence_time_func(time, beta, T2):
-    y = np.exp(-(((time)/T2)**1)) # Is there a scaling issue here?
-    return y
 
 def load_data_from_file(path, pickle_filename):
     with open(os.path.join(path, pickle_filename), 'rb') as f:
@@ -74,12 +92,16 @@ def average_results_by_seed(loaded_results, debug=False):
 
 
 def plot_combined(loaded_results, variable_name, image_path, ylim=None):
+    colors = get_colorblind_friendly_colors()  # Get colorblind-friendly colors
     plt.figure(figsize=(10,6))
     
-    for outer_key in loaded_results.keys():  # Loop over each key in the loaded_results
-        for v_key, df in loaded_results[outer_key].items():  # Then loop over the items under this key
+    color_index = 0  # Initialize a separate color index
+    for outer_key, data in loaded_results.items():
+        for v_key, df in data.items():
+            color = colors[color_index % len(colors)]  # Cycle through colors using color_index
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
-            plt.plot(df.index, df[0], label=label_str)
+            plt.plot(df.index, df[0], label=label_str, color=color)
+            color_index += 1  # Increment color_index for each v_key
 
     plt.title(f"All {variable_name.capitalize()} Results")
     plt.xlabel('Time (ms)')
@@ -120,7 +142,7 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, pickle_p
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
 
             try:
-                params, _ = curve_fit(coherence_time_func, time_data, ydata_plot, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.025])
+                params, _ = curve_fit(coherence_time_func, time_data, ydata_plot, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.060])
                 beta_fit, T2_fit = params
 
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
@@ -262,7 +284,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
 plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
-# plot_from_file(['magnetic_results_0.pkl'])
+# plot_from_file(['magnetic_results_9.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_order3_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
