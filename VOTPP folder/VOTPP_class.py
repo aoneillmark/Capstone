@@ -138,6 +138,7 @@ class VOTPP_class:
             #set          spin | gyro | quadrupole 
             spin_types = [
                 '51V',  1/2, -17608.59705
+                # '51V',  1/2, np.asarray(self.get_electron_gyro(), dtype=np.complex128)
                 # ('50V',   7/2,    7.05,       -350), # not added for consistency between tests
                 ]   #electronic bath
             atoms.add_type(*spin_types)
@@ -313,7 +314,8 @@ class VOTPP_class:
         tensor_converted_by_factor = [i * 8794.10005384623 for i in tensor]
 
         # Reshape the tensor to a 3x3 matrix
-        return np.array(tensor_converted_by_factor).reshape(3, 3)
+        converted_to_array = np.array(tensor_converted_by_factor).reshape(3, 3)
+        return converted_to_array
         
     def get_nuclear_gyro(self):
         const = -7.05
@@ -321,12 +323,12 @@ class VOTPP_class:
         # Create a 3x3 matrix filled with the constant
         return np.full((3, 3), const)
 
-    def setup_simulator(self, order, r_bath, r_dipole, magnetic_field):
-        calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field)
+    def setup_simulator(self, order, r_bath, r_dipole, magnetic_field, pulses):
+        calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field, pulses=pulses)
         return calc
 
-    def run_calculation(self, calc, timespace, method, pulses, nb_states, quantity, parallel, parallel_states):
-        l = calc.compute(timespace=timespace, method=method, pulses=pulses, nbstates=nb_states, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
+    def run_calculation(self, calc, timespace, method, nb_states, pulses, quantity, parallel, parallel_states):
+        l = calc.compute(timespace=timespace, method=method, nbstates=nb_states, pulses=pulses, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
         l_real = l.real
         l_abs = np.abs(l)
         return l_real

@@ -108,6 +108,7 @@ def plot_T2_vs_field(pickle_filename, data_range=None):
     plt.title("T2 vs Numerical Key")
     plt.xlabel("Numerical Key")
     plt.ylabel(r"$T_2$ ($\mu$s)")
+    plt.ylim(bottom=0)
     plt.grid(True)
     plt.tight_layout()
     
