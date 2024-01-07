@@ -154,7 +154,7 @@ nbstates_list = [128,]
 # ])
 
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.5, 201)
+timespace_absolute = np.linspace(0, 0.5, 401)
 # Create a an array with the same shape as timespace, but with all values set to 0, except for the final value, which is set to 0.25
 timespace_absolute2 = np.zeros_like(timespace_absolute)
 timespace_absolute2[-1] = 0.25
