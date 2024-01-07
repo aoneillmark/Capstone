@@ -120,7 +120,9 @@ def runner(concentration_value, changing_variable, variable_values, bath_paramet
 
 # concentration_list = [0, 0.02, 0.05, 0.1, 0.2, 0.5]
 # concentration_list = [0.02, 0.05,]
-concentration_list = [0.02]
+concentration_list = [0.99, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.02]
+# r_bath_conc_list = [20, 20, 20, 20, 30, 30, 30, 30, 40, 40, 40, 40]
+r_bath_conc_list = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20]
 order_list = [1, 2, 3] 
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
@@ -158,7 +160,7 @@ timespace_absolute2 = np.zeros_like(timespace_absolute)
 timespace_absolute2[-1] = 0.25
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', 
+pulse_bath = pc.Pulse(axis='z', angle='pi/2', delay=0, 
                       bath_names=('1H', '2H',
                                   '13C',
                                   '14N', '15N',
@@ -176,13 +178,15 @@ pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=timespace_absolute,
 hahn_echo_sequence = pc.Sequence([
                                 # # pulse_central, 
                                 pulse_bath,
-                                pulse_bath,
+                                pulse_bath2,
                                 # # pulse_bath,
                                 # # pulse_central, 
                                 # pulse_bath2,
                                 ])
 
-# hahn_echo_sequence=0
+pulse_1 = pc.Pulse(axis='z', angle='2*pi/3')  # 120° pulse around z-axis applied to central spin
+pulse_2 = pc.Pulse(axis='z', angle='2*pi/3')  # 120° pulse around z-axis applied to central spin
+sequence = pc.Sequence([pulse_1, pulse_2])
 
 if rank ==0:
     print(hahn_echo_sequence)
@@ -191,28 +195,28 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
-    'nbstates': 200, #!
+    'nbstates': 20, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
 }
 
 default_bath_parameters = {
-    'concentration': 0.02, #!
+    'concentration': 0.8, #!
     'cell_size': 1000, #!
     'seed': 8000
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, # 3
-    'r_bath': 80, # 80
+    'order': 3, # 3
+    'r_bath': 50, # 80
     'r_dipole': 50, # 50
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
 
-# magnetic_field_list = [[1500,0,0]]
-magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+magnetic_field_list = [[3000,0,0]]
+# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
 # Set up runner and run the simulation
@@ -244,26 +248,33 @@ magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,],
 #                         # changing_variable2='timespace', variable_values2=timespace_list,
 #                         )
 
+    # default_bath_parameters['r_bath'] = r_bath_conc_list[idx]
 # seed_list = [8000, 9000, 10000, 11000,]
 seed_list = [8000,]
 magnetic_results = {}
-for idx, seed in enumerate(seed_list):
+for idx, seed in enumerate(concentration_list):
     # Change the value of the seed in the default parameters
-    default_bath_parameters['seed'] = seed
+    default_bath_parameters['seed'] = 8000 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     if rank == 0:
-        print("Seed: {}".format(seed))
+        print("Seed: {}".format(8000)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         # Start timer
         start = time.time()
 
+    # Change the value of the r_bath in the default parameters
+    default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
     magnetic_results[seed] = runner(
-                        concentration_value=default_bath_parameters['concentration'],
+                        # concentration_value=default_bath_parameters['concentration'],
+                        concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
                         num_spins=2, #spin_type='nuclear',
                         alpha = 4, #
                         beta = 5, #
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
                         )
     
     if rank == 0:
