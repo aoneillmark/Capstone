@@ -236,7 +236,7 @@ for idx, seed in enumerate(seed_list):
     magnetic_results[seed] = runner(
                         concentration_value=default_bath_parameters['concentration'],
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2,# spin_type='electronic',
+                        num_spins=1, spin_type='nuclear',
                         alpha = 4,
                         beta = 5,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
