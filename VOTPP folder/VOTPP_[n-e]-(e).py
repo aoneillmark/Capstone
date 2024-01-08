@@ -127,9 +127,9 @@ order_list = [1, 2, 3]
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_bath_list = [40, 50, 60, 70, 80, 90, 100, 110,] #120, 130, 140, 150]
+r_bath_list = [40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
-r_dipole_list = [20, 30, 40, 50, 60, 70, 80, 90, 100]
+r_dipole_list = [20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
 nbstates_list = [128,]
@@ -207,8 +207,8 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 3, # 3
-    'r_bath': 80, # 80
+    'order': 2, # 3
+    'r_bath': 70, # 70
     'r_dipole': 50, # 50
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
@@ -336,7 +336,7 @@ for idx, conc in enumerate(concentration_list):
         pickle.dump(r_bath_results, f)
 
 if rank == 0:
-    with open((str(path) + '[n-e]-(e)_r_bath_order3_results.pkl'), 'wb') as f:
+    with open((str(path) + '[n-e]-(e)_r_bath_order2_results.pkl'), 'wb') as f:
         pickle.dump(r_bath_results, f)
 
     print("r_bath results done")
@@ -369,7 +369,7 @@ for idx, conc in enumerate(concentration_list):
         pickle.dump(r_dipole_results, f)
 
 if rank == 0:
-    with open((str(path) + '[n-e]-(e)_r_dipole_order3_results.pkl'), 'wb') as f:
+    with open((str(path) + '[n-e]-(e)_r_dipole_order2_results.pkl'), 'wb') as f:
         pickle.dump(r_dipole_results, f)
 
     print("r_dipole results done")
