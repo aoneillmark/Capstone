@@ -194,7 +194,7 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
-    'nbstates': 100, #!
+    'nbstates': 200, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
