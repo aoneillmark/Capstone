@@ -153,11 +153,20 @@ nbstates_list = [128,]
 #     {'pulse': pc.Pulse(**pulse2), 'delay': 3e-6}   # Second pulse followed by a delay
 # ])
 
+
+
+# timespace_absolute_base = np.linspace(0, 0.1, 201)  # Create a linearly spaced array from 0 to 1
+
+# # Apply an exponential function to the linearly spaced array to get the desired distribution
+# exponential_weight = 5  # You can adjust this parameter to control the distribution
+# timespace_absolute_transformed = np.exp(exponential_weight * timespace_absolute_base)
+
+# # Normalize the transformed array so that it spans from 0 to 0.5
+# timespace_absolute = timespace_absolute_transformed / timespace_absolute_transformed.max() * 0.05
+
+
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.5, 401)
-# Create a an array with the same shape as timespace, but with all values set to 0, except for the final value, which is set to 0.25
-timespace_absolute2 = np.zeros_like(timespace_absolute)
-timespace_absolute2[-1] = 0.25
+timespace_absolute = np.linspace(0, 0.05, 201)
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
 pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
@@ -184,10 +193,6 @@ hahn_echo_sequence = pc.Sequence([
                                 # pulse_bath2,
                                 ])
 
-pulse_1 = pc.Pulse(axis='z', angle='2*pi/3')  # 120° pulse around z-axis applied to central spin
-pulse_2 = pc.Pulse(axis='z', angle='2*pi/3')  # 120° pulse around z-axis applied to central spin
-sequence = pc.Sequence([pulse_1, pulse_2])
-
 if rank ==0:
     print(hahn_echo_sequence)
 
@@ -195,7 +200,7 @@ default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
     'pulses': hahn_echo_sequence,
-    'nbstates': 200, #!
+    'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -208,14 +213,15 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, # 3
-    'r_bath': 120, # 80
-    'r_dipole': 70, # 50
+    'order': 3, # 3
+    'r_bath': 80, # 80
+    'r_dipole': 50, # 50
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
 
-# magnetic_field_list = [[3000,0,0]]
+# magnetic_field_list = [[500,0,0]]
+# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], ]
 magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
