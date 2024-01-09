@@ -231,13 +231,13 @@ default_bath_parameters = {
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, # 3
     'r_bath': 70, # 70
-    'r_dipole': 60, # 50
+    'r_dipole': 50, # 50
     'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
 
-magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
-# magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+# magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
 
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
