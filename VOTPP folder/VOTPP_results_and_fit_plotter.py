@@ -7,7 +7,7 @@ import os
 import pandas as pd
 
 def coherence_time_func(time, beta, T2):
-    y = np.exp(-(((2*time)/T2)**1)) # Is there a scaling issue here?
+    y = np.exp(-(((time)/T2)**1)) # Is there a scaling issue here?
     return y
 
 

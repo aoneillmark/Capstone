@@ -137,67 +137,67 @@ nbstates_list = [128,]
 
 ###################################################################################################
 # Define the timespace
-timespace_absolute = np.linspace(0, 1, 201)
+timespace_absolute = np.linspace(0, 0.5, 201)
 
-# Creating a list of pulse sequences to cycle through
-pulse11 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
-pulse12 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
+# # Creating a list of pulse sequences to cycle through
+# pulse11 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
+# pulse12 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
 
-pulse21 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,)
-pulse22 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+# pulse21 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,)
+# pulse22 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
 
-pulse31 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
-pulse32 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
+# pulse31 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
+# pulse32 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
 
-pulse41 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
-pulse42 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+# pulse41 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+# pulse42 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
 
-pulse51 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
-                        bath_names=('51V',
-                                    )) # 120° pulse around x-axis applied to bath spins
-pulse52 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
-                        bath_names=('51V',
-                                    )) # 120° pulse around x-axis applied to bath spins
+# pulse51 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+#                         bath_names=('51V',
+#                                     )) # 120° pulse around x-axis applied to bath spins
+# pulse52 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+#                         bath_names=('51V',
+#                                     )) # 120° pulse around x-axis applied to bath spins
 
-pulse61 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
-pulse62 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
-
-
+# pulse61 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
+# pulse62 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
 
 
 
-# pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
-pulse_bath2 = pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,
-                      bath_names=('51V',
-                                  )) # 120° pulse around x-axis applied to bath spins
 
-# pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=timespace_absolute/2,)
-#                     #   bath_names=('1H', '2H',
-#                     #               '13C',
-#                     #               '14N', '15N',
-#                     #               '50V', '51V',
-#                     #               )) # 120° pulse around x-axis applied to bath spins
 
-# Define the sequence
-hahn_echo_sequence = pc.Sequence([
-                                # # pulse_central, 
-                                pulse_bath,
-                                pulse_bath2,
-                                # # pulse_bath,
-                                # # pulse_central, 
-                                # pulse_bath2,
-                                ])
+# # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
+# pulse_bath = pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
+# pulse_bath2 = pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,
+#                       bath_names=('51V',
+#                                   )) # 120° pulse around x-axis applied to bath spins
+
+# # pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=timespace_absolute/2,)
+# #                     #   bath_names=('1H', '2H',
+# #                     #               '13C',
+# #                     #               '14N', '15N',
+# #                     #               '50V', '51V',
+# #                     #               )) # 120° pulse around x-axis applied to bath spins
+
+# # Define the sequence
+# hahn_echo_sequence = pc.Sequence([
+#                                 # # pulse_central, 
+#                                 pulse_bath,
+#                                 pulse_bath2,
+#                                 # # pulse_bath,
+#                                 # # pulse_central, 
+#                                 # pulse_bath2,
+#                                 ])
 
 
 hahn_echo_sequence = pc.Sequence([ 
@@ -236,15 +236,9 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'pulses': hahn_echo_sequence,
 }
 
-# magnetic_field_list = [[3000,0,0]]
-# magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], ]
-# magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
 magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
 # magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
-# magnetic_field_list = [[0,500,0], [0,800,0], [0,1200,0], [0,1500,0], [0,2000,0], [0,3000,0]]
-# magnetic_field_list = [[0,500,0], [0,800,0], [0,1200,0], [0,1500,0], [0,2000,0], [0,3000,0]]
-# magnetic_field_list = [[3000,0,0], [4000,0,0], [5000,0,0], [6000,0,0]]
-# magnetic_field_list = [[3000, 0, 0]]
+
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
 # Set up runner and run the simulation
@@ -313,7 +307,7 @@ for idx, seed in enumerate(seed_list):
                         concentration_value=default_bath_parameters['concentration'],
                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2, # spin_type='nuclear',
+                        num_spins=2, #spin_type='nuclear',
                         alpha = 4, #
                         beta = 5, #
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
