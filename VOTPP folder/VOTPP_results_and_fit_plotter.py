@@ -7,7 +7,7 @@ import os
 import pandas as pd
 
 def coherence_time_func(time, beta, T2):
-    y = np.exp(-(((time)/T2)**1)) # Is there a scaling issue here?
+    y = np.exp(-(((2*time)/T2)**1)) # Is there a scaling issue here?
     return y
 
 
@@ -281,28 +281,22 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
-# plot_from_file(['magnetic_results_[n-e]_e_E_trans.pkl',])
-plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
+
+# plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
+
 # plot_from_file(['magnetic_results_9.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
-# plot_from_file(['[n-e]-(e)_r_dipole_order3_results.pkl'])
-# plot_from_file(['[n-e]-(e)_r_bath_order3_results.pkl'])
+        
+plot_from_file(['[n-e]-(e)_r_dipole_order3_results.pkl'])
+plot_from_file(['[n-e]-(e)_r_bath_order3_results.pkl'])
+
 # plot_from_file(['[n-e]-(e)_r_dipole_order2_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_bath_order2_results.pkl'])
 
 # plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
 # plot_from_file_average(['[n-e]-(e).pkl'])
 
-# plot_from_file(['alphabeta_results_0.pkl', 'alphabeta_results_1.pkl', 'alphabeta_results_2.pkl', 'alphabeta_results_3.pkl', ])
-# plot_from_file(['alphabeta_results.pkl',])
-# plot_from_file(['alphabeta_order2_results.pkl',])
-# plot_from_file(['alphabeta_combination_results.pkl',])
-
-# plot_from_file(['magnetic_results.pkl', 'r_bath_results.pkl', 'r_dipole_results.pkl'])
-# plot_from_file(['r_bath_results.pkl'])
-# plot_from_file(['r_dipole_results.pkl'])
-# plot_from_file(['cell_size_results.pkl'])
 
 # plot_from_file(['r_bath_results.pkl'])
 # plot_from_file(['r_dipole_results.pkl'])
