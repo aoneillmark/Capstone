@@ -67,17 +67,19 @@ class VOTPP_class:
 
     def setup_bath(self):
         #import xyz file
-        uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
-        
+        # uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
+        uc = pd.read_csv('VOTPP folder/VOTPP_opt2.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory    
+
         #seperate columns into numpy arrays
         N = np.array(uc[0])
         x = np.array(uc[1])
         y = np.array(uc[2])
         z = np.array(uc[3])
         #set up unit cell
-        sic = pc.BathCell(13.2613, 13.2613, 9.6851, 90, 90, 90, 'deg') #used optimized structure note there is also an x-ray structure with slightly different values
+        # sic = pc.BathCell(13.2613, 13.2613, 9.6851, 90, 90, 90, 'deg') #used optimized structure note there is also an x-ray structure with slightly different values
+        sic = pc.BathCell(9.6851, 13.2613, 13.2613, 90, 90, 90, 'deg') #used optimized structure note there is also an x-ray structure with slightly different values
         # z axis in cell coordinates
-        sic.zdir = [0, 0, 1]
+        sic.zdir = [0, 0, 1] 
 
         if self.concentration == 0:
             x = np.array(x)
@@ -123,15 +125,27 @@ class VOTPP_class:
             #populate unit cell with V
             sic.add_atoms((N[76], [x[76], y[76], z[76]]), type='angstrom')
 
+            #generate supercell - nuclear bath 
+            cell=self.cell_size
+
+            # # Standard 3x3 rotation matrix for swapping x and z axes
+            # rotation_matrix_3x3 = np.array([
+            #     [0, 0, 1],
+            #     [0, 1, 0],
+            #     [1, 0, 0]
+            # ])
+
+            # # Flattened version of the above matrix, if needed
+            # rotation_matrix_flattened = rotation_matrix_3x3.flatten()
+
+            # sic.rotate(rotation_matrix_3x3)
+
             #assign position of qubit 
             pos1 = x[76], y[76], z[76] # Position of the nuclear spin
             pos2 = x[76], y[76], z[76] # Position of the electron spin
             qpos1 = sic.to_cell(pos1)
             qpos2 = sic.to_cell(pos2)
 
-
-            #generate supercell - nuclear bath 
-            cell=self.cell_size
 
 
             atoms = sic.gen_supercell(cell, seed=self.seed, remove=[('V', qpos1), ('V', qpos2)]) #generate supercell 
@@ -293,29 +307,67 @@ class VOTPP_class:
         return cen
 
     def get_interaction_tensor(self, printing=False):
+        # Read the tensor from the file
         with open(('VOTPP folder/VOTPP_opt.Atens'), 'r') as f:
             lines = f.readlines()
 
-        # Extract numerical values from the string
-        values = lines[0].strip().split()
-        values = [float(value)*1e3 for value in values]
+        # Convert the tensor to a list of floats and apply the scaling factor
+        values = [float(value) * 1e3 for value in lines[0].strip().split()]
 
-        # Create a 3x3 matrix from the list of data
+        # Reshape the tensor to a 3x3 matrix
         interaction_matrix = np.array(values).reshape((3, 3))
 
+        # Define the rotation matrix to swap X and Z
+        rotation_matrix = np.array([
+            [0, 0, 1],
+            [0, 1, 0],
+            [1, 0, 0]
+        ])
 
-        return interaction_matrix # self.cen
+        # Rotate the tensor
+        rotated_interaction_matrix = rotation_matrix @ interaction_matrix @ rotation_matrix.T
+
+        if printing:
+            print('Original Tensor (Atens):')
+            print(interaction_matrix)
+
+            print("Rotated Tensor (Atens):")
+            print(rotated_interaction_matrix)
+
+        return rotated_interaction_matrix
     
-    def get_electron_gyro(self):
+    def get_electron_gyro(self, printing=False):
+        # Read the tensor from the file
         with open(('VOTPP folder/VOTPP_opt.gtens'), 'r') as f:
             lines = f.readlines()
-        
+
+        # Convert the tensor to a list of floats
         tensor = [float(x) for x in lines[0].split()]
+
+        # Multiply each element by the conversion factor
         tensor_converted_by_factor = [i * 8794.10005384623 for i in tensor]
 
         # Reshape the tensor to a 3x3 matrix
-        converted_to_array = np.array(tensor_converted_by_factor).reshape(3, 3)
-        return converted_to_array
+        tensor_matrix = np.array(tensor_converted_by_factor).reshape(3, 3)
+
+        # Define the rotation matrix to swap X and Z
+        rotation_matrix = np.array([
+            [0, 0, 1],
+            [0, 1, 0],
+            [1, 0, 0]
+        ])
+
+        # Rotate the tensor
+        rotated_tensor = rotation_matrix @ tensor_matrix @ rotation_matrix.T
+
+        if printing:
+            print('Original Tensor (gtens):')
+            print(tensor_matrix)
+
+            print("Rotated Tensor (gtens):")
+            print(rotated_tensor)
+
+        return rotated_tensor
         
     def get_nuclear_gyro(self):
         const = -7.05
@@ -327,8 +379,8 @@ class VOTPP_class:
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field, pulses=pulses)
         return calc
 
-    def run_calculation(self, calc, timespace, method, nb_states, pulses, quantity, parallel, parallel_states):
-        l = calc.compute(timespace=timespace, method=method, nbstates=nb_states, pulses=pulses, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
+    def run_calculation(self, calc, timespace, method, nb_states, quantity, parallel, parallel_states):
+        l = calc.compute(timespace=timespace, method=method, nbstates=nb_states, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
         l_real = l.real
         l_abs = np.abs(l)
         return l_real
