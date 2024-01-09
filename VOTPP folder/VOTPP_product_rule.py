@@ -11,8 +11,8 @@ timespace = np.linspace(0, 1, 201)
 
 # Series parameters
 series_params = [
-    {"beta": 1, "T2": 0.111},  # Series 1
-    {"beta": 1, "T2": 0.160},   # Series 2
+    {"beta": 1, "T2": 0.086, "bath": '51V (2%)'},  # Series 1
+    {"beta": 1, "T2": 1.591, "bath": '1H & 2H'},   # Series 2
     # {"beta": 2.185, "T2": 0.249},  # Series 1
     # {"beta": 3.539, "T2": 1.028},   # Series 2
     # {"beta": 0.221, "T2": 144881},  # Series 3
@@ -38,10 +38,10 @@ plt.figure(figsize=(10, 6))
 
 # Plotting each series
 for i, coherence in enumerate(coherences, 1):
-    plt.plot(timespace, coherence, label=f"Series {i} (Beta={series_params[i-1]['beta']}, T2={series_params[i-1]['T2']})")
+    plt.plot(timespace, coherence, label=f"Bath {series_params[i-1]['bath']} (Beta={series_params[i-1]['beta']}, $T_2$={series_params[i-1]['T2']})")
 
 plt.title("Coherence vs Time for Each Series")
-plt.xlabel("Time")
+plt.xlabel("Time (ms)")
 plt.ylabel("Coherence")
 plt.legend()
 plt.tight_layout()
@@ -63,7 +63,7 @@ plt.figure(figsize=(10, 6))
 plt.plot(timespace, product_coherence, label="Product of Coherences")
 plt.plot(timespace, coherence_time_func(timespace, fitted_beta, fitted_T2), '--', label=f"Fit: Beta={fitted_beta:.3f}, T2={fitted_T2:.3f}")
 plt.title("Product of Coherences vs Time with Fit")
-plt.xlabel("Time")
+plt.xlabel("Time (ms)")
 plt.ylabel("Product of Coherence")
 plt.legend()
 plt.tight_layout()
