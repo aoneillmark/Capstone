@@ -100,11 +100,34 @@ def setup_simulator(concentration_value, bath_parameters, simulator_parameters, 
 
 
 timespace_absolute = np.linspace(0, 1, 101)
+pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+pulse_bath2 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+
+# pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=timespace_absolute/2,)
+#                     #   bath_names=('1H', '2H',
+#                     #               '13C',
+#                     #               '14N', '15N',
+#                     #               '50V', '51V',
+#                     #               )) # 120° pulse around x-axis applied to bath spins
+
+# Define the sequence
+hahn_echo_sequence = pc.Sequence([
+                                # # pulse_central, 
+                                pulse_bath,
+                                pulse_bath2,
+                                # # pulse_bath,
+                                # # pulse_central, 
+                                # pulse_bath2,
+                                ])
 
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
+    # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     'nbstates': 30, #!
     'quantity': 'coherence',
@@ -123,10 +146,14 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'r_bath': 75, #16,
     'r_dipole': 60, #6,
     'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'pulses': hahn_echo_sequence, 
 }
 
 
+
 simulator, sim_original = setup_simulator(0.02, default_bath_parameters, default_simulator_parameters, num_spins=2, spin_type='electron', alpha=4, beta=5)
+
+call = simulator.visualize_cluster(sim_original)
 
 ##############################################################################################################
 
@@ -135,7 +162,7 @@ cen = simulator.cen
 ens = []
 ms = np.linspace(0, 3000, 51)  # applied magnetic field
 for mf in ms:
-    cen.generate_states([mf, 0, 0]) # APPLIED ALONG THE X DIRECTION
+    cen.generate_states([0, mf, 0]) # APPLIED ALONG THE X DIRECTION
     ens.append(cen.energies)
 
 ens = np.asarray(ens)
