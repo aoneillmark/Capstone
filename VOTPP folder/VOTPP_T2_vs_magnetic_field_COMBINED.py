@@ -35,7 +35,7 @@ def plot_T2_vs_field_combined(e_pickle_filename, n_pickle_filename, data_range=N
     keys = e_fit_results.keys()
 
     # Extract x_values from the keys; modify this line if x_values are different
-    x_values = [key[1] for key in keys]
+    x_values = [key[3] for key in keys]
 
     # Extract T2 values for both datasets
     T2_values_e = [e_fit_results[key]['T2'] for key in keys]
@@ -58,9 +58,9 @@ def plot_T2_vs_field_combined(e_pickle_filename, n_pickle_filename, data_range=N
 
     # Plotting
     plt.figure(figsize=(10, 6))
-    plt.plot(x_values, T2_values_e, marker='o', label='e Dataset')
-    plt.plot(x_values, T2_values_n, marker='o', label='n Dataset')
-    plt.plot(x_values, T2_product_values, marker='o', label='T2 Product Rule')
+    plt.semilogy(x_values, T2_values_e, marker='o', label='e Dataset')
+    plt.semilogy(x_values, T2_values_n, marker='o', label='n Dataset')
+    plt.semilogy(x_values, T2_product_values, marker='o', label='T2 Product Rule')
     plt.title("T2 vs Numerical Key")
     plt.xlabel("Numerical Key")
     plt.ylabel(r"$T_2$ ($\mu$s)")
