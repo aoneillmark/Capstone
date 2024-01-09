@@ -135,57 +135,80 @@ cell_size_list = [60,100,200]
 nbstates_list = [128,]
 # nbstates_list = [16,32,64]
 
-# r_bath_list = [10,]
-# r_dipole_list = [8,]
-# cell_size_list = [60,]
-
-# timespace_absolute = np.linspace(0, 1, 201)
-# # Define the pulses as dictionaries
-# pulse1 = {'axis': 'x', 'angle': '2*pi/3'}  # First (2π/3) pulse
-# pulse2 = {'axis': 'x', 'angle': '2*pi/3'}  # Second (2π/3) pulse
-
-# # Define the delay in seconds (3 microseconds)
-# delay = 3e-6  
-
-# # Create the Hahn-echo sequence using the Pulse class and dictionaries
-# hahn_echo_sequence = pc.Sequence([
-#     {'pulse': pc.Pulse(**pulse1), 'delay': 3e-6},  # First pulse followed by a delay
-#     {'pulse': pc.Pulse(**pulse2), 'delay': 3e-6}   # Second pulse followed by a delay
-# ])
-
-
-
-# timespace_absolute_base = np.linspace(0, 0.1, 201)  # Create a linearly spaced array from 0 to 1
-
-# # Apply an exponential function to the linearly spaced array to get the desired distribution
-# exponential_weight = 5  # You can adjust this parameter to control the distribution
-# timespace_absolute_transformed = np.exp(exponential_weight * timespace_absolute_base)
-
-# # Normalize the transformed array so that it spans from 0 to 0.5
-# timespace_absolute = timespace_absolute_transformed / timespace_absolute_transformed.max() * 0.05
-
-
+###################################################################################################
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.05, 201)
+timespace_absolute = np.linspace(0, 1, 201)
+
+# Creating a list of pulse sequences to cycle through
+pulse11 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+pulse12 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+
+pulse21 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,)
+pulse22 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+
+pulse31 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+pulse32 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+
+pulse41 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+pulse42 = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
+
+pulse51 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+                        bath_names=('51V',
+                                    )) # 120° pulse around x-axis applied to bath spins
+pulse52 = pc.Pulse(axis='z', angle='2*pi/3', delay=0,
+                        bath_names=('51V',
+                                    )) # 120° pulse around x-axis applied to bath spins
+
+pulse61 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
+pulse62 = pc.Pulse(axis='z', angle='2*pi/3', delay=0)
+
+
+
+
 
 # pulse_central = pc.Pulse(axis='z', angle='2*pi/3', delay=None,)  # 120° pulse around x-axis applied to central spin
-pulse_bath = pc.Pulse(axis='z', angle='2*pi/3', delay=timespace_absolute/2,)
-                    #   bath_names=('1H', '2H',
-                    #               '13C',
-                    #               '14N', '15N',
-                    #               '50V', '51V',
-                    #               )) # 120° pulse around x-axis applied to bath spins
+pulse_bath = pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
+pulse_bath2 = pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,
+                      bath_names=('51V',
+                                  )) # 120° pulse around x-axis applied to bath spins
 
+# pulse_bath2 = pc.Pulse(axis='z', angle='pi', delay=timespace_absolute/2,)
+#                     #   bath_names=('1H', '2H',
+#                     #               '13C',
+#                     #               '14N', '15N',
+#                     #               '50V', '51V',
+#                     #               )) # 120° pulse around x-axis applied to bath spins
 
 # Define the sequence
 hahn_echo_sequence = pc.Sequence([
                                 # # pulse_central, 
                                 pulse_bath,
-                                pulse_bath,
+                                pulse_bath2,
                                 # # pulse_bath,
                                 # # pulse_central, 
                                 # pulse_bath2,
                                 ])
+
+
+hahn_echo_sequence = pc.Sequence([ 
+    pc.Pulse(axis='x', angle='pi/2', delay=np.zeros(timespace_absolute.size),
+                bath_names=('51V',
+                )), # 120° pulse around x-axis applied to bath spins),
+    pc.Pulse(axis='x', angle='pi', delay=timespace_absolute/2,
+                bath_names=('51V',
+                ))]) # 120° pulse around x-axis applied to bath spins ])
+    # pc.Pulse(axis='x', angle='pi/2',),
+    # pc.Pulse(axis='x', angle='pi', ) ])
 
 if rank ==0:
     print(hahn_echo_sequence)
@@ -193,7 +216,6 @@ if rank ==0:
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'pulses': hahn_echo_sequence,
     'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
@@ -207,37 +229,70 @@ default_bath_parameters = {
 }
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
-    'order': 2, # 3
+    'order': 3, # 3
     'r_bath': 70, # 70
     'r_dipole': 50, # 50
-    'magnetic_field': [3000, 0, 0], # Magnetic field in Gauss
+    'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
 
-magnetic_field_list = [[3000,0,0]]
+# magnetic_field_list = [[3000,0,0]]
 # magnetic_field_list = [[500,0,0], [800,0,0], [1200,0,0], ]
 # magnetic_field_list = [[500, 0, 0,], [800, 0, 0,], [1200, 0, 0,], [1500, 0, 0,], [2000, 0, 0,], [3000, 0, 0,]]
+magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+# magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+# magnetic_field_list = [[0,500,0], [0,800,0], [0,1200,0], [0,1500,0], [0,2000,0], [0,3000,0]]
+# magnetic_field_list = [[0,500,0], [0,800,0], [0,1200,0], [0,1500,0], [0,2000,0], [0,3000,0]]
+# magnetic_field_list = [[3000,0,0], [4000,0,0], [5000,0,0], [6000,0,0]]
 # magnetic_field_list = [[3000, 0, 0]]
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
 # Set up runner and run the simulation
 #####################################################################
 
-
+# # Runner loop for single pulse sequence ##############################################################
+# pulses_list = [seq1, seq2, seq3]
 # magnetic_results = {}
-# for conc in concentration_list:
-#     magnetic_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-#                         num_spins=2,# spin_type='electronic',
-#                         alpha = 4,
-#                         beta = 5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
+# for idx, seed in enumerate(seed_list):
+#     # Change the value of the seed in the default parameters
+#     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#     if rank == 0:
+#         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-#     # default_bath_parameters['r_bath'] = r_bath_conc_list[idx]
-# # seed_list = [8000, 9000, 10000, 11000,]
+#         # Start timer
+#         start = time.time()
+
+#     # # Change the value of the r_bath in the default parameters
+#     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+#     magnetic_results[seed] = runner(
+#                         concentration_value=default_bath_parameters['concentration'],
+#                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+#                         num_spins=2, # spin_type='nuclear',
+#                         alpha = 4, #
+#                         beta = 5, #
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+#                         )
+    
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
+
+#     # Save the current state of results
+#     with open((str(path) + f'magnetic_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
+
+# if rank == 0:
+#     with open((str(path) + '[n-e]-(e).pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
+
+
+# Runner loop for single pulse sequence ##############################################################
 seed_list = [8000,]
 magnetic_results = {}
 for idx, seed in enumerate(seed_list):
