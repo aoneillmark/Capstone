@@ -216,7 +216,7 @@ if rank ==0:
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'nbstates': 10, #!
+    'nbstates': 100, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -230,8 +230,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 3, # 3
-    'r_bath': 110, # 70
-    'r_dipole': 90, # 50
+    'r_bath': 70, # 70
+    'r_dipole': 60, # 50
     'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
