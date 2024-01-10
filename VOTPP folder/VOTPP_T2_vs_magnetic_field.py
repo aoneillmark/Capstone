@@ -119,6 +119,7 @@ def plot_T2_vs_field(pickle_filename, data_range=None):
 
 # Call the function with the name of your pickle files
 plot_T2_vs_field('[n-e]-(e).pkl_fit_results.pkl')
+# plot_T2_vs_field('[n-e]-(n).pkl_fit_results.pkl')
 # plot_T2_vs_field('cell_size_fit_results.pkl')
 # plot_T2_vs_field('r_bath_fit_results.pkl', data_range=(1, None))
 # plot_T2_vs_field('r_dipole_fit_results.pkl', data_range=(1, None))
