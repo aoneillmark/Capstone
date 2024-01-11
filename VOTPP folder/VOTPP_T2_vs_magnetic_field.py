@@ -105,20 +105,35 @@ def plot_T2_vs_field(pickle_filename, data_range=None):
     plt.figure(figsize=(10,6))
     # plt.semilogy(x_values, T2_values, marker='o')
     plt.plot(x_values, T2_values, marker='o')
-    plt.title("T2 vs Numerical Key")
-    plt.xlabel("Numerical Key")
+    plt.title("T2 vs Magnetic Field")
+    plt.xlabel("Magnetic field (Gauss)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
     plt.ylim(bottom=0)
     plt.grid(True)
     plt.tight_layout()
     
-    # Save and show plot
-    output_filename = os.path.join(path, "T2_vs_Numerical_Key.png")
+    # Extract the base name without extension
+    base_name = os.path.splitext(os.path.basename(pickle_filename))[0]
+
+    # Construct a unique output filename
+    output_filename = os.path.join(path, f"T2_vs_Magnetic_Field_{base_name}.png")
+
     plt.savefig(output_filename, dpi=300)
     plt.show()
 
+
 # Call the function with the name of your pickle files
-plot_T2_vs_field('[n-e]-(e).pkl_fit_results.pkl')
+# plot_T2_vs_field('[n-e]-(e).pkl_fit_results.pkl')
+
+plot_T2_vs_field('[n-e]-(e)_AB1.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB2.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB3.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB4.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB5.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB6.pkl_fit_results.pkl')
+plot_T2_vs_field('[n-e]-(e)_AB7.pkl_fit_results.pkl')
+
+
 # plot_T2_vs_field('[n-e]-(n).pkl_fit_results.pkl')
 # plot_T2_vs_field('cell_size_fit_results.pkl')
 # plot_T2_vs_field('r_bath_fit_results.pkl', data_range=(1, None))

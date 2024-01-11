@@ -282,8 +282,18 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
 
-plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
+# plot_from_file(['[n-e]-(e).pkl',])#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
+
+# plot_from_file(['[n-e]-(e)_AB1.pkl',])
+# plot_from_file(['[n-e]-(e)_AB2.pkl',])
+# plot_from_file(['[n-e]-(e)_AB3.pkl',])
+# plot_from_file(['[n-e]-(e)_AB4.pkl',])
+# plot_from_file(['[n-e]-(e)_AB5.pkl',])
+# plot_from_file(['[n-e]-(e)_AB6.pkl',])
+# plot_from_file(['[n-e]-(e)_AB7.pkl',])
+
+
 
 # plot_from_file(['magnetic_results_9.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
