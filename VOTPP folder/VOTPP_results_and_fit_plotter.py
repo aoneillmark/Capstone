@@ -259,7 +259,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
         plot_individual_with_fit_average(averaged_results, variable_name, image_path, pickle_path, data_range=data_range, ylim=ylim)
 
 
-
+##############################################################################################################
 # Provide the filenames you want to process as a list
 # plot_from_file(['magnetic_results.pkl',])
 # plot_from_file(['magnetic_results.pkl'], data_range=slice(0, 40))
@@ -271,15 +271,8 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 
 # For plotting with averaging
 # plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
+##############################################################################################################
 
-
-# plot_from_file(['magnetic_results_e_n.pkl',])
-# plot_from_file(['magnetic_results_n_n.pkl',])
-# plot_from_file(['magnetic_results_[n-e]_e.pkl',])
-# plot_from_file(['magnetic_results_e_e.pkl',])
-# plot_from_file(['magnetic_results_n_e.pkl',])
-
-# plot_from_file(['magnetic_results_[n-e]_e_N_trans.pkl',]) #!!!!
 
 
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
@@ -302,12 +295,21 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(n)_AB7.pkl',], ylim=(-0.01,None))
 
 
+##############################################################################################################
+# H bath convergence
+# plot_from_file(['[n-e]-(n)_r_bath_order2_H_results.pkl'], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_r_dipole_order2_H_results.pkl'], ylim=(-0.01,None))
 
-#Add a ylim where the bottom is defined at 0 but there's no top defined
-# plot_from_file(['[n-e]-(e)_AB1.pkl',], ylim=(0, None))
+# C bath convergence
+# plot_from_file(['[n-e]-(n)_r_bath_order2_C_results.pkl'], ylim=(-0.01,1.01))
+# plot_from_file(['[n-e]-(n)_r_dipole_order2_C_results.pkl'], ylim=(-0.01,1.01))
+plot_from_file(['[n-e]-(n)_order_C_results.pkl'], ylim=(-0.01,1.01))
 
+# N bath convergence 
+# plot_from_file(['[n-e]-(n)_r_bath_order2_N_results.pkl'], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_r_dipole_order2_N_results.pkl'], ylim=(-0.01,None))
+##############################################################################################################
 
-# plot_from_file(['magnetic_results_9.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_results.pkl'])
         
 # plot_from_file(['[n-e]-(e)_r_dipole_order3_results.pkl'])
@@ -318,14 +320,8 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 
 # plot_from_file(['[n-e]-(n)_r_bath_order2_results.pkl'])
 # plot_from_file(['[n-e]-(n)_r_dipole_order2_results.pkl'])
-plot_from_file(['[n-e]-(n)_order_results.pkl'])
+# plot_from_file(['[n-e]-(n)_order_results.pkl'])
 
 # plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
 # plot_from_file_average(['[n-e]-(e).pkl'])
 
-
-# plot_from_file(['r_bath_results.pkl'])
-# plot_from_file(['r_dipole_results.pkl'])
-# plot_from_file(['cell_size_results.pkl'])
-        
-# plot_from_file(['magnetic_results_combined_bath.pkl'], data_range=slice(0, 100))
