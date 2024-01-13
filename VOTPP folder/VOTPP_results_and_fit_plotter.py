@@ -293,13 +293,14 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e)_AB6.pkl',])
 # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
-plot_from_file(['[n-e]-(n)_AB1.pkl',],)
-plot_from_file(['[n-e]-(n)_AB2.pkl',],)
-plot_from_file(['[n-e]-(n)_AB3.pkl',],)
-plot_from_file(['[n-e]-(n)_AB4.pkl',],)
-plot_from_file(['[n-e]-(n)_AB5.pkl',],)
-plot_from_file(['[n-e]-(n)_AB6.pkl',],)
-plot_from_file(['[n-e]-(n)_AB7.pkl',],)
+# plot_from_file(['[n-e]-(n)_AB1.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB2.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB3.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB4.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB5.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB6.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_AB7.pkl',], ylim=(-0.01,None))
+
 
 
 #Add a ylim where the bottom is defined at 0 but there's no top defined
@@ -314,6 +315,9 @@ plot_from_file(['[n-e]-(n)_AB7.pkl',],)
 
 # plot_from_file(['[n-e]-(e)_r_dipole_order2_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_bath_order2_results.pkl'])
+
+# plot_from_file(['[n-e]-(n)_r_bath_order2_results.pkl'])
+plot_from_file(['[n-e]-(n)_r_dipole_order2_results.pkl'])
 
 # plot_from_file(['[n-e]-(e)_r_bath_results.pkl'])
 # plot_from_file_average(['[n-e]-(e).pkl'])
