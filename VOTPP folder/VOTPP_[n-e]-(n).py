@@ -168,8 +168,8 @@ default_bath_parameters = {
 
 default_simulator_parameters = { ########## These should be greater when simulating with HPC
     'order': 2, #!
-    'r_bath': 10, #16,
-    'r_dipole': 5, #6,
+    'r_bath': 6, #16,
+    'r_dipole': 4, #6,
     'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
     'pulses': hahn_echo_sequence,
 }
@@ -572,51 +572,85 @@ magnetic_field_list = [[0,0,3000]]
 # print("Order results done")
 concentration_list = [1111,]
 
-r_bath_results = {}
-for idx, conc in enumerate(concentration_list):
-    if rank == 0:
-        # Start timer
-        start = time.time()
 
-    r_bath_results[conc] = runner(
-                        concentration_value=conc,
-                        changing_variable='r_bath', variable_values=r_bath_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= 4,
-                        beta=  5,
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='timespace', variable_values2=timespace_list,
-                        )
+
+# r_bath_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     if rank == 0:
+#         # Start timer
+#         start = time.time()
+
+#     r_bath_results[conc] = runner(
+#                         concentration_value=conc,
+#                         changing_variable='r_bath', variable_values=r_bath_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
     
-    if rank == 0:
-        # Print time
-        end = time.time()
-        print("Time taken: {} seconds".format(end - start))
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
     
-    # Save the current state of results
-    with open((str(path) + f'r_bath_results_n_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+#     # Save the current state of results
+#     with open((str(path) + f'r_bath_results_n_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_bath_results, f)
 
-if rank == 0:
-    with open((str(path) + '[n-e]-(n)_r_bath_order2_results.pkl'), 'wb') as f:
-        pickle.dump(r_bath_results, f)
+# if rank == 0:
+#     with open((str(path) + '[n-e]-(n)_r_bath_order2_results.pkl'), 'wb') as f:
+#         pickle.dump(r_bath_results, f)
 
-    print("r_bath results done")
+#     print("r_bath results done")
         
 
 
 
-r_dipole_results = {}
+# r_dipole_results = {}
+# for idx, conc in enumerate(concentration_list):
+#     if rank == 0:
+#         # Start timer
+#         start = time.time()
+
+#     r_dipole_results[conc] = runner(concentration_value=conc,
+#                         changing_variable='r_dipole', variable_values=r_dipole_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha= 4,
+#                         beta=  5,
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='timespace', variable_values2=timespace_list,
+#                         )
+    
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
+
+#     # Save the current state of results
+#     with open((str(path) + f'r_dipole_results_n_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(r_dipole_results, f)
+
+# if rank == 0:
+#     with open((str(path) + '[n-e]-(n)_r_dipole_order2_results.pkl'), 'wb') as f:
+#         pickle.dump(r_dipole_results, f)
+
+#     print("r_dipole results done")
+
+
+order_results = {}
 for idx, conc in enumerate(concentration_list):
     if rank == 0:
         # Start timer
         start = time.time()
 
-    r_dipole_results[conc] = runner(concentration_value=conc,
-                        changing_variable='r_dipole', variable_values=r_dipole_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha= 4,
-                        beta=  5,
+    order_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='order', variable_values=order_list,
+                        num_spins=2,# spin_type='electron',
+                        alpha=4,
+                        beta=5,
                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
                         # changing_variable2='timespace', variable_values2=timespace_list,
                         )
@@ -625,17 +659,16 @@ for idx, conc in enumerate(concentration_list):
         # Print time
         end = time.time()
         print("Time taken: {} seconds".format(end - start))
-
+    
     # Save the current state of results
-    with open((str(path) + f'r_dipole_results_n_{idx}.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    with open((str(path) + f'order_results_n_{idx}.pkl'), 'wb') as f:
+        pickle.dump(order_results, f)
 
 if rank == 0:
-    with open((str(path) + '[n-e]-(n)_r_dipole_order2_results.pkl'), 'wb') as f:
-        pickle.dump(r_dipole_results, f)
+    with open((str(path) + '[n-e]-(n)_order_results.pkl'), 'wb') as f:
+        pickle.dump(order_results, f)
 
-    print("r_dipole results done")
-
+    print("order results done")
 
 #####################################################################
 # Save the results
