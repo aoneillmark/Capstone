@@ -100,7 +100,7 @@ def plot_T2_vs_field_combined(e_pickle_filename, C_pickle_filename, h_pickle_fil
         start, end = data_range
         x_values = x_values[start:end]
         T2_values_e = T2_values_e[start:end]
-        T2_values_n = T2_values_C[start:end]
+        T2_values_C = T2_values_C[start:end]
         T2_values_h = T2_values_h[start:end]
         T2_values_N = T2_values_N[start:end]
         T2_product_values = T2_product_values[start:end]
