@@ -76,7 +76,8 @@ def plot_T2_product_rule_combined(e_pickle_filename, C_pickle_filename, h_pickle
 
     # Plotting the combined T2 product rule values
     plt.figure(figsize=(8, 4))
-    plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, marker='o', label='Product Rule Result', fmt='-o')
+    plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt='-o', label='Product Rule Result', 
+                 ecolor='black', elinewidth=0.5, capsize=2)
     # plt.title("T2 Product Rule Combined vs Numerical Key")
     plt.xlabel(r"$B_0$ (Gauss)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
@@ -157,10 +158,14 @@ def plot_T2_vs_field_combined(e_pickle_filename, C_pickle_filename, h_pickle_fil
 
     # Plotting with error bars
     plt.figure(figsize=(8, 4))
-    plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, label='E Bath', fmt='-o')
-    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, label='C Bath', fmt='-o')
-    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, label='H Bath', fmt='-o')
-    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, label='N Bath', fmt='-o')
+    plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, fmt='-o', label='E Bath', 
+                 ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', 
+                 ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o', label='H Bath', 
+                 ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', label='N Bath', 
+                 ecolor='black', elinewidth=0.5, capsize=2)
 
     # Plotting the T2 product rule values on a semi-logarithmic scale
     plt.semilogy(x_values, T2_product_values, '-o', label='Product Rule Result')  # Using semilogy for the product rule
@@ -209,7 +214,7 @@ def plot_T2_vs_B_single(pickle_filename, bath_type, identifier, data_range=None,
 
     # Plotting with error bars
     plt.figure(figsize=(8, 4))
-    plt.errorbar(x_values, T2_values, yerr=T2_errors, fmt='-o', label=f'{bath_type} Bath T2 vs B')
+    plt.errorbar(x_values, T2_values, yerr=T2_errors, fmt='-o', ecolor='black', elinewidth=0.5, capsize=2, label=f'{bath_type} Bath T2 vs B')
 
     plt.xlabel(r"$B_0$ (Gauss)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
@@ -229,23 +234,88 @@ def plot_T2_vs_B_single(pickle_filename, bath_type, identifier, data_range=None,
 
 
 
+
+
+def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_range=None, show=False):
+    path = "VOTPP folder/Results/Pickle files 2/Fits/"
+    plt.figure(figsize=(6/1.1, 4/1.1))
+
+    for AB, file_list in file_label_dict.items():
+        T2_product_values_all = []
+        T2_product_errors_all = []
+        x_values_all = []
+        for pickle_filename in file_list:
+            fit_results = load_fit_results(path, pickle_filename)
+            keys = fit_results.keys()
+            x_values = [key[3] for key in keys]
+
+            # Extract T2 values and errors for each bath
+            T2_values = [fit_results[key]['T2']*1e3 for key in keys]  # Convert from ms to microseconds
+            T2_errors = [fit_results[key]['T2_err']*1e3 for key in keys]
+
+            # Append to all values list
+            T2_product_values_all.append(T2_values)
+            T2_product_errors_all.append(T2_errors)
+            x_values_all.append(x_values)
+
+        # Calculate T2 product rule values and errors for each AB
+        T2_product_values = []
+        T2_product_errors = []
+        for Ta, Tb, Tc, Td, err_a, err_b, err_c, err_d in zip(*T2_product_values_all, *T2_product_errors_all):
+            T2_product = T2_product_rule(Ta, Tb, Tc, Td)
+            T2_product_values.append(T2_product)
+            T2_product_error = T2_product**2 * np.sqrt((err_a/Ta**2)**2 + (err_b/Tb**2)**2 + (err_c/Tc**2)**2 + (err_d/Td**2)**2)
+            T2_product_errors.append(np.sqrt(T2_product_error))
+
+        # Apply data range if provided
+        if data_range is not None:
+            start, end = data_range
+            x_values = x_values_all[0][start:end]  # Assuming x_values are the same for all files
+            T2_product_values = T2_product_values[start:end]
+            T2_product_errors = T2_product_errors[start:end]
+
+        # Plotting
+        color, marker = marker_color_dict[AB]
+        plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color, ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB} Product Rule')
+
+    plt.xlabel(r"$B_0$ (Gauss)")
+    plt.ylabel(r"$T_2$ ($\mu$s)")
+    plt.grid(True)
+    plt.legend()
+    plt.tight_layout()
+    plt.ylim(bottom=0)
+    plt.ylim(0,70)
+    plt.xlim(400,3400)
+
+    # Save plot in the "Results/T2_vs_B" folder
+    save_path = "VOTPP folder/Results/T2_vs_B/"
+    output_filename = os.path.join(save_path, "Combined_T2_Product_Rules.png")
+    plt.savefig(output_filename, dpi=300)
+    if show == True:
+        plt.show()
+    else:
+        plt.close()
+
+
+
 AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']  # Add all your AB values here
-
-# for AB in AB_list:
-#     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
-#     C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
-#     h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
-#     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
-
-#     # Call the function to plot individual datasets and combined T2 product rule on semilog scale
-#     plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
-
-#     # Call the function to plot only the combined T2 product rule on a normal scale
-#     plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
-
-
-
 bath_list = ['E', 'C', 'H', 'N']  
+
+# For plotting combined T2 vs B on semilog scale, and Product Rule T2 vs B on normal scale for each AB
+for AB in AB_list:
+    e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
+    C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
+    h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
+    N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
+
+    # Call the function to plot individual datasets and combined T2 product rule on semilog scale
+    plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
+
+    # Call the function to plot only the combined T2 product rule on a normal scale
+    plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
+
+
+# For plotting individual bath T2 vs B (e.g E bath AB1; T2 vs B)
 for AB in AB_list:
     # Loop through each AB and plot for each bath
     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
@@ -259,3 +329,76 @@ for AB in AB_list:
 
     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
     plot_T2_vs_B_single(N_filename, 'N', AB)
+
+
+
+# Re-creating Chicco T2 vs B
+file_label_dict = {
+    'AB1': [
+        '[n-e]-(e)_AB1.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB1.pkl_fit_results.pkl', 
+        '[n-e]-(n)_H_AB1.pkl_fit_results.pkl', 
+        '[n-e]-(n)_N_AB1.pkl_fit_results.pkl'
+    ],
+    'AB2': [
+        '[n-e]-(e)_AB2.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB2.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB2.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB2.pkl_fit_results.pkl'
+    ],
+    'AB3': [
+        '[n-e]-(e)_AB3.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB3.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB3.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB3.pkl_fit_results.pkl'
+    ],
+    'AB4': [
+        '[n-e]-(e)_AB4.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB4.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB4.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB4.pkl_fit_results.pkl'
+    ],
+    'AB5': [
+        '[n-e]-(e)_AB5.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB5.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB5.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB5.pkl_fit_results.pkl'
+    ],
+    'AB6': [
+        '[n-e]-(e)_AB6.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB6.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB6.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB6.pkl_fit_results.pkl'
+    ],
+    'AB7': [
+        '[n-e]-(e)_AB7.pkl_fit_results.pkl', 
+        '[n-e]-(n)_C_AB7.pkl_fit_results.pkl',
+        '[n-e]-(n)_H_AB7.pkl_fit_results.pkl',
+        '[n-e]-(n)_N_AB7.pkl_fit_results.pkl'
+    ]
+
+}
+
+marker_color_dict = {
+    'AB1': ('#D273FF', '-o'),  # Light purple color, circle marker
+    'AB2': ('#AC39FF', '-s'),  # Purple color, square marker
+    'AB3': ('#3F2DFF', '-^'),  # Vibrant blue color, triangle_up marker
+    'AB4': ('#0000AC', '-v'),  # Dark blue color, triangle_down marker
+    'AB5': ('#4D0000', '-d'),  # Dark brown color, diamond marker
+    'AB6': ('#FF0C10', '-<'),  # Red color, triangle_left marker
+    'AB7': ('#FF6508', '->')   # Orange color, triangle_right marker
+}
+
+
+marker_color_dict = {
+    'AB1': ('#D273FF', 'o'),  # Light purple color, circle marker
+    'AB2': ('#AC39FF', 's'),  # Purple color, square marker
+    'AB3': ('#3F2DFF', '^'),  # Vibrant blue color, triangle_up marker
+    'AB4': ('#0000AC', 'v'),  # Dark blue color, triangle_down marker
+    'AB5': ('#4D0000', 'd'),  # Dark brown color, diamond marker
+    'AB6': ('#FF0C10', '<'),  # Red color, triangle_left marker
+    'AB7': ('#FF6508', '>')   # Orange color, triangle_right marker
+}
+
+
+plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict)
