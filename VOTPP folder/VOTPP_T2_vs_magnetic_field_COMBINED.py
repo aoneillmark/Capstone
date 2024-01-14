@@ -76,10 +76,11 @@ def plot_T2_product_rule_combined(e_pickle_filename, C_pickle_filename, h_pickle
 
     # Plotting the combined T2 product rule values
     plt.figure(figsize=(8, 4))
+    x_values = [i*1e-4 for i in x_values]
     plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt='-o', label='Product Rule Result', 
                  ecolor='black', elinewidth=0.5, capsize=2)
     # plt.title("T2 Product Rule Combined vs Numerical Key")
-    plt.xlabel(r"$B_0$ (Gauss)")
+    plt.xlabel(r"$B_0$ (T)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
     plt.ylim(bottom=0)
     plt.grid(True)
@@ -158,6 +159,7 @@ def plot_T2_vs_field_combined(e_pickle_filename, C_pickle_filename, h_pickle_fil
 
     # Plotting with error bars
     plt.figure(figsize=(8, 4))
+    x_values = [i*1e-4 for i in x_values]
     plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, fmt='-o', label='E Bath', 
                  ecolor='black', elinewidth=0.5, capsize=2)
     plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', 
@@ -171,7 +173,7 @@ def plot_T2_vs_field_combined(e_pickle_filename, C_pickle_filename, h_pickle_fil
     plt.semilogy(x_values, T2_product_values, '-o', label='Product Rule Result')  # Using semilogy for the product rule
 
     # plt.title(r"T2 vs Numerical Key Combined")
-    plt.xlabel(r"$B_0$ (Gauss)")
+    plt.xlabel(r"$B_0$ (T)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
     plt.grid(True)
     plt.legend()
@@ -214,9 +216,10 @@ def plot_T2_vs_B_single(pickle_filename, bath_type, identifier, data_range=None,
 
     # Plotting with error bars
     plt.figure(figsize=(8, 4))
+    x_values = [i*1e-4 for i in x_values]
     plt.errorbar(x_values, T2_values, yerr=T2_errors, fmt='-o', ecolor='black', elinewidth=0.5, capsize=2, label=f'{bath_type} Bath T2 vs B')
 
-    plt.xlabel(r"$B_0$ (Gauss)")
+    plt.xlabel(r"$B_0$ (T)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
     plt.ylim(bottom=0)
     plt.grid(True)
@@ -274,18 +277,27 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
             T2_product_values = T2_product_values[start:end]
             T2_product_errors = T2_product_errors[start:end]
 
-        # Plotting
+        # # Plotting without lines
         color, marker = marker_color_dict[AB]
-        plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color, ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB} Product Rule')
+        x_values = [i*1e-4 for i in x_values]
+        plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color, ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
+        
+        # # Plotting with connected points
+        # color, marker = marker_color_dict[AB]
+        # # Plot lines separately with black color
+        # plt.plot(x_values, T2_product_values, color='black', linewidth=0.5, alpha=0.5, linestyle='-')
+        # # Plot markers separately with the specified color
+        # plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color,
+        #             ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
 
-    plt.xlabel(r"$B_0$ (Gauss)")
+    plt.xlabel(r"$B_0$ (T)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
-    plt.grid(True)
+    # plt.grid(True)
     plt.legend()
     plt.tight_layout()
     plt.ylim(bottom=0)
     plt.ylim(0,70)
-    plt.xlim(400,3400)
+    plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder
     save_path = "VOTPP folder/Results/T2_vs_B/"
