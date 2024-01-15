@@ -316,6 +316,9 @@ for AB in AB_list:
         
 # plot_from_file(['[n-e]-(e)_r_bath_order3_modifiedpulse_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_order3_modifiedpulse_results.pkl'])
+plot_from_file(['[n-e]-(e)_r_bath_HPC_results.pkl'])
+plot_from_file(['[n-e]-(e)_r_dipole_HPC_results.pkl'])
+
 
 # plot_from_file(['[n-e]-(e)_AB7_increasedparams4.pkl'])
 ##############################################################################################################
