@@ -99,7 +99,8 @@ def plot_combined(loaded_results, variable_name, image_path, ylim=None, show=Fal
         for v_key, df in data.items():
             color = colors[color_index % len(colors)]  # Cycle through colors using color_index
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
-            plt.plot(df.index, df[0], label=f"B_0 = {v_key[2]}", color=color)
+            plt.plot(df.index, df[0], label=f"B_0 = {label_str}", color=color)
+            # plt.plot(df.index, df[0], label=f"B_0 = {v_key[2]}", color=color)
             color_index += 1  # Increment color_index for each v_key
 
     plt.title(f"All {variable_name.capitalize()} Results")
@@ -149,9 +150,9 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
                 fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit, 'beta_err': beta_err, 'T2_err': T2_err}
 
-                # plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {v_key[2]} G')
+                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {label_str} G')
                 # plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {T2_fit:.3f}±{T2_err:.3f} ms')
-                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {(v_key[2] * 1e-4):.2f} T')
+                # plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {(v_key[2] * 1e-4):.2f} T')
                 plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {(T2_fit*1e3):.0f}±{(T2_err*1e3):.0f} μs')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
@@ -310,8 +311,12 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))
 # plot_from_file(['[n-e]-(n)_N_AB3.pkl',], ylim=(-0.01,None))
 # plot_from_file(['[n-e]-(n)_H_AB3.pkl',], ylim=(-0.01,None))
-plot_from_file(['[n-e]-(e)_AB3.pkl',], ylim=(-0.01,None),)
+# plot_from_file(['[n-e]-(e)_AB7_increasedparams3.pkl',], ylim=(-0.01,None),)
+        
+# plot_from_file(['[n-e]-(e)_r_bath_order3_modifiedpulse_results.pkl'])
+# plot_from_file(['[n-e]-(e)_r_dipole_order3_modifiedpulse_results.pkl'])
 
+plot_from_file(['[n-e]-(e)_AB7_increasedparams4.pkl'])
 ##############################################################################################################
 # H bath convergence
 # plot_from_file(['[n-e]-(n)_r_bath_order2_H_results.pkl'], ylim=(-0.01,None))
