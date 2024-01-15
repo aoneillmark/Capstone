@@ -284,9 +284,9 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 
-# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-# for AB in AB_list:
-#     plot_from_file([f'[n-e]-(e)_{AB}.pkl',], ylim=(-0.01,None))
+AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+for AB in AB_list:
+    plot_from_file([f'[n-e]-(e)_{AB}.pkl',], ylim=(-0.01,None))
 # # plot_from_file(['[n-e]-(e)_AB1.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB2.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB3.pkl',])
@@ -308,6 +308,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
 
+##############################################################################################################
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))
 # plot_from_file(['[n-e]-(n)_N_AB3.pkl',], ylim=(-0.01,None))
 # plot_from_file(['[n-e]-(n)_H_AB3.pkl',], ylim=(-0.01,None))
@@ -316,7 +317,7 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e)_r_bath_order3_modifiedpulse_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_order3_modifiedpulse_results.pkl'])
 
-plot_from_file(['[n-e]-(e)_AB7_increasedparams4.pkl'])
+# plot_from_file(['[n-e]-(e)_AB7_increasedparams4.pkl'])
 ##############################################################################################################
 # H bath convergence
 # plot_from_file(['[n-e]-(n)_r_bath_order2_H_results.pkl'], ylim=(-0.01,None))
