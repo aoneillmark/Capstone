@@ -171,12 +171,12 @@ class VOTPP_class:
             qpos2 = sic.to_cell(pos2)
 
             sic.isotopes['C']['13C'] = 0.010700000000000001
-            sic.isotopes['H']['1H'] = 0
-            sic.isotopes['H']['2H'] = 0
+            sic.isotopes['H']['1H'] = 0.999885
+            sic.isotopes['H']['2H'] = 0.000115
             sic.isotopes['N']['14N'] = 0.9963200000000001
             sic.isotopes['N']['15N'] = 0.00368
-            sic.isotopes['V']['50V'] = 0.0025
-            sic.isotopes['V']['51V'] = 0
+            sic.isotopes['V']['50V'] = 1-0.02
+            sic.isotopes['V']['51V'] = 0.02
 
             #generate supercell - nuclear bath 
             cell=self.cell_size
