@@ -15,7 +15,8 @@ export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 export PYTHONUNBUFFERED=1
 
 # Run the MPI script for simulation using slurm 
-mpirun -np 128 -hosts=$SLURM_NODELIST python "VOTPP folder/VOTPP_[n-e]-(e).py"
+# mpirun -np 128 -hosts=$SLURM_NODELIST python "VOTPP folder/VOTPP_[n-e]-(e).py"
+mpirun -np 128 python "VOTPP folder/VOTPP_[n-e]-(e).py"
 
 # # Wait for the simulation to complete before starting plotting
 # wait
