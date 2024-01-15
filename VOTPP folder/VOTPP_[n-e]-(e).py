@@ -14,7 +14,7 @@ rank = MPI.COMM_WORLD.Get_rank()
 size = MPI.COMM_WORLD.Get_size()
 
 # File path for pickle files
-path = "VOTPP folder/Results/Pickle files/"
+path = "VOTPP folder/Results/Pickle files 2/Simulation Results/"
 
 def convert_to_key(value):
     if isinstance(value, list):
@@ -127,9 +127,9 @@ order_list = [1, 2, 3]
 # r_bath_list = [40, 80, 160, 220]
 # r_dipole_list = [20, 40, 60, 100, 140, 180]
 # r_bath_list = [10, 15, 20, 25, 30, 35, 40, 45]
-r_bath_list = [40, 50, 60, 70, 80, 90, 100, 110,]
+r_bath_list = [40, 60, 70, 75, 80, 85,]
 # r_dipole_list = [5, 10, 15, 20, 25, 30]
-r_dipole_list = [20, 30, 40, 50, 60, 70, 80, 90,]
+r_dipole_list = [40, 50, 55, 60, 65,]
 # cell_size_list = [60,100,200]
 cell_size_list = [60,100,200]
 nbstates_list = [128,]
@@ -137,7 +137,7 @@ nbstates_list = [128,]
 
 ###################################################################################################
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.5, 201)
+timespace_absolute = np.linspace(0, 0.5, 51)
 
 
 hahn_echo_sequence = pc.Sequence([ 
@@ -161,7 +161,7 @@ if rank ==0:
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'nbstates': 100, #!
+    'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -181,8 +181,8 @@ default_simulator_parameters = { ########## These should be greater when simulat
     'pulses': hahn_echo_sequence,
 }
 
-# magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
-magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+magnetic_field_list = [[0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
+# magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0, 0, 2000], [0, 0, 3000]] # z-direction (but with rotation matrix, it's x-direction)
 
 # magnetic_field_list = [[200,0,0], [400,0,0], [600,0,0], [800,0,0], [1000,0,0], [1200,0,0], [1400,0,0], [1600,0,0], [1800,0,0], [2000,0,0], [2200,0,0], [2400,0,0], [2600,0,0], [2800,0,0], [3000,0,0]]
 #####################################################################
@@ -191,45 +191,45 @@ magnetic_field_list = [[0, 0, 500], [0, 0, 800], [0, 0, 1200], [0, 0, 1500], [0,
 
 # # # Runner loop for single pulse sequence ##############################################################
 # seed_list = [8000,]
-sequence_list = [hahn_echo_sequence, hahn_echo_sequence_without_bath_RF]
-magnetic_results = {}
-for idx, sequence in enumerate(sequence_list):
-    # Change the value of the seed in the default parameters
-    default_bath_parameters['seed'] = 8000 
-    if rank == 0:
-        # print("Seed: {}".format(seed)) 
-        print("Sequence: {}".format(sequence)) 
-        # Start timer
-        start = time.time()
+# sequence_list = [hahn_echo_sequence, hahn_echo_sequence_without_bath_RF]
+# magnetic_results = {}
+# for idx, sequence in enumerate(sequence_list):
+#     # Change the value of the seed in the default parameters
+#     default_bath_parameters['seed'] = 8000 
+#     if rank == 0:
+#         # print("Seed: {}".format(seed)) 
+#         print("Sequence: {}".format(sequence)) 
+#         # Start timer
+#         start = time.time()
 
-    # # Change the value of the r_bath in the default parameters
-    # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-    default_simulator_parameters['pulses'] = sequence
+#     # # Change the value of the r_bath in the default parameters
+#     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+#     default_simulator_parameters['pulses'] = sequence
 
 
-    magnetic_results[idx] = runner(
-                        concentration_value=default_bath_parameters['concentration'],
-                        # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha = 4, #
-                        beta = 5, #
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                        )
+#     magnetic_results[idx] = runner(
+#                         concentration_value=default_bath_parameters['concentration'],
+#                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha = 4, #
+#                         beta = 5, #
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+#                         )
     
-    if rank == 0:
-        # Print time
-        end = time.time()
-        print("Time taken: {} seconds".format(end - start))
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
 
-    # Save the current state of results
-    with open((str(path) + f'magnetic_results_{idx}.pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+#     # Save the current state of results
+#     with open((str(path) + f'magnetic_results_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
 
-if rank == 0:
-    with open((str(path) + '[n-e]-(e).pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+# if rank == 0:
+#     with open((str(path) + '[n-e]-(e).pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
 
 
 # # # Runner loop for single pulse sequence ##############################################################
@@ -351,11 +351,11 @@ if rank == 0:
 #         print("Time taken: {} seconds".format(end - start))
 
 #     # Save the current state of results
-#     with open((str(path) + f'magnetic_results_AB3_{idx}.pkl'), 'wb') as f:
+#     with open((str(path) + f'magnetic_results_AB3_increasedparams_{idx}.pkl'), 'wb') as f:
 #         pickle.dump(magnetic_results, f)
 
 # if rank == 0:
-#     with open((str(path) + '[n-e]-(e)_AB3.pkl'), 'wb') as f:
+#     with open((str(path) + '[n-e]-(e)_AB3_increasedparams.pkl'), 'wb') as f:
 #         pickle.dump(magnetic_results, f)
 
 
@@ -523,11 +523,11 @@ if rank == 0:
 #         print("Time taken: {} seconds".format(end - start))
 
 #     # Save the current state of results
-#     with open((str(path) + f'magnetic_results_AB7_{idx}.pkl'), 'wb') as f:
+#     with open((str(path) + f'magnetic_results_AB7_{idx}_increasedparams3.pkl'), 'wb') as f:
 #         pickle.dump(magnetic_results, f)
 
 # if rank == 0:
-#     with open((str(path) + '[n-e]-(e)_AB7.pkl'), 'wb') as f:
+#     with open((str(path) + '[n-e]-(e)_AB7_increasedparams3.pkl'), 'wb') as f:
 #         pickle.dump(magnetic_results, f)
 
 
@@ -565,69 +565,69 @@ if rank == 0:
     
 # print("Order results done")
 
-# r_bath_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     if rank == 0:
-#         # Start timer
-#         start = time.time()
+r_bath_results = {}
+for idx, conc in enumerate(concentration_list):
+    if rank == 0:
+        # Start timer
+        start = time.time()
 
-#     r_bath_results[conc] = runner(
-#                         concentration_value=conc,
-#                         changing_variable='r_bath', variable_values=r_bath_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
+    r_bath_results[conc] = runner(
+                        concentration_value=conc,
+                        changing_variable='r_bath', variable_values=r_bath_list,
+                        num_spins=2, #spin_type='nuclear',
+                        alpha= 4,
+                        beta=  5,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
     
-#     if rank == 0:
-#         # Print time
-#         end = time.time()
-#         print("Time taken: {} seconds".format(end - start))
+    if rank == 0:
+        # Print time
+        end = time.time()
+        print("Time taken: {} seconds".format(end - start))
     
-#     # Save the current state of results
-#     with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
+    # Save the current state of results
+    with open((str(path) + f'r_bath_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
-# if rank == 0:
-#     with open((str(path) + '[n-e]-(e)_r_bath_order3_results.pkl'), 'wb') as f:
-#         pickle.dump(r_bath_results, f)
+if rank == 0:
+    with open((str(path) + '[n-e]-(e)_r_bath_order3_modifiedpulse_results.pkl'), 'wb') as f:
+        pickle.dump(r_bath_results, f)
 
-#     print("r_bath results done")
+    print("r_bath results done")
         
 
 
 
-# r_dipole_results = {}
-# for idx, conc in enumerate(concentration_list):
-#     if rank == 0:
-#         # Start timer
-#         start = time.time()
+r_dipole_results = {}
+for idx, conc in enumerate(concentration_list):
+    if rank == 0:
+        # Start timer
+        start = time.time()
 
-#     r_dipole_results[conc] = runner(concentration_value=conc,
-#                         changing_variable='r_dipole', variable_values=r_dipole_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha= 4,
-#                         beta=  5,
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='timespace', variable_values2=timespace_list,
-#                         )
+    r_dipole_results[conc] = runner(concentration_value=conc,
+                        changing_variable='r_dipole', variable_values=r_dipole_list,
+                        num_spins=2, #spin_type='nuclear',
+                        alpha= 4,
+                        beta=  5,
+                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+                        # changing_variable2='timespace', variable_values2=timespace_list,
+                        )
     
-#     if rank == 0:
-#         # Print time
-#         end = time.time()
-#         print("Time taken: {} seconds".format(end - start))
+    if rank == 0:
+        # Print time
+        end = time.time()
+        print("Time taken: {} seconds".format(end - start))
 
-#     # Save the current state of results
-#     with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(r_dipole_results, f)
+    # Save the current state of results
+    with open((str(path) + f'r_dipole_results_{idx}.pkl'), 'wb') as f:
+        pickle.dump(r_dipole_results, f)
 
-# if rank == 0:
-#     with open((str(path) + '[n-e]-(e)_r_dipole_order3_results.pkl'), 'wb') as f:
-#         pickle.dump(r_dipole_results, f)
+if rank == 0:
+    with open((str(path) + '[n-e]-(e)_r_dipole_order3_modifiedpulse_results.pkl'), 'wb') as f:
+        pickle.dump(r_dipole_results, f)
 
-#     print("r_dipole results done")
+    print("r_dipole results done")
 
 
 #####################################################################
