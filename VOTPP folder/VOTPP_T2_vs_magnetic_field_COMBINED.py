@@ -280,23 +280,23 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
         # # Plotting without lines
         color, marker = marker_color_dict[AB]
         x_values = [i*1e-4 for i in x_values]
-        plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color, ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
+        # plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color, ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
         
-        # # Plotting with connected points
-        # color, marker = marker_color_dict[AB]
-        # # Plot lines separately with black color
-        # plt.plot(x_values, T2_product_values, color='black', linewidth=0.5, alpha=0.5, linestyle='-')
-        # # Plot markers separately with the specified color
-        # plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color,
-        #             ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
+        # Plotting with connected points
+        color, marker = marker_color_dict[AB]
+        # Plot lines separately with black color
+        plt.plot(x_values, T2_product_values, color=color, linewidth=0.5, alpha=0.5, linestyle='-')
+        # Plot markers separately with the specified color
+        plt.errorbar(x_values, T2_product_values, yerr=T2_product_errors, fmt=marker, color=color,
+                    ecolor='black', elinewidth=0.5, capsize=2, label=f'{AB}')
 
     plt.xlabel(r"$B_0$ (T)")
     plt.ylabel(r"$T_2$ ($\mu$s)")
     # plt.grid(True)
     plt.legend()
     plt.tight_layout()
-    plt.ylim(bottom=0)
-    plt.ylim(0,70)
+    plt.ylim(bottom=-5)
+    # plt.ylim(-3,70)
     plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder
@@ -313,34 +313,36 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
 AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']  # Add all your AB values here
 bath_list = ['E', 'C', 'H', 'N']  
 
-# For plotting combined T2 vs B on semilog scale, and Product Rule T2 vs B on normal scale for each AB
-for AB in AB_list:
-    e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
-    C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
-    h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
-    N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
-
-    # Call the function to plot individual datasets and combined T2 product rule on semilog scale
-    plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
-
-    # Call the function to plot only the combined T2 product rule on a normal scale
-    plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
 
 
-# For plotting individual bath T2 vs B (e.g E bath AB1; T2 vs B)
-for AB in AB_list:
-    # Loop through each AB and plot for each bath
-    e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
-    plot_T2_vs_B_single(e_filename, 'E', AB)
+# # For plotting combined T2 vs B on semilog scale, and Product Rule T2 vs B on normal scale for each AB
+# for AB in AB_list:
+#     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
+#     C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
+#     h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
+#     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
 
-    C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
-    plot_T2_vs_B_single(C_filename, 'C', AB)
+#     # Call the function to plot individual datasets and combined T2 product rule on semilog scale
+#     plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
 
-    h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
-    plot_T2_vs_B_single(h_filename, 'H', AB)
+#     # Call the function to plot only the combined T2 product rule on a normal scale
+#     plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
 
-    N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
-    plot_T2_vs_B_single(N_filename, 'N', AB)
+
+# # For plotting individual bath T2 vs B (e.g E bath AB1; T2 vs B)
+# for AB in AB_list:
+#     # Loop through each AB and plot for each bath
+#     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
+#     plot_T2_vs_B_single(e_filename, 'E', AB)
+
+#     C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
+#     plot_T2_vs_B_single(C_filename, 'C', AB)
+
+#     h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
+#     plot_T2_vs_B_single(h_filename, 'H', AB)
+
+#     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
+#     plot_T2_vs_B_single(N_filename, 'N', AB)
 
 
 
@@ -414,3 +416,90 @@ marker_color_dict = {
 
 
 plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict)
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################
+# Function to plot T2 vs B for H, C, and N datasets on a semilog plot
+def plot_T2_vs_B_semilog(C_pickle_filename, h_pickle_filename, N_pickle_filename, AB, data_range=None, show=False):
+    path = "VOTPP folder/Results/Pickle files 2/Fits/"
+
+    # Load fit results for H, C, and N datasets
+    C_fit_results = load_fit_results(path, C_pickle_filename)
+    h_fit_results = load_fit_results(path, h_pickle_filename)
+    N_fit_results = load_fit_results(path, N_pickle_filename)
+
+    # Assuming the keys are consistent across all datasets
+    keys = C_fit_results.keys()
+
+    # Extract x_values from the keys
+    x_values = [key[3] for key in keys]
+
+    # Extract T2 values and errors for C, H, and N datasets
+    T2_values_C = [C_fit_results[key]['T2'] * 1e3 for key in keys]  # Convert from ms to microseconds
+    T2_values_h = [h_fit_results[key]['T2'] * 1e3 for key in keys]
+    T2_values_N = [N_fit_results[key]['T2'] * 1e3 for key in keys]
+
+    T2_errors_C = [C_fit_results[key]['T2_err'] * 1e3 for key in keys]
+    T2_errors_h = [h_fit_results[key]['T2_err'] * 1e3 for key in keys]
+    T2_errors_N = [N_fit_results[key]['T2_err'] * 1e3 for key in keys]
+
+    # Apply data range if provided
+    if data_range is not None:
+        start, end = data_range
+        x_values = x_values[start:end]
+        T2_values_C = T2_values_C[start:end]
+        T2_values_h = T2_values_h[start:end]
+        T2_values_N = T2_values_N[start:end]
+        T2_errors_C = T2_errors_C[start:end]
+        T2_errors_h = T2_errors_h[start:end]
+        T2_errors_N = T2_errors_N[start:end]
+
+    # Plotting with error bars on a semilog scale
+    plt.figure(figsize=(8, 4))
+    x_values = [i*1e-4 for i in x_values]
+    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o', label='H Bath', ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', label='N Bath', ecolor='black', elinewidth=0.5, capsize=2)
+
+    plt.semilogy(x_values, T2_values_C, '-o', color='tab:blue')
+    plt.semilogy(x_values, T2_values_h, '-o', color='tab:orange')
+    plt.semilogy(x_values, T2_values_N, '-o', color='tab:green')
+
+    plt.xlabel(r"$B_0$ (T)")
+    plt.ylabel(r"$T_2$ ($\mu$s)")
+    plt.grid(True, which="both", ls="--")
+    # plt.ylim(bottom=1)
+    plt.legend()
+    plt.tight_layout()
+
+    # Save plot in the "Results/T2_vs_B" folder
+    save_path = "VOTPP folder/Results/T2_vs_B/"
+    output_filename = os.path.join(save_path, f"T2_vs_B_{AB}_without_e.png")
+    plt.savefig(output_filename, dpi=300)
+    if show:
+        plt.show()
+    else:
+        plt.close()
+    
+
+
+C_filename = f'[n-e]-(n)_C_AB3.pkl_fit_results.pkl'
+h_filename = f'[n-e]-(n)_H_AB3.pkl_fit_results.pkl'
+N_filename = f'[n-e]-(n)_N_AB3.pkl_fit_results.pkl'
+
+# Call the function to plot individual datasets and combined T2 product rule on semilog scale
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')
+
+# Call the function to plot only the combined T2 product rule on a normal scale
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')

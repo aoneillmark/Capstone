@@ -132,7 +132,8 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
 
     for outer_key in loaded_results.keys():
         for v_key, df in loaded_results[outer_key].items():
-            plt.figure(figsize=(8, 4))
+            plt.figure(figsize=(8,4))
+            # plt.figure(figsize=(4, 3))
             ydata_series = pd.Series(df[0].iloc[data_range]).replace('--', np.nan).astype(float)
             valid_mask = ~ydata_series.isna() & np.isfinite(ydata_series)
             ydata_plot = ydata_series[valid_mask]
@@ -148,12 +149,14 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
                 fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit, 'beta_err': beta_err, 'T2_err': T2_err}
 
-                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {v_key[2]} G')
-                plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {T2_fit:.3f}±{T2_err:.3f} ms')
+                # plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {v_key[2]} G')
+                # plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {T2_fit:.3f}±{T2_err:.3f} ms')
+                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {(v_key[2] * 1e-4):.2f} T')
+                plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {(T2_fit*1e3):.0f}±{(T2_err*1e3):.0f} μs')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
 
-            plt.title(f"{variable_name.capitalize()} Result for {label_str}")
+            # plt.title(f"{variable_name.capitalize()} Result for {label_str}")
             plt.xlabel(r'2$\tau$ (ms)')
             plt.ylabel('Coherence')
             plt.legend()
@@ -280,30 +283,34 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 
-AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-for AB in AB_list:
-    plot_from_file([f'[n-e]-(e)_{AB}.pkl',], ylim=(-0.01,None))
-# plot_from_file(['[n-e]-(e)_AB1.pkl',])
-# plot_from_file(['[n-e]-(e)_AB2.pkl',])
-# plot_from_file(['[n-e]-(e)_AB3.pkl',])
-# plot_from_file(['[n-e]-(e)_AB4.pkl',])
-# plot_from_file(['[n-e]-(e)_AB5.pkl',])
-# plot_from_file(['[n-e]-(e)_AB6.pkl',])
-# plot_from_file(['[n-e]-(e)_AB7.pkl',])
+# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+# for AB in AB_list:
+#     plot_from_file([f'[n-e]-(e)_{AB}.pkl',], ylim=(-0.01,None))
+# # plot_from_file(['[n-e]-(e)_AB1.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB2.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB3.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB4.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB5.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB6.pkl',])
+# # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
-bath_type_list = ['C', 'N', 'H']
-AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-for bath_type in bath_type_list:
-    for AB in AB_list:
-        plot_from_file([f'[n-e]-(n)_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB4.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB5.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
-    # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
+# bath_type_list = ['C', 'N', 'H']
+# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+# for bath_type in bath_type_list:
+#     for AB in AB_list:
+#         plot_from_file([f'[n-e]-(n)_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB4.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB5.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
+#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
 
+# plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_N_AB3.pkl',], ylim=(-0.01,None))
+# plot_from_file(['[n-e]-(n)_H_AB3.pkl',], ylim=(-0.01,None))
+plot_from_file(['[n-e]-(e)_AB3.pkl',], ylim=(-0.01,None),)
 
 ##############################################################################################################
 # H bath convergence
