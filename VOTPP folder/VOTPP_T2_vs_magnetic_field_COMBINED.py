@@ -296,7 +296,7 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
     plt.legend()
     plt.tight_layout()
     plt.ylim(bottom=-5)
-    plt.ylim(-3,200)
+    # plt.ylim(-3,70)
     plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder

@@ -143,12 +143,17 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
 
             try:
+                # Perform curve fitting
                 params, cov = curve_fit(coherence_time_func, time_data, ydata_plot, maxfev=5000, bounds=([0, -np.inf], [np.inf, np.inf]), p0=[1, 0.060])
                 beta_fit, T2_fit = params
-                beta_err, T2_err = np.sqrt(np.diag(cov))  # Standard deviation (error) of the fit parameters
+                beta_err, T2_err = np.sqrt(np.diag(cov))  # Calculate the standard deviation
 
+                # Cap the error
+                T2_err_capped = min(T2_err, 50e-3)  # Cap the error at 50 μs
+
+                # Store the results with the capped error
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
-                fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit, 'beta_err': beta_err, 'T2_err': T2_err}
+                fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit, 'beta_err': beta_err, 'T2_err': T2_err_capped}
 
                 plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {label_str} G')
                 # plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {T2_fit:.3f}±{T2_err:.3f} ms')
