@@ -296,7 +296,7 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
     plt.legend()
     plt.tight_layout()
     plt.ylim(bottom=-5)
-    # plt.ylim(-3,70)
+    plt.ylim(-3,200)
     plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder
@@ -315,77 +315,77 @@ bath_list = ['E', 'C', 'H', 'N']
 
 
 
-# # For plotting combined T2 vs B on semilog scale, and Product Rule T2 vs B on normal scale for each AB
-# for AB in AB_list:
-#     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
-#     C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
-#     h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
-#     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
+# For plotting combined T2 vs B on semilog scale, and Product Rule T2 vs B on normal scale for each AB
+for AB in AB_list:
+    e_filename = f'[n-e]-(e)_HPC_{AB}.pkl_fit_results.pkl'
+    C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
+    h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
+    N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
 
-#     # Call the function to plot individual datasets and combined T2 product rule on semilog scale
-#     plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
+    # Call the function to plot individual datasets and combined T2 product rule on semilog scale
+    plot_T2_vs_field_combined(e_filename, C_filename, h_filename, N_filename, AB)
 
-#     # Call the function to plot only the combined T2 product rule on a normal scale
-#     plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
+    # Call the function to plot only the combined T2 product rule on a normal scale
+    plot_T2_product_rule_combined(e_filename, C_filename, h_filename, N_filename, AB)
 
 
-# # For plotting individual bath T2 vs B (e.g E bath AB1; T2 vs B)
-# for AB in AB_list:
-#     # Loop through each AB and plot for each bath
-#     e_filename = f'[n-e]-(e)_{AB}.pkl_fit_results.pkl'
-#     plot_T2_vs_B_single(e_filename, 'E', AB)
+# For plotting individual bath T2 vs B (e.g E bath AB1; T2 vs B)
+for AB in AB_list:
+    # Loop through each AB and plot for each bath
+    e_filename = f'[n-e]-(e)_HPC_{AB}.pkl_fit_results.pkl'
+    plot_T2_vs_B_single(e_filename, 'E', AB)
 
-#     C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
-#     plot_T2_vs_B_single(C_filename, 'C', AB)
+    C_filename = f'[n-e]-(n)_C_{AB}.pkl_fit_results.pkl'
+    plot_T2_vs_B_single(C_filename, 'C', AB)
 
-#     h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
-#     plot_T2_vs_B_single(h_filename, 'H', AB)
+    h_filename = f'[n-e]-(n)_H_{AB}.pkl_fit_results.pkl'
+    plot_T2_vs_B_single(h_filename, 'H', AB)
 
-#     N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
-#     plot_T2_vs_B_single(N_filename, 'N', AB)
+    N_filename = f'[n-e]-(n)_N_{AB}.pkl_fit_results.pkl'
+    plot_T2_vs_B_single(N_filename, 'N', AB)
 
 
 
 # Re-creating Chicco T2 vs B
 file_label_dict = {
     'AB1': [
-        '[n-e]-(e)_AB1.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB1.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB1.pkl_fit_results.pkl', 
         '[n-e]-(n)_H_AB1.pkl_fit_results.pkl', 
         '[n-e]-(n)_N_AB1.pkl_fit_results.pkl'
     ],
     'AB2': [
-        '[n-e]-(e)_AB2.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB2.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB2.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB2.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB2.pkl_fit_results.pkl'
     ],
     'AB3': [
-        '[n-e]-(e)_AB3.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB3.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB3.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB3.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB3.pkl_fit_results.pkl'
     ],
     'AB4': [
-        '[n-e]-(e)_AB4.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB4.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB4.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB4.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB4.pkl_fit_results.pkl'
     ],
     'AB5': [
-        '[n-e]-(e)_AB5.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB5.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB5.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB5.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB5.pkl_fit_results.pkl'
     ],
     'AB6': [
-        '[n-e]-(e)_AB6.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB6.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB6.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB6.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB6.pkl_fit_results.pkl'
     ],
     'AB7': [
-        '[n-e]-(e)_AB7.pkl_fit_results.pkl', 
+        '[n-e]-(e)_HPC_AB7.pkl_fit_results.pkl', 
         '[n-e]-(n)_C_AB7.pkl_fit_results.pkl',
         '[n-e]-(n)_H_AB7.pkl_fit_results.pkl',
         '[n-e]-(n)_N_AB7.pkl_fit_results.pkl'
