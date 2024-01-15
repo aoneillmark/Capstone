@@ -8,7 +8,7 @@
 #SBATCH -e "Capstone/VOTPP folder/Slurm_2024/slurm-%j.err"
 
 # Activate the Conda environment
-source ~/miniconda3/bin/activate Capstone_conda_env5
+source ~/miniconda3/bin/activate Capstone_conda_env2
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
 # Ensure Python output is unbuffered
