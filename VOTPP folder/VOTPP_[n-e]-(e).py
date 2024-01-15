@@ -141,12 +141,12 @@ timespace_absolute = np.linspace(0, 0.5, 201)
 
 
 hahn_echo_sequence = pc.Sequence([ 
-    pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),),
-                # bath_names=('51V',
-                # )), # 120° pulse around x-axis applied to bath spins),
-    pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,)])
-                # bath_names=('51V',
-                # ))]) # 120° pulse around x-axis applied to bath spins ])
+    pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),
+                bath_names=('51V',
+                )), # 120° pulse around x-axis applied to bath spins),
+    pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,
+                bath_names=('51V',
+                ))]) # 120° pulse around x-axis applied to bath spins ])
 
 
 # hahn_echo_sequence_without_bath_RF = pc.Sequence([
