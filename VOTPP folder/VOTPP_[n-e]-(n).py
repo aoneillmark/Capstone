@@ -150,7 +150,7 @@ default_calc_parameters = {
     'method': 'gcce',
     # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 128, #!
+    'nbstates': 256, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
