@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#SBATCH -n 256              # Request 128 cores
+#SBATCH -n 128              # Request 128 cores
 #SBATCH -t 0-6:00:00      # Request 12 hours and 0 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J MONCapstone2024     # Job name
@@ -16,7 +16,7 @@ export PYTHONUNBUFFERED=1
 
 # Run the MPI script for simulation using slurm 
 # mpirun -np 128 -hosts=$SLURM_NODELIST python "VOTPP folder/VOTPP_[n-e]-(e).py"
-mpirun -np 256 python "VOTPP folder/VOTPP_[n-e]-(e).py"
+mpirun -np 128 python "VOTPP folder/VOTPP_[n-e]-(e).py"
 
 # # Wait for the simulation to complete before starting plotting
 # wait
