@@ -240,7 +240,7 @@ def plot_combined_average(averaged_results, variable_name, image_path, ylim=None
     plt.show()
 
 
-def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None):
+def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None, show=False):
     image_path = "VOTPP folder/Results/Plots 2/"
 
     for pickle_filename in pickle_filenames:
@@ -248,10 +248,10 @@ def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None):
         loaded_results = load_data_from_file(pickle_filename)
 
         # Plot all results combined without fit
-        plot_combined(loaded_results, variable_name, image_path, ylim=ylim)
+        plot_combined(loaded_results, variable_name, image_path, ylim=ylim, show=show)
         
         # Plot individual results with fit
-        plot_individual_with_fit(loaded_results, variable_name, image_path, data_range=data_range, ylim=ylim)
+        plot_individual_with_fit(loaded_results, variable_name, image_path, data_range=data_range, ylim=ylim, show=show)
 
 def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
     image_path = "VOTPP folder/Results/Plots 2/"
@@ -289,9 +289,9 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 
-AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-for AB in AB_list:
-    plot_from_file([f'[n-e]-(e)_HPC_{AB}.pkl',], ylim=(-0.01,None))
+# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+# for AB in AB_list:
+#     plot_from_file([f'[n-e]-(e)_HPC_{AB}.pkl',], ylim=(-0.01,None))
         
 # # plot_from_file(['[n-e]-(e)_AB1.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB2.pkl',])
@@ -301,9 +301,10 @@ for AB in AB_list:
 # # plot_from_file(['[n-e]-(e)_AB6.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
-bath_type_list = ['C', 'N', 'H']
+# bath_type_list = ['C', 'N', 'H']
+bath_type_list = ['H']
 AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-# for bath_type in bath_type_list:
+for bath_type in bath_type_list:
 #     for AB in AB_list:
 #         plot_from_file([f'[n-e]-(n)_HPC_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
@@ -315,8 +316,11 @@ AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
 
 # for bath_type in bath_type_list:
-#     plot_from_file([f'[n-e]-(n)_r_bath_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
-#     plot_from_file([f'[n-e]-(n)_r_dipole_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
+    # plot_from_file([f'[n-e]-(n)_r_bath_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None), show=True)
+    # plot_from_file([f'[n-e]-(n)_r_dipole_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
+    plot_from_file([f'r_bath_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
+    plot_from_file([f'r_dipole_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
+    
 
 ##############################################################################################################
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))
