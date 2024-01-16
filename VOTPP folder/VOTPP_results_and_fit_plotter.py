@@ -133,8 +133,8 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
 
     for outer_key in loaded_results.keys():
         for v_key, df in loaded_results[outer_key].items():
-            plt.figure(figsize=(8,4))
-            # plt.figure(figsize=(4, 3))
+            # plt.figure(figsize=(8,4))
+            plt.figure(figsize=(4, 3))
             ydata_series = pd.Series(df[0].iloc[data_range]).replace('--', np.nan).astype(float)
             valid_mask = ~ydata_series.isna() & np.isfinite(ydata_series)
             ydata_plot = ydata_series[valid_mask]
@@ -155,9 +155,9 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
                 fit_key = (outer_key,) + v_key if isinstance(v_key, tuple) else (outer_key, v_key)
                 fit_results[fit_key] = {'beta': beta_fit, 'T2': T2_fit, 'beta_err': beta_err, 'T2_err': T2_err_capped}
 
-                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {label_str} G')
+                # plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {label_str} G')
                 # plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {T2_fit:.3f}±{T2_err:.3f} ms')
-                # plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {(v_key[2] * 1e-4):.2f} T')
+                plt.plot(time_data, ydata_plot, 'o', label=f'Data for B_0 = {(v_key[2] * 1e-4):.2f} T')
                 plt.plot(time_data, coherence_time_func(time_data, *params), '--', label=f'Fit: T_2 = {(T2_fit*1e3):.0f}±{(T2_err*1e3):.0f} μs')
             except RuntimeError as e:
                 print(f"Fit for label {label_str} failed: {e}")
@@ -302,25 +302,28 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
 # bath_type_list = ['C', 'N', 'H']
-bath_type_list = ['H']
-AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-for bath_type in bath_type_list:
-#     for AB in AB_list:
-#         plot_from_file([f'[n-e]-(n)_HPC_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB4.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB5.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
-#     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
-
+# bath_type_list = ['H']
+# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
 # for bath_type in bath_type_list:
-    # plot_from_file([f'[n-e]-(n)_r_bath_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None), show=True)
-    # plot_from_file([f'[n-e]-(n)_r_dipole_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
-    plot_from_file([f'r_bath_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
-    plot_from_file([f'r_dipole_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
-    
+# #     for AB in AB_list:
+# #         plot_from_file([f'[n-e]-(n)_HPC_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB4.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB5.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
+# #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
+
+# # for bath_type in bath_type_list:
+#     # plot_from_file([f'[n-e]-(n)_r_bath_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None), show=True)
+#     # plot_from_file([f'[n-e]-(n)_r_dipole_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
+#     plot_from_file([f'r_bath_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
+#     plot_from_file([f'r_dipole_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
+
+plot_from_file(['[n-e]-(n)_H_AB7.pkl',], ylim=(-0.01,None), show=True)
+plot_from_file(['[n-e]-(n)_C_AB7.pkl',], ylim=(-0.01,None), show=True)
+plot_from_file(['[n-e]-(n)_N_AB7.pkl',], ylim=(-0.01,None), show=True)
 
 ##############################################################################################################
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))

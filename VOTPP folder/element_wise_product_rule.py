@@ -84,16 +84,25 @@ def plot_and_save_combined(data_collections, product, save_path):
             continue
 
         if isinstance(series, pd.Series):
-            plt.plot(series.index, series.values, label=f"{label_list[i]}", color=colors[(i) % len(colors)])
+            series = series.apply(pd.to_numeric, errors='coerce')  # Ensure numeric type
+            series_filled = series.fillna(method='ffill').fillna(method='bfill')  # Handle NaN values
+
+            # Plot each dataset
+            if label_list[i] == 'E bath':
+                plt.plot(series_filled.index, series_filled.values, label=f"{label_list[i]}", color=colors[i % len(colors)], linestyle="-")
+            else:
+                plt.plot(series.index, series.values, label=f"{label_list[i]}", color=colors[i % len(colors)])
         else:
             print(f"Data for {key} is not in expected format (pandas Series), skipping.")
 
     if product is not None and not product.empty:
-        plt.plot(product.index, product.values, label="Product of Coherences",color="#ff7f0e", linestyle="--", linewidth=2)
+        # Interpolate product data
+        product = product.apply(pd.to_numeric, errors='coerce')
+        product_filled = product.fillna(method='ffill').fillna(method='bfill')
+        plt.plot(product_filled.index, product_filled.values, label="Product of Coherences", color="#ff7f0e", linestyle="-")
     else:
         print("Product data is empty or not provided.")
 
-    # plt.title("Coherence vs Timespace")
     plt.xlabel(r"2$\tau$ (ms)")
     plt.ylabel("Coherence")
     plt.legend()
@@ -107,9 +116,9 @@ def plot_and_save_combined(data_collections, product, save_path):
     print(f"Plot saved to {output_filename}")
 
 # Usage
-pickle_path = "VOTPP folder/Results/Pickle files/"
-save_path = "VOTPP folder/Results/Plots/"
-pickle_filenames = ["[n-e]-(e)_AB3.pkl", "[n-e]-(n)_H_AB3.pkl", "[n-e]-(n)_C_AB3.pkl", "[n-e]-(n)_N_AB3.pkl"]
+pickle_path = "VOTPP folder/Results/Pickle files 2/Simulation Results/"
+save_path = "VOTPP folder/Results/Plots 2/"
+pickle_filenames = ["[n-e]-(e)_HPC_AB7.pkl", "[n-e]-(n)_H_AB7.pkl", "[n-e]-(n)_C_AB7.pkl", "[n-e]-(n)_N_AB7.pkl"]
 
 data_collections = extract_coherence_and_timespace(pickle_filenames, pickle_path)
 

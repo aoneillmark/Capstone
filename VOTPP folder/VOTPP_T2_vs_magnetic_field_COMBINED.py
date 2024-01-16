@@ -160,17 +160,17 @@ def plot_T2_vs_field_combined(e_pickle_filename, C_pickle_filename, h_pickle_fil
     # Plotting with error bars
     plt.figure(figsize=(8, 4))
     x_values = [i*1e-4 for i in x_values]
-    plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, fmt='-o', label='E Bath', 
+    plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, fmt='-o', color='#3577b4', label='E Bath', 
                  ecolor='black', elinewidth=0.5, capsize=2)
-    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', 
+    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', color='#d72f26', label='C Bath', 
                  ecolor='black', elinewidth=0.5, capsize=2)
-    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o', label='H Bath', 
+    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o',color='#499e2f', label='H Bath', 
                  ecolor='black', elinewidth=0.5, capsize=2)
-    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', label='N Bath', 
+    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', color='#9364bc', label='N Bath', 
                  ecolor='black', elinewidth=0.5, capsize=2)
 
     # Plotting the T2 product rule values on a semi-logarithmic scale
-    plt.semilogy(x_values, T2_product_values, '-o', label='Product Rule Result')  # Using semilogy for the product rule
+    plt.semilogy(x_values, T2_product_values, '-o', color='#ee7c30', label='Product Rule Result')  # Using semilogy for the product rule
 
     # plt.title(r"T2 vs Numerical Key Combined")
     plt.xlabel(r"$B_0$ (T)")
@@ -296,7 +296,7 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
     plt.legend()
     plt.tight_layout()
     plt.ylim(bottom=-5)
-    # plt.ylim(-3,70)
+    plt.ylim(-3,70)
     plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder
@@ -468,9 +468,17 @@ def plot_T2_vs_B_semilog(C_pickle_filename, h_pickle_filename, N_pickle_filename
     # Plotting with error bars on a semilog scale
     plt.figure(figsize=(8, 4))
     x_values = [i*1e-4 for i in x_values]
-    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', ecolor='black', elinewidth=0.5, capsize=2)
-    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o', label='H Bath', ecolor='black', elinewidth=0.5, capsize=2)
-    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', label='N Bath', ecolor='black', elinewidth=0.5, capsize=2)
+    #     plt.errorbar(x_values, T2_values_e, yerr=T2_errors_e, fmt='-o', color='#3577b4', label='E Bath', 
+    #              ecolor='black', elinewidth=0.5, capsize=2)
+    # plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', color='#d72f26', label='C Bath', 
+    #              ecolor='black', elinewidth=0.5, capsize=2)
+    # plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o',color='#499e2f', label='H Bath', 
+    #              ecolor='black', elinewidth=0.5, capsize=2)
+    # plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', color='#9364bc', label='N Bath', 
+    #              ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_C, yerr=T2_errors_C, fmt='-o', label='C Bath', color='#d72f26', ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_h, yerr=T2_errors_h, fmt='-o', label='H Bath', color='#499e2f', ecolor='black', elinewidth=0.5, capsize=2)
+    plt.errorbar(x_values, T2_values_N, yerr=T2_errors_N, fmt='-o', label='N Bath', color='#9364bc', ecolor='black', elinewidth=0.5, capsize=2)
 
     plt.semilogy(x_values, T2_values_C, '-o', color='tab:blue')
     plt.semilogy(x_values, T2_values_h, '-o', color='tab:orange')
@@ -494,12 +502,12 @@ def plot_T2_vs_B_semilog(C_pickle_filename, h_pickle_filename, N_pickle_filename
     
 
 
-C_filename = f'[n-e]-(n)_C_AB3.pkl_fit_results.pkl'
-h_filename = f'[n-e]-(n)_H_AB3.pkl_fit_results.pkl'
-N_filename = f'[n-e]-(n)_N_AB3.pkl_fit_results.pkl'
+C_filename = f'[n-e]-(n)_C_AB7.pkl_fit_results.pkl'
+h_filename = f'[n-e]-(n)_H_AB7.pkl_fit_results.pkl'
+N_filename = f'[n-e]-(n)_N_AB7.pkl_fit_results.pkl'
 
 # Call the function to plot individual datasets and combined T2 product rule on semilog scale
-plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB7')
 
 # Call the function to plot only the combined T2 product rule on a normal scale
-plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB7')
