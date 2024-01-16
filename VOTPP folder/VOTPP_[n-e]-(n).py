@@ -178,8 +178,8 @@ default_simulator_parameters = { ########## These should be greater when simulat
 
 # magnetic_field_list = [[0,0,3000]]
 magnetic_field_list = [[0,0,500], [0,0,800], [0,0,1200], [0,0,1500], [0,0,2000], [0,0,3000]]
-# bath_type = 'N'
-bath_type_list = ['C', 'N', 'H']
+bath_type_list = ['H']
+# bath_type_list = ['C', 'N', 'H']
 for bath_type in bath_type_list:
     if bath_type == 'C':
         concentration_list = [1313,]
@@ -202,8 +202,8 @@ for bath_type in bath_type_list:
     elif bath_type == 'H':
         concentration_list = [1111,]
         default_bath_parameters['concentration'] = 1111
-        r_bath_list = [5, 10, 15, 20, 25]
-        r_dipole_list = [2, 5, 10, 15, 20]
+        r_bath_list = [20, 25, 30]
+        r_dipole_list = [15, 20, 25]
         default_bath_parameters['cell_size'] = 100
         default_simulator_parameters['r_bath'] = 20
         default_simulator_parameters['r_dipole'] = 20
