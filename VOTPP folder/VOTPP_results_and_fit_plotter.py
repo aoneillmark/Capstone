@@ -289,9 +289,10 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 
-AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
-for AB in AB_list:
-    plot_from_file([f'[n-e]-(e)_HPC_{AB}.pkl',], ylim=(-0.01,None))
+# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+# for AB in AB_list:
+#     plot_from_file([f'[n-e]-(e)_HPC_{AB}.pkl',], ylim=(-0.01,None))
+        
 # # plot_from_file(['[n-e]-(e)_AB1.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB2.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB3.pkl',])
@@ -300,11 +301,11 @@ for AB in AB_list:
 # # plot_from_file(['[n-e]-(e)_AB6.pkl',])
 # # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
-# bath_type_list = ['C', 'N', 'H']
-# AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
+bath_type_list = ['C', 'N', 'H']
+AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
 # for bath_type in bath_type_list:
 #     for AB in AB_list:
-#         plot_from_file([f'[n-e]-(n)_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
+#         plot_from_file([f'[n-e]-(n)_HPC_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
@@ -312,6 +313,10 @@ for AB in AB_list:
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB5.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB6.pkl',], ylim=(-0.01,None))
 #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB7.pkl',], ylim=(-0.01,None))
+
+for bath_type in bath_type_list:
+    plot_from_file([f'[n-e]-(n)_r_bath_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
+    plot_from_file([f'[n-e]-(n)_r_dipole_HPC_{bath_type}_results.pkl',], ylim=(-0.01,None))
 
 ##############################################################################################################
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))
@@ -321,8 +326,8 @@ for AB in AB_list:
         
 # plot_from_file(['[n-e]-(e)_r_bath_order3_modifiedpulse_results.pkl'])
 # plot_from_file(['[n-e]-(e)_r_dipole_order3_modifiedpulse_results.pkl'])
-plot_from_file(['[n-e]-(e)_r_bath_HPC_results.pkl'])
-plot_from_file(['[n-e]-(e)_r_dipole_HPC_results.pkl'])
+# plot_from_file(['[n-e]-(e)_r_bath_HPC_results.pkl'])
+# plot_from_file(['[n-e]-(e)_r_dipole_HPC_results.pkl'])
 
 
 # plot_from_file(['[n-e]-(e)_AB7_increasedparams4.pkl'])

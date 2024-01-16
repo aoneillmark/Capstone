@@ -187,8 +187,8 @@ for bath_type in bath_type_list:
         r_bath_list = [20, 30, 40,50]
         r_dipole_list = [10, 20, 30,40]
         default_bath_parameters['cell_size'] = 500
-        default_simulator_parameters['r_bath'] = 30
-        default_simulator_parameters['r_dipole'] = 20
+        default_simulator_parameters['r_bath'] = 10
+        default_simulator_parameters['r_dipole'] = 10
 
     elif bath_type == 'N':
         concentration_list = [1414,]
@@ -205,8 +205,8 @@ for bath_type in bath_type_list:
         r_bath_list = [5, 10, 15, 20, 25]
         r_dipole_list = [2, 5, 10, 15, 20]
         default_bath_parameters['cell_size'] = 100
-        default_simulator_parameters['r_bath'] = 10
-        default_simulator_parameters['r_dipole'] = 10
+        default_simulator_parameters['r_bath'] = 20
+        default_simulator_parameters['r_dipole'] = 20
 
 #####################################################################
 # Set up runner and run the simulation
