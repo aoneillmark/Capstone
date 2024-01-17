@@ -161,7 +161,7 @@ if rank ==0:
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'nbstates': 128, #!
+    'nbstates': 64, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
