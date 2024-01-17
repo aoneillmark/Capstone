@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #SBATCH -n 1              # Request 128 cores
-#SBATCH -t 0-6=0:01:00      # Request 12 hours and 0 minutes
+#SBATCH -t 0-00:01:00      # Request 12 hours and 0 minutes
 #SBATCH -p compute         # Use the "compute" partition
 #SBATCH -J MONCapstone2024     # Job name
 #SBATCH -o "Capstone/VOTPP folder/Slurm_2024/slurm-%j.out"
