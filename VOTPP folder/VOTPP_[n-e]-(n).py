@@ -139,7 +139,7 @@ nbstates_list = [128,]
 # r_dipole_list = [8,]
 # cell_size_list = [60,]
 
-timespace_absolute = np.linspace(0, 0.5, 201)
+timespace_absolute = np.linspace(0, 0.1, 201)
 
 hahn_echo_sequence = pc.Sequence([ 
     pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),),
@@ -150,7 +150,7 @@ default_calc_parameters = {
     'method': 'gcce',
     # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 256, #!
+    'nbstates': 32, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -205,8 +205,8 @@ for bath_type in bath_type_list:
         r_bath_list = [20, 25, 30]
         r_dipole_list = [15, 20, 25]
         default_bath_parameters['cell_size'] = 100
-        default_simulator_parameters['r_bath'] = 25
-        default_simulator_parameters['r_dipole'] = 20
+        default_simulator_parameters['r_bath'] = 10
+        default_simulator_parameters['r_dipole'] = 10
 
 #####################################################################
 # Set up runner and run the simulation
