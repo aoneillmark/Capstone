@@ -137,7 +137,7 @@ nbstates_list = [128,]
 
 ###################################################################################################
 # Define the timespace
-timespace_absolute = np.linspace(0, 0.2, 201)
+timespace_absolute = np.linspace(0, 0.1, 201)
 
 
 hahn_echo_sequence = pc.Sequence([ 
@@ -161,7 +161,7 @@ if rank ==0:
 default_calc_parameters = {
     'timespace': timespace_absolute, # 7e-2
     'method': 'gcce',
-    'nbstates': 32, #!
+    'nbstates': 128, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
