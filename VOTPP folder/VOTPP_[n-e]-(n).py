@@ -213,46 +213,46 @@ for bath_type in bath_type_list:
 #####################################################################
 
 
-# seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-seed_list = [8000,]
-magnetic_results = {}
-for idx, seed in enumerate(seed_list):
-    # Change the value of the seed in the default parameters
-    default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    if rank == 0:
-        print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# # seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
+# seed_list = [8000,]
+# magnetic_results = {}
+# for idx, seed in enumerate(seed_list):
+#     # Change the value of the seed in the default parameters
+#     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#     if rank == 0:
+#         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        # Start timer
-        start = time.time()
+#         # Start timer
+#         start = time.time()
 
-    # # Change the value of the r_bath in the default parameters
-    # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+#     # # Change the value of the r_bath in the default parameters
+#     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
 
 
 
-    magnetic_results[seed] = runner(
-                        concentration_value=default_bath_parameters['concentration'],
-                        # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                        num_spins=2, #spin_type='nuclear',
-                        alpha = 4, #
-                        beta = 5, #
-                        bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                        # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                        )
+#     magnetic_results[seed] = runner(
+#                         concentration_value=default_bath_parameters['concentration'],
+#                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+#                         num_spins=2, #spin_type='nuclear',
+#                         alpha = 4, #
+#                         beta = 5, #
+#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+#                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+#                         )
     
-    if rank == 0:
-        # Print time
-        end = time.time()
-        print("Time taken: {} seconds".format(end - start))
+#     if rank == 0:
+#         # Print time
+#         end = time.time()
+#         print("Time taken: {} seconds".format(end - start))
 
-    # Save the current state of results
-    with open((str(path) + f'magnetic_results_AB3_{bath_type}_{idx}.pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+#     # Save the current state of results
+#     with open((str(path) + f'magnetic_results_AB3_{bath_type}_{idx}.pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
 
-if rank == 0:
-    with open((str(path) + f'[n-e]-(n)_{bath_type}_AB3.pkl'), 'wb') as f:
-        pickle.dump(magnetic_results, f)
+# if rank == 0:
+#     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB3.pkl'), 'wb') as f:
+#         pickle.dump(magnetic_results, f)
 ###########################################################################################################################
 ###########################################################################################################################
 ###########################################################################################################################
