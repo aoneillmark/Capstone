@@ -4,8 +4,8 @@ This repository contains the code and results used in an undergraduate thesis pa
 
 ## Getting Started
 
-Results are found in /VOTPP folder/Results and code can be found it VOTPP folder/
-A lot of the code is built with mpi4py. You will need to run code (e.g. like ```mpiexec -np NUMBER_OF_CORES python "VOTPP folder/VOTPP_[n-e]-(n).py```) where the number of cores is an integer which must be equal to or greater than the value of nbstates.
+Results are found in /VOTPP folder/Results and code can be found it VOTPP folder/  
+A lot of the code is built with mpi4py. You will need to run code (e.g. like ```mpiexec -np NUMBER_OF_CORES python "VOTPP folder/VOTPP_[n-e]-(n).py```) where the number of cores is an integer which must be equal to or greater than the value of nbstates.  
 Requirements can be accessed in requirements.txt.
 
 ### Sample Results
@@ -22,15 +22,13 @@ invaluable guidance and generosity throughout the development of this thesis. Th
 and support have been instrumental to this research. Additionally, I would like to thank all
 members of Prof. Lunghi’s research group for their kindness, warmth, and openness. The
 optimised structure of the [VO(TPP)] cell and the hyperfine interaction tensor were provided
-by Valerio Briganti.
+by Valerio Briganti.  
 I would like to thank Dr. Nikita Onizhuk for his expert guidance on PyCCE simulations. His
 advice on pulse sequence implementation and Monte Carlo bath sampling theory was
-instrumental in advancing this research.
-I am also grateful to my friends Aimee Liu and Eric Chiu for their insightful feedback and
-constructive criticism during the writing of this thesis.
+instrumental in advancing this research.  
 This work was supported by RIT (Research IT, Trinity College Dublin). Various calculations
 were performed on the Boyle cluster maintained by the Trinity Centre for High Performance
 Computing. This cluster was funded through grants from the European Research Council and
-Science Foundation Ireland.
+Science Foundation Ireland.  
 In the preparation of this research, I acknowledge the use of Large Language Models (GitHub
 Copilot etc.) for assistance in generating code related to data processing and plotting.
