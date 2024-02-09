@@ -12,7 +12,7 @@ Requirements can be accessed in requirements.txt.
 
 ### Authors
 
-Author: Mark O'Neill
+Author: Mark O'Neill  
 Supervisors: Prof Alessandro Lunghi, Valerio Briganti
 
 ### Acknowledgements 
