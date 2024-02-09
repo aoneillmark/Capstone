@@ -9,6 +9,12 @@ A lot of the code is built with mpi4py. You will need to run code (e.g. like ```
 Requirements can be accessed in requirements.txt.
 
 ### Sample Results
+![Coherence Plot](https://github.com/aoneillmark/Capstone/blob/master/VOTPP%20folder/Results/Plots%202/combined_coherence_plot.png?raw=true)  
+Simulation results with product rule visualisation. The envelope of the overall coherence curve is determined by the coherence curve of the electronic spin bath.  
+
+![T2 vs B Plot](https://github.com/aoneillmark/Capstone/blob/master/VOTPP%20folder/Results/T2_vs_B/Combined_T2_Product_Rules.png?raw=true)  
+𝑇_2 vs 𝐵_0 for many nuclear transitions, simulated with PyCCE and analysed with Product Rule.
+
 
 ### Authors
 
