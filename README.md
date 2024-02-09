@@ -1,9 +1,5 @@
 # Simulating Spin Decoherence in Realistic Environments
 
-This repository contains Python scripts for simulating spin decoherence in Vandadyl Tetraphenylporphyrinate [VO(TPP)], a material with promising potential in quantum computing applications. The research focuses on investigating the impact of nuclear and electronic spins in the bath on the decoherence of the central spin qudit.
-
-## Abstract
-
 This repository contains the code and results used in an undergraduate thesis paper, which presents a comprehensive study of spin decoherence in Vandadyl Tetraphenylporphyrinate [VO(TPP)], a material with promising potential in quantum computing applications. This research focuses on investigating the impact of nuclear and electronic spins in the bath on the decoherence of the central spin qudit. Through simulations of this quantum system using the Cluster Correlation Expansion method in Python (PyCCE) and combining bath contributions via the analytical product rule, this study challenges conventional assumptions by demonstrating that electronic spin interactions in the bath play a more dominant role in driving decoherence than nuclear magnetic spins. These findings contribute to the field of quantum computing materials and offer an opportunity for development of further materials with greater coherence time.
 
 ## Getting Started
