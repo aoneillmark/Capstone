@@ -2,18 +2,6 @@ import pandas as pd
 import io
 import numpy as np
 
-# # Provided XYZ data as a string
-# xyz_data = """
-#  C        8.4470799999999997        9.1870999999999974        4.8570099999999998     
-#  C        8.3630499999999994        10.620729999999998        4.8550599999999999     
-#  ...
-#  V        6.6898000000000000        6.6898000000000000        5.4113499999999997     
-#  O        6.6897999999999973        6.6898000000000000        7.0411100000000006     
-# """
-
-# # Simulating reading from a file
-# xyz_file = io.StringIO(xyz_data)
-
 # Reading the XYZ data into a DataFrame
 # uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz', skiprows=2, header=None, delimiter='      ', engine='python') #enter specific directory
 uc = pd.read_csv('VOTPP folder/VOTPP_opt.xyz',skiprows=2, header=None, delim_whitespace=True, names=['Element', 'X', 'Y', 'Z'])

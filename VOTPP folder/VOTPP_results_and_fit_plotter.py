@@ -42,9 +42,8 @@ def check_pickle_structure(pickle_path, pickle_filename):
             for sub_key, df in data.items():
                 print(f"    Sub_key: {sub_key}, Type: {type(df)}, Structure: {type(df[0]) if isinstance(df, (list, tuple)) else 'N/A'}")
 
-def load_data_from_file(pickle_filename):
-    path = "VOTPP folder/Results/Pickle files 2/Simulation results/"
-    with open(os.path.join(path, pickle_filename), 'rb') as f:
+def load_data_from_file(pickle_filename, pickle_path):
+    with open(os.path.join(pickle_path, pickle_filename), 'rb') as f:
         loaded_results = pickle.load(f)
     
     # Convert all coherence values to their absolute values
@@ -90,32 +89,81 @@ def average_results_by_seed(loaded_results, debug=False):
 
 
 
-def plot_combined(loaded_results, variable_name, image_path, ylim=None, show=False):
+# def plot_combined(loaded_results, variable_name, image_path, ylim=None, show=False, filename=None):
+#     colors = get_colorblind_friendly_colors()  # Get colorblind-friendly colors
+#     plt.figure(figsize=(8,4))
+    
+#     color_index = 0  # Initialize a separate color index
+#     for outer_key, data in loaded_results.items():
+#         for v_key, df in data.items():
+#             color = colors[color_index % len(colors)]  # Cycle through colors using color_index
+#             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
+#             # plt.plot(df.index, df[0], label=f"B_0 = {label_str}", color=color)
+#             plt.plot(df.index, df[0], label=f"{variable_name} = {v_key}", color=color)
+#             # plt.plot(df.index, df[0], label=f"B_0 = {v_key[2]}", color=color)
+#             color_index += 1  # Increment color_index for each v_key
+
+#     # plt.title(f"All {variable_name.capitalize()} Results")
+#     plt.xlabel(r'2$\tau$ (ms)')
+#     plt.ylabel('Coherence')
+#     plt.legend()
+#     plt.tight_layout()
+#     plt.ylim(ylim)
+    
+#     # output_filename = os.path.join(image_path, f"{variable_name}_all_results.png")
+#     output_filename = os.path.join(image_path, f"{filename}.png")
+#     plt.savefig(output_filename, dpi=300)
+#     if show == True:
+#         plt.show()
+#     else:
+#         plt.close()
+
+def plot_combined(loaded_results, variable_name, image_path, ylim=None, show=False, filename=None):
     colors = get_colorblind_friendly_colors()  # Get colorblind-friendly colors
     plt.figure(figsize=(8,4))
-    
+
+    desired_r_bath_values = {20, 40, 60, 80, 100}  # E_r_bath
+    # desired_r_bath_values = {40, 55, 65, 75,}  # E_r_dipole
+    # desired_r_bath_values = {5, 10, 15,}  # H_r_bath
+    # desired_r_bath_values = {5, 10, 15,}  # H_r_dipole
+
+
     color_index = 0  # Initialize a separate color index
     for outer_key, data in loaded_results.items():
         for v_key, df in data.items():
+            # Skip the undesired r_bath values
+            if isinstance(v_key, tuple):
+                if v_key[0] not in desired_r_bath_values:
+                    continue
+            elif v_key not in desired_r_bath_values:
+                continue
+
             color = colors[color_index % len(colors)]  # Cycle through colors using color_index
             label_str = ', '.join(map(str, v_key)) if isinstance(v_key, tuple) else f"Value {v_key}"
-            plt.plot(df.index, df[0], label=f"B_0 = {label_str}", color=color)
-            # plt.plot(df.index, df[0], label=f"B_0 = {v_key[2]}", color=color)
+
+            # Plot lines
+            plt.plot(df.index, df[0], '-', label=f"{variable_name} = {v_key}", color=color, linewidth=1, alpha=0.75)  # Translucent lines
+
+            # Plot points
+            plt.plot(df.index, df[0], 'o', color=color, markersize=3)  # Smaller points, no label to avoid duplicating in legend
+
             color_index += 1  # Increment color_index for each v_key
 
-    plt.title(f"All {variable_name.capitalize()} Results")
     plt.xlabel(r'2$\tau$ (ms)')
     plt.ylabel('Coherence')
     plt.legend()
     plt.tight_layout()
     plt.ylim(ylim)
-    
-    output_filename = os.path.join(image_path, f"{variable_name}_all_results.png")
+
+    output_filename = os.path.join(image_path, f"{filename}.png")
     plt.savefig(output_filename, dpi=300)
     if show == True:
         plt.show()
     else:
         plt.close()
+
+
+
 
 def save_fit_results(fit_results, result_name):
     """
@@ -133,8 +181,8 @@ def plot_individual_with_fit(loaded_results, variable_name, image_path, data_ran
 
     for outer_key in loaded_results.keys():
         for v_key, df in loaded_results[outer_key].items():
-            # plt.figure(figsize=(8,4))
-            plt.figure(figsize=(4, 3))
+            plt.figure(figsize=(8,4))
+            # plt.figure(figsize=(4, 3))
             ydata_series = pd.Series(df[0].iloc[data_range]).replace('--', np.nan).astype(float)
             valid_mask = ~ydata_series.isna() & np.isfinite(ydata_series)
             ydata_plot = ydata_series[valid_mask]
@@ -240,12 +288,15 @@ def plot_combined_average(averaged_results, variable_name, image_path, ylim=None
     plt.show()
 
 
-def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None, show=False):
-    image_path = "VOTPP folder/Results/Plots 2/"
+def plot_from_file(pickle_filenames, 
+                           pickle_path="VOTPP folder/Results/Pickle files 2/Simulation results/", 
+                           image_path="VOTPP folder/Results/Plots 2/", 
+                           data_range=slice(None), ylim=None,
+                           show=False):
 
     for pickle_filename in pickle_filenames:
         variable_name = pickle_filename.split('_results.pkl')[0]
-        loaded_results = load_data_from_file(pickle_filename)
+        loaded_results = load_data_from_file(pickle_filename, pickle_path)
 
         # Plot all results combined without fit
         plot_combined(loaded_results, variable_name, image_path, ylim=ylim, show=show)
@@ -253,12 +304,14 @@ def plot_from_file(pickle_filenames, data_range=slice(None), ylim=None, show=Fal
         # Plot individual results with fit
         plot_individual_with_fit(loaded_results, variable_name, image_path, data_range=data_range, ylim=ylim, show=show)
 
-def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
-    image_path = "VOTPP folder/Results/Plots 2/"
+def plot_from_file_average(pickle_filenames, 
+                           pickle_path="VOTPP folder/Results/Pickle files 2/Simulation results/", 
+                           image_path="VOTPP folder/Results/Plots 2/", 
+                           data_range=slice(None), ylim=None):
 
     for pickle_filename in pickle_filenames:
         variable_name = pickle_filename.split('_results.pkl')[0]
-        loaded_results = load_data_from_file(pickle_filename)
+        loaded_results = load_data_from_file(pickle_filename, pickle_path)
 
         # Average results by seed
         averaged_results = average_results_by_seed(loaded_results, debug=False)
@@ -283,9 +336,24 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # For plotting with averaging
 # plot_from_file_average(['magnetic_results.pkl'])#)#, data_range=slice(0, 100))
 ##############################################################################################################
+# def plot_combined(loaded_results, variable_name, image_path, ylim=None, show=False):
+convergence_path = "VOTPP folder/Results/Convergence/"
+convergence_filename = "C_r_bath.pkl"
+convergence_image_path = "VOTPP folder/Results/Convergence/"
+# plot_combined(load_data_from_file("C_r_bath.pkl", convergence_path), "r_bath", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="C_r_bath_convergence")
+# plot_combined(load_data_from_file("N_r_bath.pkl", convergence_path), "r_bath", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="N_r_bath_convergence")
+# plot_combined(load_data_from_file("H_r_bath.pkl", convergence_path), "r_bath", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="H_r_bath_convergence")
+plot_combined(load_data_from_file("E_r_bath.pkl", convergence_path), "r_bath", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="E_r_bath_convergence")
+# plot_combined(load_data_from_file("C_r_dipole.pkl", convergence_path), "r_dipole", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="C_r_dipole_convergence")
+# plot_combined(load_data_from_file("N_r_dipole.pkl", convergence_path), "r_dipole", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="N_r_dipole_convergence")
+# plot_combined(load_data_from_file("H_r_dipole.pkl", convergence_path), "r_dipole", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="H_r_dipole_convergence")
+# plot_combined(load_data_from_file("E_r_dipole.pkl", convergence_path), "r_dipole", convergence_image_path, ylim=(-0.01,1.01), show=True, filename="E_r_dipole_convergence")
 
 
 
+
+##############################################################################################################
+        
 # plot_from_file(['[n-e]-(e).pkl',],ylim=(-0.01,None))#, data_range=slice(0, 225), )
 # plot_from_file(['[n-e]-(n).pkl',])
 
@@ -302,11 +370,10 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 # # plot_from_file(['[n-e]-(e)_AB7.pkl',])
 
 # bath_type_list = ['C', 'N', 'H']
-# bath_type_list = ['H']
 # AB_list = ['AB1', 'AB2', 'AB3', 'AB4', 'AB5', 'AB6', 'AB7']
 # for bath_type in bath_type_list:
-# #     for AB in AB_list:
-# #         plot_from_file([f'[n-e]-(n)_HPC_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
+#     for AB in AB_list:
+#         plot_from_file([f'[n-e]-(n)_{bath_type}_{AB}.pkl',], ylim=(-0.01,None))
 # #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB1.pkl',], ylim=(-0.01,None))
 # #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB2.pkl',], ylim=(-0.01,None))
 # #     # plot_from_file([f'[n-e]-(n)_{bath_type}_AB3.pkl',], ylim=(-0.01,None))
@@ -321,9 +388,9 @@ def plot_from_file_average(pickle_filenames, data_range=slice(None), ylim=None):
 #     plot_from_file([f'r_bath_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
 #     plot_from_file([f'r_dipole_results_n_HPC_{bath_type}_0.pkl',], ylim=(-0.01,None), show=True)
 
-plot_from_file(['[n-e]-(n)_H_AB7.pkl',], ylim=(-0.01,None), show=True)
-plot_from_file(['[n-e]-(n)_C_AB7.pkl',], ylim=(-0.01,None), show=True)
-plot_from_file(['[n-e]-(n)_N_AB7.pkl',], ylim=(-0.01,None), show=True)
+# plot_from_file(['[n-e]-(n)_H_AB7.pkl',], ylim=(-0.01,None), show=True)
+# plot_from_file(['[n-e]-(n)_C_AB7.pkl',], ylim=(-0.01,None), show=True)
+# plot_from_file(['[n-e]-(n)_N_AB7.pkl',], ylim=(-0.01,None), show=True)
 
 ##############################################################################################################
 # plot_from_file(['[n-e]-(n)_C_AB3.pkl',], ylim=(-0.01,None))

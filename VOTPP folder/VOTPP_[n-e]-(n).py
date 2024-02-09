@@ -150,7 +150,7 @@ default_calc_parameters = {
     'method': 'gcce',
     # 'pulses': [('x', ((2*np.pi)/3), timespace_absolute / 2), ('x', ((2*np.pi)/3), timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
     # 'pulses': [('x', np.pi, timespace_absolute / 2), ('x', np.pi, timespace_absolute / 2)], # Paper defines a Hahn-echo pulse sequence with 2pi/3 pulses?
-    'nbstates': 32, #!
+    'nbstates': 10, #!
     'quantity': 'coherence',
     'parallel': True,
     'parallel_states': True,
@@ -205,148 +205,14 @@ for bath_type in bath_type_list:
         r_bath_list = [20, 25, 30]
         r_dipole_list = [15, 20, 25]
         default_bath_parameters['cell_size'] = 100
-        default_simulator_parameters['r_bath'] = 15
-        default_simulator_parameters['r_dipole'] = 10
+        default_simulator_parameters['r_bath'] = 10
+        default_simulator_parameters['r_dipole'] = 5
 
 #####################################################################
 # Set up runner and run the simulation
 #####################################################################
 
 
-# # seed_list = [8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000]
-# seed_list = [8000,]
-# magnetic_results = {}
-# for idx, seed in enumerate(seed_list):
-#     # Change the value of the seed in the default parameters
-#     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#     if rank == 0:
-#         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-#         # Start timer
-#         start = time.time()
-
-#     # # Change the value of the r_bath in the default parameters
-#     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-
-
-
-#     magnetic_results[seed] = runner(
-#                         concentration_value=default_bath_parameters['concentration'],
-#                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
-#                         num_spins=2, #spin_type='nuclear',
-#                         alpha = 4, #
-#                         beta = 5, #
-#                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-#                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-#                         )
-    
-#     if rank == 0:
-#         # Print time
-#         end = time.time()
-#         print("Time taken: {} seconds".format(end - start))
-
-#     # Save the current state of results
-#     with open((str(path) + f'magnetic_results_AB3_{bath_type}_{idx}.pkl'), 'wb') as f:
-#         pickle.dump(magnetic_results, f)
-
-# if rank == 0:
-#     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB3.pkl'), 'wb') as f:
-#         pickle.dump(magnetic_results, f)
-###########################################################################################################################
-###########################################################################################################################
-###########################################################################################################################
-###########################################################################################################################
-###########################################################################################################################
-
-    # # Runner loop for single pulse sequence ##############################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB1")
-
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-
-
-
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 2, #
-                            beta = 3, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
-        
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
-
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB1_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB1.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-    ########################################################################################################################################
-    ########################################################################################################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB2")
-
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-
-
-
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 3, #
-                            beta = 4, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
-        
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
-
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB2_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB2.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-
-    ########################################################################################################################################
-    ########################################################################################################################################
     seed_list = [8000,]
     magnetic_results = {}
     for idx, seed in enumerate(seed_list):
@@ -387,182 +253,316 @@ for bath_type in bath_type_list:
     if rank == 0:
         with open((str(path) + f'[n-e]-(n)_{bath_type}_AB3.pkl'), 'wb') as f:
             pickle.dump(magnetic_results, f)
+###########################################################################################################################
+###########################################################################################################################
+###########################################################################################################################
+###########################################################################################################################
+###########################################################################################################################
+
+    # # # Runner loop for single pulse sequence ##############################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB1")
+
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
 
 
-    ########################################################################################################################################
-    ########################################################################################################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB4")
 
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-
-
-
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 5, #
-                            beta = 6, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 2, #
+    #                         beta = 3, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
         
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
 
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB4_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB1_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB4.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB1.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB2")
 
-    ########################################################################################################################################
-    ########################################################################################################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB5")
+    #         # Start timer
+    #         start = time.time()
 
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
-
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
 
 
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 9, #
-                            beta = 10, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 3, #
+    #                         beta = 4, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
         
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
 
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB5_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB2_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB5.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-    ########################################################################################################################################
-    ########################################################################################################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB6")
-
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB2.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
 
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB3")
 
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 11, #
-                            beta = 12, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 4, #
+    #                         beta = 5, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
         
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
 
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB6_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB3_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB6.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-
-
-    ########################################################################################################################################
-    ########################################################################################################################################
-    seed_list = [8000,]
-    magnetic_results = {}
-    for idx, seed in enumerate(seed_list):
-        # Change the value of the seed in the default parameters
-        default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if rank == 0:
-            print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            print("AB7")
-
-            # Start timer
-            start = time.time()
-
-        # # Change the value of the r_bath in the default parameters
-        # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB3.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
 
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB4")
 
-        magnetic_results[seed] = runner(
-                            concentration_value=default_bath_parameters['concentration'],
-                            # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                            changing_variable='magnetic_field', variable_values=magnetic_field_list,
-                            num_spins=2, #spin_type='nuclear',
-                            alpha = 12, #
-                            beta = 13, #
-                            bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
-                            # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
-                            )
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 5, #
+    #                         beta = 6, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
         
-        if rank == 0:
-            # Print time
-            end = time.time()
-            print("Time taken: {} seconds".format(end - start))
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
 
-        # Save the current state of results
-        with open((str(path) + f'magnetic_results_AB7_{bath_type}_{idx}.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB4_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
 
-    if rank == 0:
-        with open((str(path) + f'[n-e]-(n)_{bath_type}_AB7.pkl'), 'wb') as f:
-            pickle.dump(magnetic_results, f)
-    #####################################################################
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB4.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB5")
+
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 9, #
+    #                         beta = 10, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
+        
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
+
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB5_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB5.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB6")
+
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 11, #
+    #                         beta = 12, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
+        
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
+
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB6_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB6.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+
+    # ########################################################################################################################################
+    # ########################################################################################################################################
+    # seed_list = [8000,]
+    # magnetic_results = {}
+    # for idx, seed in enumerate(seed_list):
+    #     # Change the value of the seed in the default parameters
+    #     default_bath_parameters['seed'] = seed # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #     if rank == 0:
+    #         print("Seed: {}".format(seed)) #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #         print("AB7")
+
+    #         # Start timer
+    #         start = time.time()
+
+    #     # # Change the value of the r_bath in the default parameters
+    #     # default_simulator_parameters['r_bath'] = r_bath_conc_list[idx]
+
+
+
+    #     magnetic_results[seed] = runner(
+    #                         concentration_value=default_bath_parameters['concentration'],
+    #                         # concentration_value=seed, # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    #                         changing_variable='magnetic_field', variable_values=magnetic_field_list,
+    #                         num_spins=2, #spin_type='nuclear',
+    #                         alpha = 12, #
+    #                         beta = 13, #
+    #                         bath_parameters=default_bath_parameters, simulator_parameters=default_simulator_parameters, calc_parameters=default_calc_parameters,
+    #                         # changing_variable2='r_bath', variable_values2=r_bath_conc_list,
+    #                         )
+        
+    #     if rank == 0:
+    #         # Print time
+    #         end = time.time()
+    #         print("Time taken: {} seconds".format(end - start))
+
+    #     # Save the current state of results
+    #     with open((str(path) + f'magnetic_results_AB7_{bath_type}_{idx}.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+
+    # if rank == 0:
+    #     with open((str(path) + f'[n-e]-(n)_{bath_type}_AB7.pkl'), 'wb') as f:
+    #         pickle.dump(magnetic_results, f)
+    # #####################################################################
 
 ############################################################################################################################
 ############################################################################################################################

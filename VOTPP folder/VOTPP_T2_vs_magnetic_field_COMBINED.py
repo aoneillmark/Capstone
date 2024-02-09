@@ -296,7 +296,7 @@ def plot_all_T2_product_rules_combined(file_label_dict, marker_color_dict, data_
     plt.legend()
     plt.tight_layout()
     plt.ylim(bottom=-5)
-    plt.ylim(-3,70)
+    # plt.ylim(-3,70)
     plt.xlim(0.04,0.32)
 
     # Save plot in the "Results/T2_vs_B" folder
@@ -502,12 +502,12 @@ def plot_T2_vs_B_semilog(C_pickle_filename, h_pickle_filename, N_pickle_filename
     
 
 
-C_filename = f'[n-e]-(n)_C_AB7.pkl_fit_results.pkl'
-h_filename = f'[n-e]-(n)_H_AB7.pkl_fit_results.pkl'
-N_filename = f'[n-e]-(n)_N_AB7.pkl_fit_results.pkl'
+C_filename = f'[n-e]-(n)_C_AB3.pkl_fit_results.pkl'
+h_filename = f'[n-e]-(n)_H_AB3.pkl_fit_results.pkl'
+N_filename = f'[n-e]-(n)_N_AB3.pkl_fit_results.pkl'
 
 # Call the function to plot individual datasets and combined T2 product rule on semilog scale
-plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB7')
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')
 
 # Call the function to plot only the combined T2 product rule on a normal scale
-plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB7')
+plot_T2_vs_B_semilog(C_filename, h_filename, N_filename, 'AB3')
