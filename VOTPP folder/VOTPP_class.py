@@ -379,8 +379,8 @@ class VOTPP_class:
         calc = pc.Simulator(spin=self.cen, bath=self.atoms, order=order, r_bath=r_bath, r_dipole=r_dipole, magnetic_field=magnetic_field, pulses=pulses)
         return calc
 
-    def run_calculation(self, calc, timespace, method, nb_states, quantity, parallel, parallel_states):
-        l = calc.compute(timespace=timespace, method=method, nbstates=nb_states, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
+    def run_calculation(self, calc, timespace, method, nbstates, quantity, parallel, parallel_states):
+        l = calc.compute(timespace=timespace, method=method, nbstates=nbstates, quantity=quantity, parallel=parallel, parallel_states=parallel_states)
         l_real = l.real
         l_abs = np.abs(l)
         return l_real
