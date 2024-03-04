@@ -254,7 +254,7 @@ class CenterSetup:
         applies a scaling factor, and rotates the tensor, returning the final interaction matrix.
         The reason for rotating the tensor is outlined in the Methods section of Mark's Capstone report.
         '''
-        # Read the tensor from the file: 'VOTPP folder/VOTPP_opt.Atens
+        # Read the tensor from the file: 'Revised_VOTPP/VOTPP_opt.Atens
         with open((self.atens_file_path), 'r') as f: 
             lines = f.readlines()
         # Convert the tensor to a list of floats and apply the scaling factor
@@ -281,13 +281,13 @@ class CenterSetup:
         The reason for rotating the tensor is outlined in the Methods section of Mark's Capstone report.
         '''
 
-        # Read the tensor from the file: 'VOTPP folder/VOTPP_opt.gtens'
+        # Read the tensor from the file: 'Revised_VOTPP/VOTPP_opt.gtens'
         with open((self.gtens_file_path), 'r') as f:
             lines = f.readlines()
         # Convert the tensor to a list of floats
         tensor = [float(x) for x in lines[0].split()]
         # Multiply each element by the conversion factor
-        tensor_converted_by_factor = [i * 8794.10005384623 for i in tensor]
+        tensor_converted_by_factor = [i * -8794.10005384623 for i in tensor]
 
         # Reshape the tensor to a 3x3 matrix
         tensor_matrix = np.array(tensor_converted_by_factor).reshape(3, 3)
@@ -307,8 +307,9 @@ class CenterSetup:
         This function returns the gyromagnetic ratio of the central nuclear spin.
         '''
         const = -7.05
-        # Create a 3x3 matrix filled with the constant
-        return np.full((3, 3), const)
+        # Create an identity matrix with the constant as the diagonal
+        identity_matrix = np.identity(3) * const
+        return identity_matrix
 
 ############################################################################################################
 
@@ -377,69 +378,71 @@ class RunCalc:
 
 ############################################################################################################
 
-# Example usage
-timespace_absolute = np.linspace(0, 0.1, 201)
+# # Example usage
+# timespace_absolute = np.linspace(0, 2, 201)
 
-hahn_echo_sequence = pc.Sequence([ 
-    pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),),
-    pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,)])
+# hahn_echo_sequence = pc.Sequence([ 
+#     pc.Pulse(axis='x', angle='2*pi/3', delay=np.zeros(timespace_absolute.size),),
+#     pc.Pulse(axis='x', angle='2*pi/3', delay=timespace_absolute/2,)])
 
-default_calc_parameters = {
-    'timespace': timespace_absolute,
-    'method': 'gcce',
-    'nbstates': 1, 
-    'quantity': 'coherence',
-    'parallel': True,
-    'parallel_states': True,
-}
+# default_calc_parameters = {
+#     'timespace': timespace_absolute,
+#     'method': 'gcce',
+#     'nbstates': 1, 
+#     'quantity': 'coherence',
+#     'parallel': True,
+#     'parallel_states': True,
+# }
 
-default_bath_parameters = {
-    'filepath': './VOTPP folder/VOTPP_opt2.xyz',
-    'bath_type': 'electronic', # choose between 'electronic', 'hydrogen', 'nitrogen', 'carbon'
-    'concentration': 0.02, 
-    'cell_size': 100, 
-    'seed': 8000
-}
+# default_bath_parameters = {
+#     'filepath': './Revised_VOTPP/VOTPP_opt2.xyz',
+#     'bath_type': 'hydrogen', # choose between 'electronic', 'hydrogen', 'nitrogen', 'carbon'
+#     'concentration': 0.02, 
+#     'cell_size': 10, 
+#     'seed': 8000
+# }
 
-default_simulator_parameters = {
-    'order': 2,
-    'r_bath': 40, 
-    'r_dipole': 10,
-    'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
-    'pulses': hahn_echo_sequence,
-}
+# default_simulator_parameters = {
+#     'order': 2,
+#     'r_bath': 10, 
+#     'r_dipole': 10,
+#     'magnetic_field': [0, 0, 3000], # Magnetic field in Gauss
+#     'pulses': hahn_echo_sequence,
+# }
 
-default_center_parameters = {
-    'atens_file_path': './VOTPP folder/VOTPP_opt.Atens',
-    'gtens_file_path': './VOTPP folder/VOTPP_opt.gtens',
-    'spin_type': 'both', # choose between 'electron', 'nuclear', 'both'
-    # 'qpos': bath.qpos, we have to wait for the bath to be created :(
-    'alpha': 4, 
-    'beta': 5,
-}
+# default_center_parameters = {
+#     'atens_file_path': './Revised_VOTPP/VOTPP_opt.Atens',
+#     'gtens_file_path': './Revised_VOTPP/VOTPP_opt.gtens',
+#     'spin_type': 'both', # choose between 'electron', 'nuclear', 'both'
+#     # 'qpos': bath.qpos, we have to wait for the bath to be created :(
+#     'alpha': 4, 
+#     'beta': 5,
+# }
 
 
-# bath = BathSetup(filepath='./VOTPP folder/VOTPP_opt2.xyz', concentration=0.02, cell_size=500, seed=8000, bath_type='electronic')
-bath = BathSetup(**default_bath_parameters)
-bath.create_bath()
-bath.print_bath()
+# # bath = BathSetup(filepath='./Revised_VOTPP/VOTPP_opt2.xyz', concentration=0.02, cell_size=500, seed=8000, bath_type='electronic')
+# bath = BathSetup(**default_bath_parameters)
+# bath.create_bath()
+# bath.print_bath()
+# # print("Bath qpos: ",bath.qpos)
+# # print(bath.atoms)
 
-# center = CenterSetup(atens_file_path='./VOTPP folder/VOTPP_opt.Atens', gtens_file_path='./VOTPP folder/VOTPP_opt.gtens', spin_type='both', qpos=bath.qpos, alpha=0, beta=0)
-center = CenterSetup(qpos=bath.qpos, **default_center_parameters)
-cen = center.create_center()
-print(cen)
+# # center = CenterSetup(atens_file_path='./Revised_VOTPP/VOTPP_opt.Atens', gtens_file_path='./Revised_VOTPP/VOTPP_opt.gtens', spin_type='both', qpos=bath.qpos, alpha=0, beta=0)
+# center = CenterSetup(qpos=bath.qpos, **default_center_parameters)
+# cen = center.create_center()
+# print(cen)
 
-simulator = SimulatorSetup(center=cen, atoms=bath.atoms, **default_simulator_parameters)
-# calc = simulator.setup_simulator(order=2, r_bath=100, r_dipole=10, magnetic_field=[0, 0, 3000], pulses=None)
-calc = simulator.setup_simulator()
-print(calc)
+# simulator = SimulatorSetup(center=cen, atoms=bath.atoms, **default_simulator_parameters)
+# # calc = simulator.setup_simulator(order=2, r_bath=100, r_dipole=10, magnetic_field=[0, 0, 3000], pulses=None)
+# calc = simulator.setup_simulator()
+# print(calc)
 
-run = RunCalc(calc, **default_calc_parameters)
-result = run.run_calculation()
+# run = RunCalc(calc, **default_calc_parameters)
+# result = run.run_calculation()
 
-plt.figure()
-plt.plot(timespace_absolute, result)
-plt.title('Example coherence plot, obviously not converged! :)')
-plt.xlabel('Time (ms)')
-plt.ylabel('Coherence')
-plt.show()
+# plt.figure()
+# plt.plot(timespace_absolute, result)
+# plt.title('Example coherence plot, obviously not converged! :)')
+# plt.xlabel('Time (ms)')
+# plt.ylabel('Coherence')
+# plt.show()
